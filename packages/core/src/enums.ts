@@ -5,7 +5,15 @@
  * a dropdown built from the members observed in the save.
  */
 export const KNOWN_ENUMS: Record<string, string[]> = {
+  // Member lists extracted from the game's reflection data.
+  EDifficultySetting: ["Normal", "Medium", "Hard"],
+  ETtChallengeGameProgressState: ["Locked", "Unlocked", "Completed", "Rewarded"],
+  ETtGameProgressUnlock: ["Locked", "Unlocked", "Collected"],
+  ETtMissionGameProgress: ["Locked", "Unlocked", "InProgress", "Complete"],
+  ETtObjectivesNodeGameProgress: ["Locked", "InProgress", "Complete"],
+  ETtPlayGoInstallState: ["Unknown", "InitialChunkOnly", "Complete"],
   ETtSaveGameVersion: ["NoVersion", "Initial", "LatestVersion", "UnknownVersion", "VersionCount"],
+  ETtSaveSlotValidationState: ["Unknown", "Validated", "Invalidated"],
 };
 
 /** Options for an enum dropdown: known members ∪ members seen in the save ∪ current. */
