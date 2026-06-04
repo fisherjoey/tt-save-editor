@@ -164,3 +164,11 @@ details.advanced > .search, details.advanced .tableWrap { margin-top: 14px; }
 
 .completeAll { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 14px; }
 .completeAll span { color: var(--muted); font-size: 13px; }
+
+.quickGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.quickField { gap: 6px; }
+.quickLabel { color: var(--txt); font-size: 14px; font-weight: 600; }
+.quickHelp { color: var(--muted); font-weight: 400; font-size: 12px; }
+.quickInputRow { display: flex; align-items: center; gap: 8px; }
+.quickInputRow input { flex: 1; font-size: 16px; padding: 9px 11px; }
+.quickDot { color: var(--accent); font-size: 12px; }

@@ -3,6 +3,7 @@ import { Keystream, SaveFile, readBuildVersion, downgradeRecipe, type ScalarFiel
 import { Dropzone } from "./components/Dropzone.js";
 import { FieldTable } from "./components/FieldTable.js";
 import { EnumPanel } from "./components/EnumPanel.js";
+import { QuickEdits } from "./components/QuickEdits.js";
 import { Help } from "./components/Help.js";
 
 interface Loaded {
@@ -119,6 +120,20 @@ export function App() {
               </div>
             )}
           </section>
+
+          <QuickEdits
+            fields={loaded.fields}
+            onEdit={(name, value) => {
+              try {
+                const f = loaded.fields.find((x) => x.name === name);
+                const v = f?.type === "Int64Property" || f?.type === "UInt64Property" ? BigInt(value) : Number(value);
+                loaded.save.setField(name, v);
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
+            }}
+          />
 
           <DowngradePanel
             save={loaded.save}
