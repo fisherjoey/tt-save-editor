@@ -13,6 +13,7 @@ import {
   ScalarField,
   EnumField,
 } from "../gvas/index.js";
+import { enumMeta } from "../enums.js";
 
 export class RoundTripError extends Error {
   constructor() {
@@ -72,6 +73,25 @@ export class SaveFile {
       this.doc.body = setEnumValue(this.doc.body, f, member);
     }
     return this;
+  }
+
+  /**
+   * One-click "complete everything": set every progress enum to its completion
+   * value (collectibles → Collected, challenges → Completed, etc.). Returns the
+   * number of fields changed.
+   */
+  completeAllProgress(): number {
+    let n = 0;
+    const all = this.enums();
+    for (const enumType of new Set(all.map((e) => e.enumType))) {
+      const meta = enumMeta(enumType);
+      if (meta.category !== "progress" || !meta.completeValue) continue;
+      const fields = this.enums().filter((e) => e.enumType === enumType && e.member !== meta.completeValue);
+      if (!fields.length) continue;
+      this.setEnumsBulk(fields, meta.completeValue);
+      n += fields.length;
+    }
+    return n;
   }
 
   getField(name: string): ScalarField | undefined {

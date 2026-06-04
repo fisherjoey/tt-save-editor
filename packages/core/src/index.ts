@@ -17,7 +17,7 @@ export {
   BinaryWriter,
 } from "./gvas/index.js";
 export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind, EnumField } from "./gvas/index.js";
-export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, CATEGORY_LABELS } from "./enums.js";
+export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, CATEGORY_LABELS, prettifyKey } from "./enums.js";
 export type { EnumMeta, EnumCategory } from "./enums.js";
 export { SaveFile, RoundTripError } from "./sav/index.js";
 export { recipes, downgradeRecipe, renameRecipe, readBuildVersion } from "./recipes/index.js";

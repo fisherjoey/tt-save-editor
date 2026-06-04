@@ -147,6 +147,14 @@ export function App() {
                 setError(e instanceof Error ? e.message : String(e));
               }
             }}
+            onCompleteAll={() => {
+              try {
+                loaded.save.completeAllProgress();
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
+            }}
           />
 
           <details className="card advanced">

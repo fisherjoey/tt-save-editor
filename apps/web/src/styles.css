@@ -161,3 +161,6 @@ details.advanced[open] > summary::before { transform: rotate(90deg); }
 details.advanced > summary h2 { display: inline; }
 .advHint { color: var(--muted); font-size: 13px; }
 details.advanced > .search, details.advanced .tableWrap { margin-top: 14px; }
+
+.completeAll { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 14px; }
+.completeAll span { color: var(--muted); font-size: 13px; }

@@ -57,3 +57,19 @@ export const CATEGORY_LABELS: Record<EnumCategory, string> = {
   system: "System (advanced)",
 };
 
+/** Turn a raw gameplay-tag key into a readable label, e.g.
+ *  "LeavingAreaSplines.Tricorner" -> "Leaving Area Splines › Tricorner". */
+export function prettifyKey(key: string): string {
+  return key
+    .split(".")
+    .map((seg) =>
+      seg
+        .replace(/_/g, " ")
+        .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+        .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+        .trim(),
+    )
+    .filter(Boolean)
+    .join(" › ");
+}
+

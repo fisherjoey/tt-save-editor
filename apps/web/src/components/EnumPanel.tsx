@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { enumOptions, enumMeta, CATEGORY_LABELS, type EnumField, type EnumCategory } from "@tt-save/core";
+import { enumOptions, enumMeta, CATEGORY_LABELS, prettifyKey, type EnumField, type EnumCategory } from "@tt-save/core";
 
-function shortContext(ctx: string): string {
-  return ctx.replace(/^GameProgress\.Definitions\./, "").replace(/^GameProgress\./, "");
+function label(ctx: string): string {
+  return prettifyKey(ctx.replace(/^GameProgress\.Definitions\./, "").replace(/^GameProgress\./, ""));
 }
 
 const CATEGORY_ORDER: EnumCategory[] = ["progress", "settings", "system"];
@@ -12,11 +12,13 @@ export function EnumPanel({
   observed,
   onChange,
   onBulk,
+  onCompleteAll,
 }: {
   enums: EnumField[];
   observed: Map<string, Set<string>>;
   onChange: (field: EnumField, member: string) => void;
   onBulk: (fields: EnumField[], member: string) => void;
+  onCompleteAll: () => void;
 }) {
   const [q, setQ] = useState("");
 
@@ -40,6 +42,12 @@ export function EnumPanel({
     <section className="card">
       <h2>Progress &amp; settings</h2>
       <p className="hint">Friendly, fixed-choice settings. Use “set all” to change a whole category at once, or expand to tweak individual entries.</p>
+      <div className="completeAll">
+        <button className="primary" onClick={onCompleteAll}>
+          🏆 Complete everything
+        </button>
+        <span>Marks all collectibles, challenges, missions, and objectives as done.</span>
+      </div>
       <input className="search" placeholder="Search settings…" value={q} onChange={(e) => setQ(e.target.value)} />
 
       {CATEGORY_ORDER.map((cat) =>
@@ -103,8 +111,8 @@ function EnumGroup({
       <div className="enumList">
         {visible.slice(0, 400).map((e, i) => (
           <div key={`${e.valueOffset}-${i}`} className="enumRow">
-            <span className="enumCtx mono" title={e.context ?? ""}>
-              {e.context ? shortContext(e.context) : meta.title}
+            <span className="enumCtx" title={e.context ?? ""}>
+              {e.context ? label(e.context) : meta.title}
             </span>
             <select value={e.member} onChange={(ev) => onChange(e, ev.target.value)}>
               {enumOptions(type, observed.get(type), e.member).map((m) => (

@@ -50,3 +50,24 @@ describe("enum scanning + dropdowns", () => {
     expect(SaveFile.load(reloaded.toBytes(), ks).toBytes()).toEqual(reloaded.toBytes());
   });
 });
+
+import { prettifyKey } from "../src/enums.js";
+
+describe("UX helpers", () => {
+  it("prettifies gameplay-tag keys", () => {
+    expect(prettifyKey("LeavingAreaSplines.Tricorner")).toBe("Leaving Area Splines › Tricorner");
+    expect(prettifyKey("Tutorials.Basic.Move")).toBe("Tutorials › Basic › Move");
+    expect(prettifyKey("GameFlow.RestorePoint.Default")).toBe("Game Flow › Restore Point › Default");
+  });
+
+  it("completeAllProgress sets progress enums to their completion value and round-trips", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"), ks);
+    const changed = sf.completeAllProgress();
+    expect(changed).toBeGreaterThan(0);
+    const reloaded = SaveFile.load(sf.toBytes(), ks);
+    // collectibles are now Collected
+    const unlocks = reloaded.enums().filter((e) => e.enumType === "ETtGameProgressUnlock");
+    expect(unlocks.every((e) => e.member === "Collected")).toBe(true);
+    expect(SaveFile.load(reloaded.toBytes(), ks).toBytes()).toEqual(reloaded.toBytes());
+  });
+});
