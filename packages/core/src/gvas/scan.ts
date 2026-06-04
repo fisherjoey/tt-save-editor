@@ -180,35 +180,60 @@ export interface EnumField {
   member: string;
   /** Full stored value, e.g. "ETtSaveGameVersion::Initial". */
   value: string;
+  /** The nearest preceding identifier (e.g. a gameplay-tag key) that distinguishes
+   *  this instance from other entries of the same enum type. May be undefined. */
+  context?: string;
   valueOffset: number;
   valueLen: number;
   sizeOffset: number;
 }
 
-/**
- * Find UE enum values: FStrings shaped like `EnumType::Member`, framed by a
- * `size int32 == fstring length` then a `hasGuid == 0` byte. The strict framing
- * is what makes editing one safe (we know exactly which bytes to splice).
- */
-export function scanEnums(body: Uint8Array): EnumField[] {
-  const out: EnumField[] = [];
-  const dv = new DataView(body.buffer, body.byteOffset);
+interface StringHit {
+  offset: number;
+  value: string;
+  byteLen: number;
+}
+
+/** Forward-scan every length-prefixed FString with its offset (for enum + context detection). */
+function collectStrings(body: Uint8Array): StringHit[] {
+  const out: StringHit[] = [];
   let pos = 0;
   while (pos < body.length) {
     const r = new BinaryReader(body);
     r.pos = pos;
-    const s = readFStringChecked(r, 256);
-    if (s !== null && s.includes("::")) {
-      const len = r.pos - pos; // total FString bytes (4 + chars)
-      // framing: [size int32 == len][hasGuid == 0][this FString]
-      if (pos >= 5 && body[pos - 1] === 0 && dv.getInt32(pos - 5, true) === len) {
-        const [enumType, member] = splitOnce(s, "::");
-        out.push({ enumType, member, value: s, valueOffset: pos, valueLen: len, sizeOffset: pos - 5 });
-        pos = r.pos;
-        continue;
-      }
+    const s = readFStringChecked(r, 512);
+    if (s !== null) {
+      out.push({ offset: pos, value: s, byteLen: r.pos - pos });
+      pos = r.pos;
+    } else {
+      pos++;
     }
-    pos++;
+  }
+  return out;
+}
+
+/** A string that identifies a specific instance — a gameplay tag / dotted key. */
+function isContextKey(s: string): boolean {
+  return s.includes(".") && !s.startsWith("/") && !s.includes("::") && s !== "None";
+}
+
+/**
+ * Find UE enum values: FStrings shaped like `EnumType::Member`, framed by a
+ * `size int32 == fstring length` then a `hasGuid == 0` byte. The strict framing
+ * is what makes editing one safe. Each gets the nearest preceding dotted key as
+ * `context` so duplicate enum types can be told apart.
+ */
+export function scanEnums(body: Uint8Array): EnumField[] {
+  const dv = new DataView(body.buffer, body.byteOffset);
+  const strings = collectStrings(body);
+  const out: EnumField[] = [];
+  let lastKey: string | undefined;
+  for (const s of strings) {
+    if (isContextKey(s.value)) lastKey = s.value;
+    if (!s.value.includes("::")) continue;
+    if (s.offset < 5 || body[s.offset - 1] !== 0 || dv.getInt32(s.offset - 5, true) !== s.byteLen) continue;
+    const [enumType, member] = splitOnce(s.value, "::");
+    out.push({ enumType, member, value: s.value, ...(lastKey ? { context: lastKey } : {}), valueOffset: s.offset, valueLen: s.byteLen, sizeOffset: s.offset - 5 });
   }
   return out;
 }

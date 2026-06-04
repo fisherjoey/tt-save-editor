@@ -103,9 +103,13 @@ select {
 }
 select:focus { outline: 2px solid var(--accent2); outline-offset: -1px; }
 
-.enumGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-.enumItem { gap: 5px; }
-.enumName { color: var(--txt); font-size: 12px; }
+.enumList { display: flex; flex-direction: column; gap: 8px; max-height: 460px; overflow: auto; }
+.enumRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 4px; border-bottom: 1px solid var(--line); }
+.enumRow:last-child { border-bottom: 0; }
+.enumLabels { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.enumType { color: var(--accent2); font-size: 12px; }
+.enumCtx { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 420px; }
+.enumRow select { flex-shrink: 0; min-width: 150px; }
 
 .helpBtn {
   position: fixed; top: 16px; right: 16px; z-index: 5;
