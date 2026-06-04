@@ -23,3 +23,37 @@ export function enumOptions(enumType: string, observed: Set<string> | undefined,
   set.add(current);
   return [...set];
 }
+
+export type EnumCategory = "progress" | "settings" | "system";
+
+export interface EnumMeta {
+  /** Human-friendly title for this enum type. */
+  title: string;
+  category: EnumCategory;
+  /** A sensible "complete it" value for the bulk action, when there is one. */
+  completeValue?: string;
+}
+
+/** Friendly names + grouping so non-technical users see "Collectibles", not "ETtGameProgressUnlock". */
+export const ENUM_META: Record<string, EnumMeta> = {
+  ETtGameProgressUnlock: { title: "Collectibles & unlocks", category: "progress", completeValue: "Collected" },
+  ETtChallengeGameProgressState: { title: "Challenges", category: "progress", completeValue: "Completed" },
+  ETtMissionGameProgress: { title: "Missions", category: "progress", completeValue: "Complete" },
+  ETtObjectivesNodeGameProgress: { title: "Objectives", category: "progress", completeValue: "Complete" },
+  EDifficultySetting: { title: "Difficulty", category: "settings" },
+  ETtSaveGameVersion: { title: "Save version", category: "system" },
+  ETtSaveSlotValidationState: { title: "Save validation", category: "system" },
+  ETtPlayGoInstallState: { title: "Install state", category: "system" },
+  E_LowHighResEras: { title: "Resolution era", category: "system" },
+};
+
+export function enumMeta(enumType: string): EnumMeta {
+  return ENUM_META[enumType] ?? { title: enumType.replace(/^E_?/, ""), category: "system" };
+}
+
+export const CATEGORY_LABELS: Record<EnumCategory, string> = {
+  progress: "Progress & unlocks",
+  settings: "Settings",
+  system: "System (advanced)",
+};
+

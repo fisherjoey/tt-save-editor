@@ -136,3 +136,28 @@ select:focus { outline: 2px solid var(--accent2); outline-offset: -1px; }
   color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; padding: 4px;
 }
 .helpClose:hover { color: var(--txt); }
+
+/* grouped enum settings */
+.enumCat { margin-top: 8px; }
+.catTitle { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 18px 0 8px; }
+.enumGroup { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; background: var(--panel2); }
+.enumGroup > summary { list-style: none; cursor: pointer; padding: 11px 14px; display: flex; align-items: center; gap: 10px; }
+.enumGroup > summary::-webkit-details-marker { display: none; }
+.enumGroup > summary::before { content: "▸"; color: var(--muted); transition: transform 0.15s; }
+.enumGroup[open] > summary::before { transform: rotate(90deg); }
+.groupTitle { font-weight: 600; }
+.groupCount { background: var(--line); color: var(--muted); border-radius: 20px; padding: 1px 9px; font-size: 12px; }
+.bulkRow { display: flex; align-items: center; gap: 10px; padding: 4px 14px 12px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+button.small { padding: 6px 12px; font-size: 13px; }
+.enumGroup .enumList { padding: 0 14px 12px; max-height: 360px; }
+.enumGroup .enumRow { gap: 10px; }
+.enumGroup .enumCtx { flex: 1; max-width: none; }
+
+/* advanced raw-field section */
+details.advanced > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+details.advanced > summary::-webkit-details-marker { display: none; }
+details.advanced > summary::before { content: "▸"; color: var(--muted); transition: transform 0.15s; }
+details.advanced[open] > summary::before { transform: rotate(90deg); }
+details.advanced > summary h2 { display: inline; }
+.advHint { color: var(--muted); font-size: 13px; }
+details.advanced > .search, details.advanced .tableWrap { margin-top: 14px; }

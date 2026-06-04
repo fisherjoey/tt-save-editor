@@ -62,6 +62,18 @@ export class SaveFile {
     return this;
   }
 
+  /**
+   * Set many enum fields to the same member at once (e.g. "complete all challenges").
+   * Applies from the highest offset down so each splice can't invalidate the offsets
+   * of fields not yet edited.
+   */
+  setEnumsBulk(fields: EnumField[], member: string): this {
+    for (const f of [...fields].sort((a, b) => b.valueOffset - a.valueOffset)) {
+      this.doc.body = setEnumValue(this.doc.body, f, member);
+    }
+    return this;
+  }
+
   getField(name: string): ScalarField | undefined {
     return findField(this.fields(), name);
   }

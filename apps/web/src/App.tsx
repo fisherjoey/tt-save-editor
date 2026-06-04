@@ -139,11 +139,21 @@ export function App() {
                 setError(e instanceof Error ? e.message : String(e));
               }
             }}
+            onBulk={(fields, member) => {
+              try {
+                loaded.save.setEnumsBulk(fields, member);
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
+            }}
           />
 
-          <section className="card">
-            <h2>All fields</h2>
-            <p className="hint">Every editable value found in the save. Edit anything; changes apply immediately.</p>
+          <details className="card advanced">
+            <summary>
+              <h2>Advanced: all raw fields</h2>
+              <span className="advHint">Every value in the save, by name. For power users.</span>
+            </summary>
             <FieldTable
               fields={loaded.fields}
               onEdit={(field, value) => {
@@ -155,7 +165,7 @@ export function App() {
                 }
               }}
             />
-          </section>
+          </details>
 
           <DownloadBar save={loaded.save} fileName={loaded.fileName} onReset={() => setLoaded(null)} />
         </>

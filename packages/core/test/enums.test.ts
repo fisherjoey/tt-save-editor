@@ -29,4 +29,24 @@ describe("enum scanning + dropdowns", () => {
     // and the save still fully round-trips (no corruption)
     expect(SaveFile.load(reloaded.toBytes(), ks).toBytes()).toEqual(reloaded.toBytes());
   });
+
+  it("captures a distinguishing context key for duplicate enum types", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"), ks);
+    const unlocks = sf.enums().filter((e) => e.enumType === "ETtGameProgressUnlock");
+    expect(unlocks.length).toBeGreaterThan(1);
+    const contexts = new Set(unlocks.map((e) => e.context));
+    expect(contexts.size).toBeGreaterThan(1); // duplicates are actually distinguishable
+  });
+
+  it("bulk-sets every entry of an enum type, length-changing members and all, and re-loads cleanly", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"), ks);
+    const unlocks = sf.enums().filter((e) => e.enumType === "ETtGameProgressUnlock");
+    sf.setEnumsBulk(unlocks, "Collected");
+    const reloaded = SaveFile.load(sf.toBytes(), ks);
+    const after = reloaded.enums().filter((e) => e.enumType === "ETtGameProgressUnlock");
+    expect(after.length).toBe(unlocks.length);
+    expect(after.every((e) => e.member === "Collected")).toBe(true);
+    // still a clean round-trip
+    expect(SaveFile.load(reloaded.toBytes(), ks).toBytes()).toEqual(reloaded.toBytes());
+  });
 });
