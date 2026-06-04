@@ -92,3 +92,7 @@ tr.dirty td.val input { border-color: var(--accent); }
 
 .foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 36px; }
 .foot a { color: var(--accent2); }
+
+.sampleLine { text-align: center; color: var(--muted); font-size: 13px; margin: 14px 0 0; }
+.link { background: none; border: none; color: var(--accent2); cursor: pointer; padding: 0; font: inherit; text-decoration: underline; }
+.link:disabled { opacity: 0.5; cursor: default; }

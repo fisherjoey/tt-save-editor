@@ -49,6 +49,11 @@ export function App() {
     setLoaded((l) => (l ? { ...l, fields: l.save.fields() } : l));
   }, []);
 
+  const loadSample = useCallback(async () => {
+    const buf = await fetch("/sample.sav").then((r) => r.arrayBuffer());
+    onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
+  }, [onFile]);
+
   const padCovers = loaded ? loaded.cipherLen <= (ks?.length ?? 0) : true;
   const buildVersion = loaded ? readBuildVersion(loaded.save) : undefined;
 
@@ -64,7 +69,14 @@ export function App() {
 
       {ksError && <div className="banner err">Could not load the keystream: {ksError}</div>}
 
-      {!loaded && <Dropzone disabled={!ks} onFile={onFile} />}
+      {!loaded && (
+        <>
+          <Dropzone disabled={!ks} onFile={onFile} />
+          <p className="sampleLine">
+            No save handy? <button className="link" disabled={!ks} onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
+          </p>
+        </>
+      )}
       {error && <div className="banner err">Couldn’t open that save: {error}</div>}
 
       {loaded && ks && (
