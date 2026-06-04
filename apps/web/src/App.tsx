@@ -60,6 +60,18 @@ export function App() {
     onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
   }, [onFile]);
 
+  // Optional larger sample (a 100% save) — only present in local builds.
+  const [hasBigSample, setHasBigSample] = useState(false);
+  useEffect(() => {
+    fetch("/sample-100.sav", { method: "HEAD" })
+      .then((r) => setHasBigSample(r.ok))
+      .catch(() => setHasBigSample(false));
+  }, []);
+  const loadBigSample = useCallback(async () => {
+    const buf = await fetch("/sample-100.sav").then((r) => r.arrayBuffer());
+    onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
+  }, [onFile]);
+
   const padCovers = loaded ? loaded.cipherLen <= (ks?.length ?? 0) : true;
   const buildVersion = loaded ? readBuildVersion(loaded.save) : undefined;
 
@@ -87,6 +99,12 @@ export function App() {
           <Dropzone disabled={!ks} onFile={onFile} />
           <p className="sampleLine">
             No save handy? <button className="link" disabled={!ks} onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
+            {hasBigSample && (
+              <>
+                {" · "}
+                <button className="link" disabled={!ks} onClick={loadBigSample}>Try a 100% save (large)</button>
+              </>
+            )}
           </p>
         </>
       )}
