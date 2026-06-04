@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+.vercel/
+coverage/
+target/
+
+# personal captured saves live outside the repo; test fixtures are intentionally committed
