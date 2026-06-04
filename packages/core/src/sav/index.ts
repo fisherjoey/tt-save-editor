@@ -1,5 +1,18 @@
 import { Keystream, decrypt, encrypt } from "../crypt/index.js";
-import { GvasDocument, parse, serialize, scanFields, findField, setFixedValue, setStringValue, ScalarField } from "../gvas/index.js";
+import {
+  GvasDocument,
+  parse,
+  serialize,
+  scanFields,
+  findField,
+  setFixedValue,
+  setStringValue,
+  scanEnums,
+  observedEnumMembers,
+  setEnumValue,
+  ScalarField,
+  EnumField,
+} from "../gvas/index.js";
 
 export class RoundTripError extends Error {
   constructor() {
@@ -32,6 +45,21 @@ export class SaveFile {
 
   fields(): ScalarField[] {
     return scanFields(this.doc.body);
+  }
+
+  enums(): EnumField[] {
+    return scanEnums(this.doc.body);
+  }
+
+  /** Members observed per enum type in this save (for richer dropdowns). */
+  observedEnums(): Map<string, Set<string>> {
+    return observedEnumMembers(this.enums());
+  }
+
+  /** Set an enum field (located by its current byte offset) to a new member. */
+  setEnum(field: EnumField, member: string): this {
+    this.doc.body = setEnumValue(this.doc.body, field, member);
+    return this;
   }
 
   getField(name: string): ScalarField | undefined {

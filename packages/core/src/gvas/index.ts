@@ -4,8 +4,8 @@ import { GvasHeader, readHeader, writeHeader } from "./header.js";
 export type { GvasHeader, CustomVersion } from "./header.js";
 export { NotGvasError } from "./header.js";
 export { BinaryReader, BinaryWriter } from "./binary.js";
-export { scanFields, findField, setFixedValue, setStringValue } from "./scan.js";
-export type { ScalarField, ScalarKind } from "./scan.js";
+export { scanFields, findField, setFixedValue, setStringValue, scanEnums, observedEnumMembers, setEnumValue } from "./scan.js";
+export type { ScalarField, ScalarKind, EnumField } from "./scan.js";
 
 /**
  * A decrypted save = a fully-parsed header + an opaque body.

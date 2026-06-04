@@ -62,7 +62,10 @@ function FieldRow({ field, onEdit }: { field: ScalarField; onEdit: (f: ScalarFie
       <td className="ty">{field.type.replace("Property", "")}</td>
       <td className="val">
         {field.kind === "bool" ? (
-          <input type="checkbox" checked={field.value === true} onChange={(e) => onEdit(field, e.target.checked)} />
+          <select value={field.value === true ? "true" : "false"} onChange={(e) => onEdit(field, e.target.value === "true")}>
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
         ) : (
           <input
             className="mono"

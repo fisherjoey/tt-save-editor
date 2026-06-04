@@ -96,3 +96,39 @@ tr.dirty td.val input { border-color: var(--accent); }
 .sampleLine { text-align: center; color: var(--muted); font-size: 13px; margin: 14px 0 0; }
 .link { background: none; border: none; color: var(--accent2); cursor: pointer; padding: 0; font: inherit; text-decoration: underline; }
 .link:disabled { opacity: 0.5; cursor: default; }
+
+select {
+  background: var(--panel2); border: 1px solid var(--line); color: var(--txt);
+  border-radius: 8px; padding: 7px 10px; font: inherit; font-size: 14px; cursor: pointer;
+}
+select:focus { outline: 2px solid var(--accent2); outline-offset: -1px; }
+
+.enumGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.enumItem { gap: 5px; }
+.enumName { color: var(--txt); font-size: 12px; }
+
+.helpBtn {
+  position: fixed; top: 16px; right: 16px; z-index: 5;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--panel2); border: 1px solid var(--line); color: var(--accent);
+  font-size: 18px; font-weight: 700; line-height: 1; cursor: pointer;
+}
+.helpBtn:hover { border-color: var(--accent); }
+.helpOverlay {
+  position: fixed; inset: 0; z-index: 10; background: rgba(4, 6, 10, 0.7);
+  display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow: auto;
+}
+.helpPanel {
+  position: relative; max-width: 640px; width: 100%;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px 28px 24px;
+}
+.helpPanel h2 { margin: 0 0 8px; }
+.helpPanel h3 { margin: 22px 0 6px; font-size: 15px; color: var(--accent); }
+.helpPanel p, .helpPanel li { color: var(--txt); font-size: 14px; }
+.helpPanel ol { padding-left: 20px; }
+.helpPanel li { margin: 6px 0; }
+.helpClose {
+  position: absolute; top: 12px; right: 14px; background: none; border: none;
+  color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; padding: 4px;
+}
+.helpClose:hover { color: var(--txt); }

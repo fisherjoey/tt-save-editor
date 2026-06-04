@@ -173,6 +173,67 @@ export function findField(fields: ScalarField[], name: string): ScalarField | un
   return fields.find((f) => f.name === name);
 }
 
+export interface EnumField {
+  /** The enum type, e.g. "ETtSaveGameVersion". */
+  enumType: string;
+  /** The current member, e.g. "Initial". */
+  member: string;
+  /** Full stored value, e.g. "ETtSaveGameVersion::Initial". */
+  value: string;
+  valueOffset: number;
+  valueLen: number;
+  sizeOffset: number;
+}
+
+/**
+ * Find UE enum values: FStrings shaped like `EnumType::Member`, framed by a
+ * `size int32 == fstring length` then a `hasGuid == 0` byte. The strict framing
+ * is what makes editing one safe (we know exactly which bytes to splice).
+ */
+export function scanEnums(body: Uint8Array): EnumField[] {
+  const out: EnumField[] = [];
+  const dv = new DataView(body.buffer, body.byteOffset);
+  let pos = 0;
+  while (pos < body.length) {
+    const r = new BinaryReader(body);
+    r.pos = pos;
+    const s = readFStringChecked(r, 256);
+    if (s !== null && s.includes("::")) {
+      const len = r.pos - pos; // total FString bytes (4 + chars)
+      // framing: [size int32 == len][hasGuid == 0][this FString]
+      if (pos >= 5 && body[pos - 1] === 0 && dv.getInt32(pos - 5, true) === len) {
+        const [enumType, member] = splitOnce(s, "::");
+        out.push({ enumType, member, value: s, valueOffset: pos, valueLen: len, sizeOffset: pos - 5 });
+        pos = r.pos;
+        continue;
+      }
+    }
+    pos++;
+  }
+  return out;
+}
+
+function splitOnce(s: string, sep: string): [string, string] {
+  const i = s.indexOf(sep);
+  return i < 0 ? [s, ""] : [s.slice(0, i), s.slice(i + sep.length)];
+}
+
+/** Distinct members observed for each enum type across the save (for dropdown options). */
+export function observedEnumMembers(enums: EnumField[]): Map<string, Set<string>> {
+  const m = new Map<string, Set<string>>();
+  for (const e of enums) {
+    if (!m.has(e.enumType)) m.set(e.enumType, new Set());
+    m.get(e.enumType)!.add(e.member);
+  }
+  return m;
+}
+
+/** Set an enum field to `EnumType::member`, splicing the FString and fixing its size. */
+export function setEnumValue(body: Uint8Array, field: EnumField, member: string): Uint8Array {
+  const newValue = `${field.enumType}::${member}`;
+  return setStringValue(body, { kind: "string", valueOffset: field.valueOffset, valueLen: field.valueLen, sizeOffset: field.sizeOffset } as ScalarField, newValue);
+}
+
 /** Write a new numeric/bool value into a fixed-width or bool field (in place, same length). */
 export function setFixedValue(body: Uint8Array, field: ScalarField, value: number | bigint | boolean): Uint8Array {
   const out = body.slice();

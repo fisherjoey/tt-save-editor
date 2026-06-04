@@ -1,0 +1,32 @@
+import { describe, it, expect } from "vitest";
+import { Keystream } from "../src/crypt/index.js";
+import { SaveFile } from "../src/sav/index.js";
+import { enumOptions, KNOWN_ENUMS } from "../src/enums.js";
+import { fx } from "./helpers.js";
+
+const ks = new Keystream(fx("keystream-61k.bin"));
+
+describe("enum scanning + dropdowns", () => {
+  it("finds the ETtSaveGameVersion enum field", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"), ks);
+    const e = sf.enums().find((x) => x.enumType === "ETtSaveGameVersion");
+    expect(e, "ETtSaveGameVersion enum present").toBeDefined();
+    expect(e!.value.startsWith("ETtSaveGameVersion::")).toBe(true);
+  });
+
+  it("builds dropdown options from known members + observed + current", () => {
+    const opts = enumOptions("ETtSaveGameVersion", new Set(["Initial"]), "Initial");
+    for (const m of KNOWN_ENUMS.ETtSaveGameVersion!) expect(opts).toContain(m);
+  });
+
+  it("edits an enum member safely and re-loads to the new value", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"), ks);
+    const e = sf.enums().find((x) => x.enumType === "ETtSaveGameVersion")!;
+    sf.setEnum(e, "LatestVersion");
+    const reloaded = SaveFile.load(sf.toBytes(), ks);
+    const e2 = reloaded.enums().find((x) => x.enumType === "ETtSaveGameVersion")!;
+    expect(e2.member).toBe("LatestVersion");
+    // and the save still fully round-trips (no corruption)
+    expect(SaveFile.load(reloaded.toBytes(), ks).toBytes()).toEqual(reloaded.toBytes());
+  });
+});

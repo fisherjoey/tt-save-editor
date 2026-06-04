@@ -9,11 +9,15 @@ export {
   findField,
   setFixedValue,
   setStringValue,
+  scanEnums,
+  observedEnumMembers,
+  setEnumValue,
   NotGvasError,
   BinaryReader,
   BinaryWriter,
 } from "./gvas/index.js";
-export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind } from "./gvas/index.js";
+export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind, EnumField } from "./gvas/index.js";
+export { KNOWN_ENUMS, enumOptions } from "./enums.js";
 export { SaveFile, RoundTripError } from "./sav/index.js";
 export { recipes, downgradeRecipe, renameRecipe, readBuildVersion } from "./recipes/index.js";
 export type { Recipe, RecipeParam, ParamType } from "./recipes/index.js";

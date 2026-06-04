@@ -1,0 +1,17 @@
+/**
+ * Known enum member lists, so a dropdown can show every valid option even when a
+ * save only contains one. Data-driven and community-extensible (like recipes) —
+ * add an entry when you map an enum's members. Anything not listed here still gets
+ * a dropdown built from the members observed in the save.
+ */
+export const KNOWN_ENUMS: Record<string, string[]> = {
+  ETtSaveGameVersion: ["NoVersion", "Initial", "LatestVersion", "UnknownVersion", "VersionCount"],
+};
+
+/** Options for an enum dropdown: known members ∪ members seen in the save ∪ current. */
+export function enumOptions(enumType: string, observed: Set<string> | undefined, current: string): string[] {
+  const set = new Set<string>(KNOWN_ENUMS[enumType] ?? []);
+  observed?.forEach((m) => set.add(m));
+  set.add(current);
+  return [...set];
+}

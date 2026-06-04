@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Keystream, SaveFile, readBuildVersion, downgradeRecipe, type ScalarField } from "@tt-save/core";
+import { Keystream, SaveFile, readBuildVersion, downgradeRecipe, type ScalarField, type EnumField } from "@tt-save/core";
 import { Dropzone } from "./components/Dropzone.js";
 import { FieldTable } from "./components/FieldTable.js";
+import { EnumPanel } from "./components/EnumPanel.js";
+import { Help } from "./components/Help.js";
 
 interface Loaded {
   fileName: string;
   save: SaveFile;
   cipherLen: number;
   fields: ScalarField[];
+  enums: EnumField[];
+  observed: Map<string, Set<string>>;
 }
 
 export function App() {
@@ -15,6 +19,7 @@ export function App() {
   const [ksError, setKsError] = useState<string | null>(null);
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [help, setHelp] = useState(false);
   const [, force] = useState(0);
   const rerender = () => force((n) => n + 1);
 
@@ -36,7 +41,7 @@ export function App() {
       if (!ks) return;
       try {
         const save = SaveFile.load(bytes, ks);
-        setLoaded({ fileName: name, save, cipherLen: bytes.length, fields: save.fields() });
+        setLoaded({ fileName: name, save, cipherLen: bytes.length, fields: save.fields(), enums: save.enums(), observed: save.observedEnums() });
       } catch (e) {
         setLoaded(null);
         setError(e instanceof Error ? e.message : String(e));
@@ -46,7 +51,7 @@ export function App() {
   );
 
   const refreshFields = useCallback(() => {
-    setLoaded((l) => (l ? { ...l, fields: l.save.fields() } : l));
+    setLoaded((l) => (l ? { ...l, fields: l.save.fields(), enums: l.save.enums(), observed: l.save.observedEnums() } : l));
   }, []);
 
   const loadSample = useCallback(async () => {
@@ -59,12 +64,19 @@ export function App() {
 
   return (
     <div className="app">
+      <button className="helpBtn" onClick={() => setHelp(true)} aria-label="What is this?" title="What is this?">
+        ?
+      </button>
+      {help && <Help onClose={() => setHelp(false)} />}
+
       <header className="masthead">
         <h1>
           TT Save Editor <span className="bat">🦇</span>
         </h1>
         <p className="sub">LEGO Batman: Legacy of the Dark Knight — edit any field, or make a save load on an older patch.</p>
-        <p className="privacy">Your save is decrypted and edited entirely in your browser. Nothing is ever uploaded.</p>
+        <p className="privacy">
+          Your save is decrypted and edited entirely in your browser. Nothing is ever uploaded. <button className="link" onClick={() => setHelp(true)}>How it works</button>
+        </p>
       </header>
 
       {ksError && <div className="banner err">Could not load the keystream: {ksError}</div>}
@@ -113,6 +125,19 @@ export function App() {
             onApplied={() => {
               refreshFields();
               rerender();
+            }}
+          />
+
+          <EnumPanel
+            enums={loaded.enums}
+            observed={loaded.observed}
+            onChange={(field, member) => {
+              try {
+                loaded.save.setEnum(field, member);
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
             }}
           />
 
