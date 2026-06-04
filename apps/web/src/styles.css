@@ -1,0 +1,94 @@
+:root {
+  --bg: #0b0e14;
+  --panel: #141925;
+  --panel2: #1b2230;
+  --line: #283044;
+  --txt: #e6e9ef;
+  --muted: #8b94a7;
+  --accent: #ffd23f; /* bat-signal yellow */
+  --accent2: #4ea1ff;
+  --ok: #57d9a3;
+  --warn: #ffb454;
+  --err: #ff6b6b;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 50% -200px, #182033 0%, var(--bg) 60%);
+  color: var(--txt);
+  font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+.app { max-width: 880px; margin: 0 auto; padding: 32px 20px 80px; }
+.masthead { text-align: center; margin-bottom: 28px; }
+.masthead h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -0.02em; }
+.bat { filter: drop-shadow(0 0 8px var(--accent)); }
+.sub { color: var(--txt); margin: 0 0 6px; }
+.privacy { color: var(--muted); font-size: 13px; margin: 0; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 16px 0;
+}
+.card h2 { margin: 0 0 4px; font-size: 17px; }
+.hint { color: var(--muted); font-size: 13px; margin: 4px 0 14px; }
+.mono { font-family: var(--mono); }
+
+.dropzone {
+  border: 2px dashed var(--line);
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--panel);
+}
+.dropzone.over { border-color: var(--accent); background: #161c2b; }
+.dropzone.disabled { opacity: 0.5; cursor: default; }
+.dzInner { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.dzIcon { font-size: 40px; }
+.dzHint { color: var(--muted); font-size: 12px; max-width: 560px; }
+code { font-family: var(--mono); background: var(--panel2); padding: 1px 5px; border-radius: 5px; font-size: 0.9em; }
+
+.banner { padding: 10px 14px; border-radius: 10px; font-size: 13px; margin: 12px 0; }
+.banner.err { background: #2a1417; color: var(--err); border: 1px solid #50232a; }
+.banner.warn { background: #2a2113; color: var(--warn); border: 1px solid #524222; }
+
+.meta .metaRow { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.meta .metaRow:last-child { border-bottom: 0; }
+.meta .k { width: 130px; color: var(--muted); }
+.meta .v { flex: 1; word-break: break-all; }
+
+.downgrade .row { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+input[type="text"], input:not([type]), .search, .downgrade input, .fields input {
+  background: var(--panel2); border: 1px solid var(--line); color: var(--txt);
+  border-radius: 8px; padding: 8px 10px; font-size: 14px;
+}
+input:focus { outline: 2px solid var(--accent2); outline-offset: -1px; }
+.refpick input[type="file"] { color: var(--muted); }
+
+button { font: inherit; border-radius: 9px; padding: 9px 16px; cursor: pointer; border: 1px solid transparent; }
+button.primary { background: var(--accent); color: #1a1505; font-weight: 600; }
+button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+button.ghost { background: transparent; border-color: var(--line); color: var(--txt); }
+.ok { color: var(--ok); font-size: 13px; margin: 10px 0 0; }
+
+.search { width: 100%; margin-bottom: 12px; }
+.tableWrap { max-height: 460px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+table.fields { width: 100%; border-collapse: collapse; font-size: 13px; }
+.fields th { position: sticky; top: 0; background: var(--panel2); text-align: left; padding: 8px 10px; color: var(--muted); font-weight: 600; }
+.fields td { padding: 5px 10px; border-top: 1px solid var(--line); }
+.fields td.name { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fields td.ty { color: var(--accent2); }
+.fields td.val input { width: 100%; min-width: 120px; padding: 4px 8px; }
+tr.dirty td.val input { border-color: var(--accent); }
+
+.downloadbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.dlbtns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 36px; }
+.foot a { color: var(--accent2); }
