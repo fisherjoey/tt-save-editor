@@ -7,3 +7,7 @@ coverage/
 target/
 
 # personal captured saves live outside the repo; test fixtures are intentionally committed
+
+# optional test fixtures kept local only (personal / third-party saves not redistributed)
+packages/core/test/fixtures/slot0_patched.sav
+packages/core/test/fixtures/slot0_thirdparty_100pct.sav

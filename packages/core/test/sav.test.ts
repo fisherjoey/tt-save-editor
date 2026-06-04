@@ -1,29 +1,27 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { Keystream } from "../src/crypt/index.js";
 import { SaveFile } from "../src/sav/index.js";
 import { downgradeRecipe, renameRecipe, readBuildVersion } from "../src/recipes/index.js";
+import { fx, hasFx, REAL_SAVES } from "./helpers.js";
 
-const fx = (name: string) => new Uint8Array(readFileSync(fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url))));
 const ks = new Keystream(fx("keystream-61k.bin"));
 
 describe("SaveFile", () => {
   it("loads with a passing round-trip self-check (even partially-covered big saves)", () => {
-    for (const name of ["slot1_prepatch.sav", "slot0_patched.sav", "slot0_thirdparty_100pct.sav"]) {
+    for (const name of REAL_SAVES) {
       const sf = SaveFile.load(fx(name), ks);
-      expect(sf.isUnmodified()).toBe(true);
-      expect(sf.toBytes()).toEqual(fx(name)); // no-op === original
+      expect(sf.isUnmodified(), name).toBe(true);
+      expect(sf.toBytes(), name).toEqual(fx(name));
     }
   });
 
   it("reads the build version", () => {
-    expect(readBuildVersion(SaveFile.load(fx("slot0_patched.sav"), ks))).toBe(1283556);
     expect(readBuildVersion(SaveFile.load(fx("slot1_prepatch.sav"), ks))).toBe(1281204);
+    if (hasFx("slot0_patched.sav")) expect(readBuildVersion(SaveFile.load(fx("slot0_patched.sav"), ks))).toBe(1283556);
   });
 });
 
-describe("downgrade recipe", () => {
+describe.skipIf(!hasFx("slot0_patched.sav"))("downgrade recipe", () => {
   it("lowers BuildVersion + changelist to the target, touching nothing else", () => {
     const original = fx("slot0_patched.sav");
     const sf = SaveFile.load(original, ks);
@@ -33,12 +31,9 @@ describe("downgrade recipe", () => {
     expect(sf.doc.header.changelist).toBe(1281204);
 
     const out = sf.toBytes();
-    expect(out.length).toBe(original.length); // progress untouched, same size
-    // re-load the edited save and confirm it parses cleanly with the new value
-    const reloaded = SaveFile.load(out, ks);
-    expect(readBuildVersion(reloaded)).toBe(1281204);
+    expect(out.length).toBe(original.length);
+    expect(readBuildVersion(SaveFile.load(out, ks))).toBe(1281204);
 
-    // only a handful of bytes changed (BuildVersion u32 + changelist u32)
     const diffs = [...out].reduce((n, b, i) => n + (b !== original[i] ? 1 : 0), 0);
     expect(diffs).toBeLessThanOrEqual(8);
   });
@@ -49,7 +44,6 @@ describe("rename recipe", () => {
     const sf = SaveFile.load(fx("slot1_prepatch.sav"), ks);
     renameRecipe.apply(sf, { name: "PRACTICE" });
     expect(sf.getField("SaveName")!.value).toBe("PRACTICE");
-    // edited save re-loads cleanly
     expect(SaveFile.load(sf.toBytes(), ks).getField("SaveName")!.value).toBe("PRACTICE");
   });
 });

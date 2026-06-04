@@ -1,10 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { Keystream, decrypt, encrypt } from "../src/crypt/index.js";
 import { parse, serialize, scanFields, findField, setFixedValue } from "../src/gvas/index.js";
+import { fx, hasFx, REAL_SAVES } from "./helpers.js";
 
-const fx = (name: string) => new Uint8Array(readFileSync(fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url))));
 const ks = new Keystream(fx("keystream-61k.bin"));
 
 describe("gvas header + body", () => {
@@ -16,8 +14,8 @@ describe("gvas header + body", () => {
     expect(doc.header.engineMinor).toBe(6);
   });
 
-  it("BYTE-IDENTICAL round-trip on every real save (the safety net)", () => {
-    for (const name of ["slot1_prepatch.sav", "slot0_patched.sav", "slot0_thirdparty_100pct.sav"]) {
+  it("BYTE-IDENTICAL round-trip on every available real save (the safety net)", () => {
+    for (const name of REAL_SAVES) {
       const plain = decrypt(fx(name), ks, { allowPartial: true });
       const out = serialize(parse(plain));
       expect(out.length, `${name} length`).toBe(plain.length);
@@ -25,7 +23,7 @@ describe("gvas header + body", () => {
     }
   });
 
-  it("full pipeline no-op is byte-identical: encrypt(serialize(parse(decrypt(f)))) === f", () => {
+  it("full pipeline no-op is byte-identical", () => {
     const c = fx("slot1_prepatch.sav");
     const plain = decrypt(c, ks, { allowPartial: true });
     const out = encrypt(serialize(parse(plain)), ks, { allowPartial: true });
@@ -36,13 +34,12 @@ describe("gvas header + body", () => {
 describe("scanner", () => {
   it("finds BuildVersion by name (not offset) and decodes it", () => {
     const doc = parse(decrypt(fx("slot1_prepatch.sav"), ks, { allowPartial: true }));
-    const fields = scanFields(doc.body);
-    const bv = findField(fields, "BuildVersion");
+    const bv = findField(scanFields(doc.body), "BuildVersion");
     expect(bv?.type).toBe("UInt32Property");
-    expect(bv?.value).toBe(1281204); // pre-patch build
+    expect(bv?.value).toBe(1281204);
   });
 
-  it("finds the same BuildVersion field in a THIRD-PARTY save (by name, robust to layout shift)", () => {
+  it.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("finds BuildVersion in a third-party save (robust to layout shift)", () => {
     const doc = parse(decrypt(fx("slot0_thirdparty_100pct.sav"), ks, { allowPartial: true }));
     const bv = findField(scanFields(doc.body), "BuildVersion");
     expect(bv?.type).toBe("UInt32Property");
@@ -56,7 +53,7 @@ describe("scanner", () => {
     doc.body = setFixedValue(doc.body, bv, 999);
     const out = serialize(doc);
     const diffs = [...out].reduce((n, b, i) => n + (b !== plain[i] ? 1 : 0), 0);
-    expect(diffs).toBeLessThanOrEqual(4); // only the UInt32
+    expect(diffs).toBeLessThanOrEqual(4);
     expect(findField(scanFields(parse(out).body), "BuildVersion")!.value).toBe(999);
   });
 });
