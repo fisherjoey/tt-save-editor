@@ -4,7 +4,7 @@ A free, in-browser save editor for **LEGO Batman: Legacy of the Dark Knight**.
 
 Edit any field in your save, or make a save load on an **older patch** of the game (handy for speedrun practice when an update removes a route). Everything runs locally in your browser — your save file is never uploaded anywhere.
 
-> **Web app:** https://tt-save-editor.vercel.app · **Status:** early but the core is well-tested and safe.
+> **Status:** early, but the core is well-tested and safe. Deploy your own in one click by importing this repo on [Vercel](https://vercel.com/new) (it reads `vercel.json` automatically) — or run it locally (below).
 
 ## What it does
 
