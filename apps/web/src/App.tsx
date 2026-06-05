@@ -37,19 +37,21 @@ export function App() {
   }, []);
 
   const loadSample = useCallback(async () => {
-    const buf = await fetch("/sample.sav").then((r) => r.arrayBuffer());
+    const buf = await fetch("./sample.sav").then((r) => r.arrayBuffer());
     onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
   }, [onFile]);
 
-  // Optional larger sample (a 100% save) — only present in local builds.
+  // Optional larger sample (a 100% save) — only present in local builds, and
+  // file:// can't fetch at all so don't bother probing.
   const [hasBigSample, setHasBigSample] = useState(false);
   useEffect(() => {
-    fetch("/sample-100.sav", { method: "HEAD" })
+    if (typeof location !== "undefined" && location.protocol === "file:") return;
+    fetch("./sample-100.sav", { method: "HEAD" })
       .then((r) => setHasBigSample(r.ok))
       .catch(() => setHasBigSample(false));
   }, []);
   const loadBigSample = useCallback(async () => {
-    const buf = await fetch("/sample-100.sav").then((r) => r.arrayBuffer());
+    const buf = await fetch("./sample-100.sav").then((r) => r.arrayBuffer());
     onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
   }, [onFile]);
 
@@ -75,15 +77,17 @@ export function App() {
       {!loaded && (
         <>
           <Dropzone disabled={false} onFile={onFile} />
-          <p className="sampleLine">
-            No save handy? <button className="link" onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
-            {hasBigSample && (
-              <>
-                {" · "}
-                <button className="link" onClick={loadBigSample}>Try a 100% save (large)</button>
-              </>
-            )}
-          </p>
+          {typeof location !== "undefined" && location.protocol !== "file:" && (
+            <p className="sampleLine">
+              No save handy? <button className="link" onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
+              {hasBigSample && (
+                <>
+                  {" · "}
+                  <button className="link" onClick={loadBigSample}>Try a 100% save (large)</button>
+                </>
+              )}
+            </p>
+          )}
         </>
       )}
       {error && <div className="banner err">Couldn’t open that save: {error}</div>}

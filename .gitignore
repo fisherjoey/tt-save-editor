@@ -12,3 +12,5 @@ target/
 packages/core/test/fixtures/slot0_patched.sav
 packages/core/test/fixtures/slot0_thirdparty_100pct.sav
 apps/web/public/sample-100.sav
+.vercel
+release/
