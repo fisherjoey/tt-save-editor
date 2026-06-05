@@ -1,13 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { Keystream, decrypt, encrypt } from "../src/crypt/index.js";
+import { decrypt, encrypt } from "../src/crypt/index.js";
 import { parse, serialize, scanFields, findField, setFixedValue } from "../src/gvas/index.js";
 import { fx, hasFx, REAL_SAVES } from "./helpers.js";
 
-const ks = new Keystream(fx("keystream-61k.bin"));
-
 describe("gvas header + body", () => {
   it("parses the real save header", () => {
-    const doc = parse(decrypt(fx("slot1_prepatch.sav"), ks, { allowPartial: true }));
+    const doc = parse(decrypt(fx("slot1_prepatch.sav")));
     expect(doc.header.branch).toBe("++Dinner+mainline");
     expect(doc.header.saveGameClassName).toBe("/Script/TtSaveSystem.TtSaveGame");
     expect(doc.header.engineMajor).toBe(5);
@@ -16,38 +14,36 @@ describe("gvas header + body", () => {
 
   it("BYTE-IDENTICAL round-trip on every available real save (the safety net)", () => {
     for (const name of REAL_SAVES) {
-      const plain = decrypt(fx(name), ks, { allowPartial: true });
+      const plain = decrypt(fx(name));
       const out = serialize(parse(plain));
       expect(out.length, `${name} length`).toBe(plain.length);
       expect(out, `${name} bytes`).toEqual(plain);
     }
   });
 
-  it("full pipeline no-op is byte-identical", () => {
+  it("full pipeline no-op is byte-identical: encrypt(serialize(parse(decrypt(f)))) === f", () => {
     const c = fx("slot1_prepatch.sav");
-    const plain = decrypt(c, ks, { allowPartial: true });
-    const out = encrypt(serialize(parse(plain)), ks, { allowPartial: true });
-    expect(out).toEqual(c);
+    expect(encrypt(serialize(parse(decrypt(c))))).toEqual(c);
   });
 });
 
 describe("scanner", () => {
   it("finds BuildVersion by name (not offset) and decodes it", () => {
-    const doc = parse(decrypt(fx("slot1_prepatch.sav"), ks, { allowPartial: true }));
+    const doc = parse(decrypt(fx("slot1_prepatch.sav")));
     const bv = findField(scanFields(doc.body), "BuildVersion");
     expect(bv?.type).toBe("UInt32Property");
     expect(bv?.value).toBe(1281204);
   });
 
   it.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("finds BuildVersion in a third-party save (robust to layout shift)", () => {
-    const doc = parse(decrypt(fx("slot0_thirdparty_100pct.sav"), ks, { allowPartial: true }));
+    const doc = parse(decrypt(fx("slot0_thirdparty_100pct.sav")));
     const bv = findField(scanFields(doc.body), "BuildVersion");
     expect(bv?.type).toBe("UInt32Property");
     expect(typeof bv?.value).toBe("number");
   });
 
   it("editing a field changes only its value bytes and re-scans to the new value", () => {
-    const plain = decrypt(fx("slot1_prepatch.sav"), ks, { allowPartial: true });
+    const plain = decrypt(fx("slot1_prepatch.sav"));
     const doc = parse(plain);
     const bv = findField(scanFields(doc.body), "BuildVersion")!;
     doc.body = setFixedValue(doc.body, bv, 999);

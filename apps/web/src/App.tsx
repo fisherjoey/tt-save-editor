@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Keystream, SaveFile, readBuildVersion, downgradeRecipe, type ScalarField, type EnumField } from "@tt-save/core";
+import { SaveFile, readBuildVersion, downgradeRecipe, type ScalarField, type EnumField } from "@tt-save/core";
 import { Dropzone } from "./components/Dropzone.js";
 import { FieldTable } from "./components/FieldTable.js";
 import { EnumPanel } from "./components/EnumPanel.js";
@@ -9,47 +9,28 @@ import { Help } from "./components/Help.js";
 interface Loaded {
   fileName: string;
   save: SaveFile;
-  cipherLen: number;
   fields: ScalarField[];
   enums: EnumField[];
   observed: Map<string, Set<string>>;
 }
 
 export function App() {
-  const [ks, setKs] = useState<Keystream | null>(null);
-  const [ksError, setKsError] = useState<string | null>(null);
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [help, setHelp] = useState(false);
   const [, force] = useState(0);
   const rerender = () => force((n) => n + 1);
 
-  // Load the bundled universal keystream once.
-  useEffect(() => {
-    fetch("/keystream.bin")
-      .then((r) => r.arrayBuffer())
-      .then((buf) => {
-        const k = new Keystream(new Uint8Array(buf));
-        if (!k.isValid()) throw new Error("bundled keystream failed its sanity check");
-        setKs(k);
-      })
-      .catch((e) => setKsError(String(e)));
+  const onFile = useCallback((name: string, bytes: Uint8Array) => {
+    setError(null);
+    try {
+      const save = SaveFile.load(bytes);
+      setLoaded({ fileName: name, save, fields: save.fields(), enums: save.enums(), observed: save.observedEnums() });
+    } catch (e) {
+      setLoaded(null);
+      setError(e instanceof Error ? e.message : String(e));
+    }
   }, []);
-
-  const onFile = useCallback(
-    (name: string, bytes: Uint8Array) => {
-      setError(null);
-      if (!ks) return;
-      try {
-        const save = SaveFile.load(bytes, ks);
-        setLoaded({ fileName: name, save, cipherLen: bytes.length, fields: save.fields(), enums: save.enums(), observed: save.observedEnums() });
-      } catch (e) {
-        setLoaded(null);
-        setError(e instanceof Error ? e.message : String(e));
-      }
-    },
-    [ks],
-  );
 
   const refreshFields = useCallback(() => {
     setLoaded((l) => (l ? { ...l, fields: l.save.fields(), enums: l.save.enums(), observed: l.save.observedEnums() } : l));
@@ -72,7 +53,6 @@ export function App() {
     onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
   }, [onFile]);
 
-  const padCovers = loaded ? loaded.cipherLen <= (ks?.length ?? 0) : true;
   const buildVersion = loaded ? readBuildVersion(loaded.save) : undefined;
 
   return (
@@ -92,17 +72,15 @@ export function App() {
         </p>
       </header>
 
-      {ksError && <div className="banner err">Could not load the keystream: {ksError}</div>}
-
       {!loaded && (
         <>
-          <Dropzone disabled={!ks} onFile={onFile} />
+          <Dropzone disabled={false} onFile={onFile} />
           <p className="sampleLine">
-            No save handy? <button className="link" disabled={!ks} onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
+            No save handy? <button className="link" onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
             {hasBigSample && (
               <>
                 {" · "}
-                <button className="link" disabled={!ks} onClick={loadBigSample}>Try a 100% save (large)</button>
+                <button className="link" onClick={loadBigSample}>Try a 100% save (large)</button>
               </>
             )}
           </p>
@@ -110,7 +88,7 @@ export function App() {
       )}
       {error && <div className="banner err">Couldn’t open that save: {error}</div>}
 
-      {loaded && ks && (
+      {loaded && (
         <>
           <section className="card meta">
             <div className="metaRow">
@@ -131,12 +109,6 @@ export function App() {
               <span className="k">Build version</span>
               <span className="v mono">{buildVersion ?? "—"}</span>
             </div>
-            {!padCovers && (
-              <div className="banner warn">
-                This save ({(loaded.cipherLen / 1024).toFixed(0)} KB) is larger than the bundled keystream ({((ks.length || 0) / 1024).toFixed(0)} KB). Header
-                edits and the downgrade still work, but fields past the covered region are hidden until a longer keystream is loaded.
-              </div>
-            )}
           </section>
 
           <QuickEdits
@@ -229,11 +201,8 @@ function DowngradePanel({ save, onApplied }: { save: SaveFile; onApplied: () => 
   const [msg, setMsg] = useState<string | null>(null);
 
   const readFromReference = (bytes: Uint8Array, name: string) => {
-    // We can't know the user's keystream here; reuse the same bundled one via a throwaway load.
     try {
-      // Reference saves share the universal pad, so the bundled keystream reads them too.
-      const ref = (save as unknown as { keystream: Keystream }).keystream;
-      const sf = SaveFile.load(bytes, ref);
+      const sf = SaveFile.load(bytes);
       const bv = readBuildVersion(sf);
       if (bv === undefined) throw new Error("no BuildVersion in that save");
       setTarget(String(bv));

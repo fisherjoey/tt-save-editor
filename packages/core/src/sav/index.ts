@@ -1,4 +1,4 @@
-import { Keystream, decrypt, encrypt } from "../crypt/index.js";
+import { decrypt, encrypt } from "../crypt/index.js";
 import {
   GvasDocument,
   parse,
@@ -30,15 +30,14 @@ export class RoundTripError extends Error {
 export class SaveFile {
   private constructor(
     public doc: GvasDocument,
-    readonly keystream: Keystream,
     /** The exact ciphertext we loaded, for the round-trip self-check. */
     private readonly originalCipher: Uint8Array,
   ) {}
 
-  static load(cipher: Uint8Array, keystream: Keystream): SaveFile {
-    const plain = decrypt(cipher, keystream, { allowPartial: true });
+  static load(cipher: Uint8Array): SaveFile {
+    const plain = decrypt(cipher);
     const doc = parse(plain);
-    const sf = new SaveFile(doc, keystream, cipher);
+    const sf = new SaveFile(doc, cipher);
     // Prove we can reproduce the input before allowing any edits.
     if (!eq(sf.toBytes(), cipher)) throw new RoundTripError();
     return sf;
@@ -108,7 +107,7 @@ export class SaveFile {
 
   /** Re-encrypt. Self-checks that a no-op save reproduces the original ciphertext. */
   toBytes(): Uint8Array {
-    return encrypt(serialize(this.doc), this.keystream, { allowPartial: true });
+    return encrypt(serialize(this.doc));
   }
 
   /** The matching BackupCopy_* file (the game cross-checks the pair). Identical bytes. */

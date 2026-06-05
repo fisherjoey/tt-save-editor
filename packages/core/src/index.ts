@@ -1,7 +1,7 @@
 // @tt-save/core — decrypt, parse, edit, and re-encrypt LEGO Batman: Legacy of the
 // Dark Knight save files. Everything is pure data (no game, no network).
 
-export { Keystream, KEYSTREAM_ANCHOR, decrypt, encrypt, KeystreamTooShortError } from "./crypt/index.js";
+export { decrypt, encrypt } from "./crypt/index.js";
 export {
   parse,
   serialize,

@@ -4,18 +4,25 @@ A free, in-browser save editor for **LEGO Batman: Legacy of the Dark Knight**.
 
 Edit any field in your save, or make a save load on an **older patch** of the game (handy for speedrun practice when an update removes a route). Everything runs locally in your browser — your save file is never uploaded anywhere.
 
-> **Status:** early, but the core is well-tested and safe. Deploy your own in one click by importing this repo on [Vercel](https://vercel.com/new) (it reads `vercel.json` automatically) — or run it locally (below).
+> **Status:** early but well-tested. Deploy your own in one click by importing this repo on [Vercel](https://vercel.com/new) (it reads `vercel.json` automatically) — or run it locally (below).
 
 ## What it does
 
 - **Open a `.sav`** — drag in `SaveSlot_0_TT.sav` and the editor decrypts it in your browser.
-- **Edit any field** — studs, counters, flags, names, and every other value the save stores, found and listed by name.
-- **Downgrade to an older patch** — set the save's build version back so a pre-patch build will load it. The game otherwise refuses with *"This save was created on an updated version."*
-- **Download** the patched `SaveSlot` and its matching `BackupCopy` (the game checks the pair).
+- **🏆 Complete everything** — one click marks all collectibles, challenges, missions, and objectives done.
+- **Studs box** — change your total studs as a labelled input, no hunting required.
+- **Make a save load on an older patch** — sets the build-version stamp back so a pre-patch build will load it. The game otherwise refuses with *"This save was created on an updated version."*
+- **Progress & settings dropdowns** — friendly grouped panels for difficulty, mission state, collectible state, objectives, save validation, install state, etc. Each entry is labelled with the gameplay tag that identifies it.
+- **Advanced: all raw fields** — every value in the save, by name, for power users.
+- **Download** the patched `SaveSlot` and matching `BackupCopy` (the game checks the pair).
 
-## Why this is safe
+## Credit
 
-Corrupting a save would be the worst thing this tool could do, so safety is the whole design:
+The save cipher — RC4 with a 32-byte key reverse-engineered out of the game executable — is from [**@RealDarkCraft**'s save-decryptor](https://github.com/RealDarkCraft/LEGO-Batman-Legacy-of-the-Dark-Knight---Save-decryptor). Big thanks; the editor is built on top of that discovery.
+
+## Safety
+
+Corrupting a save is the worst thing this tool could do, so safety is the design:
 
 - The save's body is kept **byte-for-byte** and only the exact bytes you change are touched. Opening and re-saving without edits produces an **identical file** — verified in the test suite against real saves up to a 1.5 MB 100%-completion save.
 - On load, the editor runs a round-trip self-check and **refuses to emit a file it can't reproduce**.
@@ -23,22 +30,15 @@ Corrupting a save would be the worst thing this tool could do, so safety is the 
 
 Still: keep a backup of your save before replacing it.
 
-## How the saves work (the short version)
+## How it works under the hood
 
-The game (Unreal Engine 5.6, internal project "Dinner", `TtSaveSystem`) obfuscates saves by XOR-ing the data against a **fixed keystream that's the same in every copy of the game**. Underneath is a standard UE **GVAS** save. Because the keystream is constant, one captured pad decrypts and re-encrypts anyone's save — which is why this works as a zero-install web app with no game running.
-
-The version check that blocks cross-patch loads is a `BuildVersion` field stored in the save; the downgrade simply sets it to the target build's value.
-
-## Keystream
-
-The editor ships with a bundled keystream that covers the start of every save (enough for the version downgrade on any file). For editing fields deep inside very large saves, a longer keystream is needed — see [`tools/capture`](tools/capture) to extract one from your own running game (the keystream is identical for everyone, so this is rarely necessary).
+Saves are **RC4-encrypted** with a fixed 32-byte key baked into the game (same in every copy — so one cipher works for everyone, fully client-side). Under the encryption it's standard UE5 **GVAS** (engine branch `++Dinner+mainline`). The editor parses the header, locates editable scalar and enum fields by name (never by fixed offset, which would break across saves), and rewrites only the bytes you change.
 
 ## Repo layout
 
 ```
-packages/core   @tt-save/core — decrypt / parse / scan / edit / re-encrypt (no UI, no network)
-apps/web        React + Vite single-page app (the editor UI)
-tools/capture   keystream extractor (reads the pad from a running game)
+packages/core    @tt-save/core — decrypt / parse / scan / edit / re-encrypt (no UI, no network)
+apps/web         React + Vite single-page app (the editor UI)
 ```
 
 ## Develop
@@ -51,12 +51,12 @@ pnpm -C apps/web dev           # http://localhost:5173
 
 ## Contributing
 
-The generic field editor already covers everything by name. "Curated" editors (a labelled *Studs* box, *unlock all characters*, etc.) are data-driven recipes — see [`packages/core/src/recipes`](packages/core/src/recipes). Mapping a field is usually as simple as: change it in-game, re-save, diff, and add a recipe. PRs welcome.
+Curated "Quick edits" (Studs etc.) and grouped enum titles are data-driven — see `packages/core/src/featured.ts` and `packages/core/src/enums.ts`. Mapping a new field is usually as simple as: change it in-game, re-save, diff, and add an entry. PRs welcome.
 
 ## Legal
 
-This edits **your own save files** for your own copy of the game — interoperability and personal use. It ships a reverse-engineered XOR keystream (the same thing every save editor needs) and **no copyrighted game assets**. Not affiliated with, endorsed by, or connected to Warner Bros. or TT Games. MIT licensed.
+This edits **your own save files** for your own copy of the game — interoperability and personal use. Not affiliated with, endorsed by, or connected to Warner Bros. or TT Games. MIT licensed.
 
 ---
 
-_Keywords: LEGO Batman Legacy of the Dark Knight save editor, save downgrade, version downgrade, "created on an updated version" fix, GVAS editor, TtSave, speedrun practice._
+*Keywords: LEGO Batman Legacy of the Dark Knight save editor, save downgrade, version downgrade, "created on an updated version" fix, GVAS editor, TtSave, speedrun practice.*
