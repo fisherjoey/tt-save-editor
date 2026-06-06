@@ -87,6 +87,25 @@ describe.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("manifest vs 100% save", 
   });
 });
 
+describe("SaveFile.addCollectibles (max-out)", () => {
+  it("adds only missing tags, is idempotent, and round-trips", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"));
+    const gb = COLLECTIBLES.find((c) => c.key === "GoldBricks")!;
+    const allTags = gb.tags.map((t) => t.tag);
+    const before = sf.enumArrayEntries().length;
+    const added = sf.addCollectibles(allTags, gb.stateValue);
+    expect(added).toBeGreaterThan(0);
+    const after = sf.enumArrayEntries();
+    expect(after.length).toBe(before + added);
+    const have = new Set(after.map((e) => e.tag));
+    for (const t of allTags) expect(have.has(t), t).toBe(true);
+    // idempotent
+    expect(sf.addCollectibles(allTags, gb.stateValue)).toBe(0);
+    // round-trips cleanly
+    expect(() => SaveFile.load(sf.toBytes())).not.toThrow();
+  });
+});
+
 describe.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("insert a manifest collectible end-to-end", () => {
   it("inserts a gold brick the save lacks using the manifest's stateValue; count grows; round-trips", () => {
     const sf = SaveFile.load(fx("slot1_prepatch.sav"));
