@@ -1,4 +1,5 @@
 import { BinaryReader, BinaryWriter } from "./binary.js";
+import { parseStructure, ancestorContainers } from "./structure.js";
 
 /** Fixed-width scalar property types and their value byte length. */
 const FIXED: Record<string, number> = {
@@ -300,17 +301,33 @@ export function setFixedValue(body: Uint8Array, field: ScalarField, value: numbe
   return out;
 }
 
-/** Write a new string into a Str/NameProperty, splicing and fixing the size int32. */
+/**
+ * Write a new string into a Str/NameProperty/EnumProperty FString, splicing and
+ * fixing the size int32. If the new payload changes length, also walks every
+ * ancestor container (Struct/Array/Map/InstancedStruct) and bumps its outer Size
+ * by the delta — without that, neighbouring entries inside the same container
+ * get misread by the game (the v0.1.1 "edit X resets Y" bug).
+ */
 export function setStringValue(body: Uint8Array, field: ScalarField, value: string): Uint8Array {
   if (field.kind !== "string") throw new Error("setStringValue on non-string field");
   const w = new BinaryWriter();
   w.fstring(value);
   const newPayload = w.toBytes();
+  const delta = newPayload.length - field.valueLen;
+
+  // Resolve ancestor containers from the OLD body, before splicing. Their sizeOffsets
+  // all sit before the edit point, so they remain valid in the new body.
+  const ancestors = delta === 0 ? [] : ancestorContainers(parseStructure(body), field.valueOffset);
+
   const out = new Uint8Array(body.length - field.valueLen + newPayload.length);
   out.set(body.subarray(0, field.valueOffset), 0);
   out.set(newPayload, field.valueOffset);
   out.set(body.subarray(field.valueOffset + field.valueLen), field.valueOffset + newPayload.length);
-  // update the property's size int32 to the new payload length
-  new DataView(out.buffer).setInt32(field.sizeOffset, newPayload.length, true);
+
+  const dv = new DataView(out.buffer);
+  dv.setInt32(field.sizeOffset, newPayload.length, true);
+  for (const a of ancestors) {
+    dv.setInt32(a.sizeOffset, dv.getInt32(a.sizeOffset, true) + delta, true);
+  }
   return out;
 }

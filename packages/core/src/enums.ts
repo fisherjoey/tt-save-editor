@@ -18,20 +18,15 @@ export const KNOWN_ENUMS: Record<string, string[]> = {
 
 /**
  * Options for an enum dropdown: known members ∪ members seen in the save ∪ current.
- *
- * INTERIM SAFETY: only members whose byte length matches the current member are
- * returned. Changing an enum value to one of a different byte length grows or
- * shrinks the body, and we don't yet update the containing Array/Map's outer
- * Size field — the result corrupts neighbouring entries in-game (the
- * "edit Batcave platform → other progress resets" report). Same-length swaps
- * are safe and cover most useful transitions (Unlocked ↔ Complete, Collected ↔
- * Completed, etc.). Will be lifted once container size tracking lands.
+ * As of v0.1.2 the structure walker tracks every container's Size field, so
+ * different-byte-length swaps (Locked ↔ Collected, etc.) are safe — setStringValue
+ * splices and bumps every ancestor container's Size by Δ.
  */
 export function enumOptions(enumType: string, observed: Set<string> | undefined, current: string): string[] {
   const all = new Set<string>(KNOWN_ENUMS[enumType] ?? []);
   observed?.forEach((m) => all.add(m));
   all.add(current);
-  return [...all].filter((m) => m.length === current.length);
+  return [...all];
 }
 
 export type EnumCategory = "progress" | "settings" | "system";
