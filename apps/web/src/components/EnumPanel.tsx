@@ -42,6 +42,10 @@ export function EnumPanel({
     <section className="card">
       <h2>Progress &amp; settings</h2>
       <p className="hint">Friendly, fixed-choice settings. Use “set all” to change a whole category at once, or expand to tweak individual entries.</p>
+      <p className="hint">
+        <strong>Note (v0.1.1):</strong> dropdowns are temporarily limited to options of the same byte length as the current value, while a save-corruption fix
+        lands. <em>Locked → Collected</em> is blocked for now; <em>Unlocked → Rewarded</em> and similar same-length swaps still work.
+      </p>
       <div className="completeAll">
         <button className="primary" onClick={onCompleteAll}>
           🏆 Complete everything

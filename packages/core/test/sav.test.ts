@@ -36,6 +36,19 @@ describe.skipIf(!hasFx("slot0_patched.sav"))("downgrade recipe", () => {
   });
 });
 
+describe("setFieldAll (wallet writes to multiple denormalized fields)", () => {
+  it("updates every duplicate of a field name to the given value, re-loading clean", () => {
+    const sf = SaveFile.load(fx("slot1_prepatch.sav"));
+    sf.setFieldAll("Saved_Total", 9999n);
+    const after = SaveFile.load(sf.toBytes());
+    const allSavedTotal = after.fields().filter((f) => f.name === "Saved_Total");
+    expect(allSavedTotal.length).toBeGreaterThan(0);
+    expect(allSavedTotal.every((f) => f.value === 9999n)).toBe(true);
+    // round-trips
+    expect(SaveFile.load(after.toBytes()).toBytes()).toEqual(after.toBytes());
+  });
+});
+
 describe("rename recipe", () => {
   it("changes the save name and still round-trips", () => {
     const sf = SaveFile.load(fx("slot1_prepatch.sav"));

@@ -11,9 +11,26 @@ describe("enum scanning + dropdowns", () => {
     expect(e!.value.startsWith("ETtSaveGameVersion::")).toBe(true);
   });
 
-  it("builds dropdown options from known members + observed + current", () => {
-    const opts = enumOptions("ETtSaveGameVersion", new Set(["Initial"]), "Initial");
-    for (const m of KNOWN_ENUMS.ETtSaveGameVersion!) expect(opts).toContain(m);
+  it("dropdown options are filtered to same byte length as the current member (interim safety)", () => {
+    // ETtGameProgressUnlock: Locked(6), Unlocked(8), Collected(9) — all different lengths
+    const fromLocked = enumOptions("ETtGameProgressUnlock", new Set(), "Locked");
+    const fromUnlocked = enumOptions("ETtGameProgressUnlock", new Set(), "Unlocked");
+    const fromCollected = enumOptions("ETtGameProgressUnlock", new Set(), "Collected");
+    expect(fromLocked).toEqual(["Locked"]);
+    expect(fromUnlocked).toEqual(["Unlocked"]);
+    expect(fromCollected).toEqual(["Collected"]);
+    // ETtChallengeGameProgressState: Locked(6), Unlocked(8), Completed(9), Rewarded(8)
+    // From Unlocked you should be able to reach Rewarded (both 8 chars)
+    const fromChallengeUnlocked = enumOptions("ETtChallengeGameProgressState", new Set(), "Unlocked");
+    expect(fromChallengeUnlocked).toContain("Unlocked");
+    expect(fromChallengeUnlocked).toContain("Rewarded");
+    expect(fromChallengeUnlocked).not.toContain("Locked");
+    expect(fromChallengeUnlocked).not.toContain("Completed");
+  });
+
+  it("KNOWN_ENUMS still lists every documented member (for v0.1.2 when restriction lifts)", () => {
+    expect(KNOWN_ENUMS.ETtSaveGameVersion).toContain("NoVersion");
+    expect(KNOWN_ENUMS.ETtSaveGameVersion).toContain("LatestVersion");
   });
 
   it("edits an enum member safely and re-loads to the new value", () => {

@@ -105,6 +105,18 @@ export class SaveFile {
     return this;
   }
 
+  /** Set EVERY field with the given name to the same value (some saves store
+   *  the wallet in multiple denormalized places). Re-scans after each write so
+   *  any offset shifts from string edits stay valid. */
+  setFieldAll(name: string, value: number | bigint | boolean | string): this {
+    for (;;) {
+      const target = this.fields().find((f) => f.name === name && String(f.value) !== String(value));
+      if (!target) break;
+      this.doc.body = target.kind === "string" ? setStringValue(this.doc.body, target, String(value)) : setFixedValue(this.doc.body, target, value as number | bigint | boolean);
+    }
+    return this;
+  }
+
   /** Re-encrypt. Self-checks that a no-op save reproduces the original ciphertext. */
   toBytes(): Uint8Array {
     return encrypt(serialize(this.doc));

@@ -16,12 +16,22 @@ export const KNOWN_ENUMS: Record<string, string[]> = {
   ETtSaveSlotValidationState: ["Unknown", "Validated", "Invalidated"],
 };
 
-/** Options for an enum dropdown: known members ∪ members seen in the save ∪ current. */
+/**
+ * Options for an enum dropdown: known members ∪ members seen in the save ∪ current.
+ *
+ * INTERIM SAFETY: only members whose byte length matches the current member are
+ * returned. Changing an enum value to one of a different byte length grows or
+ * shrinks the body, and we don't yet update the containing Array/Map's outer
+ * Size field — the result corrupts neighbouring entries in-game (the
+ * "edit Batcave platform → other progress resets" report). Same-length swaps
+ * are safe and cover most useful transitions (Unlocked ↔ Complete, Collected ↔
+ * Completed, etc.). Will be lifted once container size tracking lands.
+ */
 export function enumOptions(enumType: string, observed: Set<string> | undefined, current: string): string[] {
-  const set = new Set<string>(KNOWN_ENUMS[enumType] ?? []);
-  observed?.forEach((m) => set.add(m));
-  set.add(current);
-  return [...set];
+  const all = new Set<string>(KNOWN_ENUMS[enumType] ?? []);
+  observed?.forEach((m) => all.add(m));
+  all.add(current);
+  return [...all].filter((m) => m.length === current.length);
 }
 
 export type EnumCategory = "progress" | "settings" | "system";
