@@ -48,5 +48,10 @@ export const COUNTER_MAPPINGS: CounterMapping[] = [
     include: ["GameProgress.Definitions.BatTokens."] },
   { key: "Trophies", label: "Trophies", counter: 170, verified: false, stateCategory: "MicroBuilds",
     include: ["GameProgress.Definitions.MicroBuilds.", "GameProgress.Definitions.Microbuilds."] },
-  // Costumes (Task 4) appended after the base/DLC count is resolved.
+  // Costumes: `counter` = all insertable Characters.* tags (125). The in-game base-game
+  // counter shows /101; DLC character variants inflate the tag count. Unverified category —
+  // refine the base/DLC split (DLC assets live under AdditionalContent/DLC_*) if costume
+  // insertion is ever confirmed in-game.
+  { key: "Costumes", label: "Costumes", counter: 125, verified: false, stateCategory: "Characters",
+    include: ["GameProgress.Definitions.Characters."], exclude: DLC_COSTUMES },
 ];
