@@ -163,11 +163,77 @@ export function scanFields(body: Uint8Array): ScalarField[] {
     if (hit) {
       out.push(hit.field);
       pos = hit.end;
-    } else {
-      pos++;
+      continue;
     }
+    const ts = tryTimespanStruct(body, pos);
+    if (ts) {
+      out.push(ts.field);
+      pos = ts.end;
+      continue;
+    }
+    pos++;
   }
   return out;
+}
+
+/** Browser-safe byte search (no Node Buffer dependency). */
+function indexOfBytes(hay: Uint8Array, needle: Uint8Array): number {
+  if (needle.length === 0) return 0;
+  outer: for (let i = 0; i <= hay.length - needle.length; i++) {
+    for (let j = 0; j < needle.length; j++) {
+      if (hay[i + j] !== needle[j]) continue outer;
+    }
+    return i;
+  }
+  return -1;
+}
+
+/**
+ * Match a StructProperty whose AssetName is "Timespan" (= UE FTimespan, an Int64
+ * count of 100ns ticks). Treat it as an editable Int64 so users can read/write
+ * playtime fields. We don't fully parse the UE 5.5+ TopLevelAssetPath struct tag
+ * here — we just scan for the literal token sequence and lock onto the 8-byte
+ * payload at the end.
+ */
+function tryTimespanStruct(body: Uint8Array, pos: number): { field: ScalarField; end: number } | null {
+  const r = new BinaryReader(body);
+  r.pos = pos;
+  const name = readFStringChecked(r, 128);
+  if (name === null) return null;
+  const type = readFStringChecked(r, 64);
+  if (type !== "StructProperty") return null;
+  // Scan forward for "Timespan\0" within a small window — confirms this is the
+  // Timespan variant (vs other struct types we don't model).
+  const lookahead = body.subarray(r.pos, Math.min(body.length, r.pos + 80));
+  const tsNeedle = Uint8Array.of(0x54, 0x69, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x6e, 0x00); // "Timespan\0"
+  const tsIdx = indexOfBytes(lookahead, tsNeedle);
+  if (tsIdx < 0) return null;
+  // Find size = 8 followed by an extra byte (the mystery 0x08 padding/flag) then 8 value bytes.
+  // The size i32 sits right before the value payload. Scan forward for `08 00 00 00 XX <8 bytes>`
+  // followed by `None` or another property tag.
+  const after = body.subarray(r.pos + tsIdx + 9, Math.min(body.length, r.pos + tsIdx + 9 + 80));
+  const sizeNeedle = Uint8Array.of(0x08, 0x00, 0x00, 0x00);
+  const sizeIdx = indexOfBytes(after, sizeNeedle);
+  if (sizeIdx < 0) return null;
+  const sizeOffset = r.pos + tsIdx + 9 + sizeIdx;
+  // Value lives 5 bytes after the size int32 (the 0x08 padding/hasGuid byte then the Int64).
+  const valueOffset = sizeOffset + 5;
+  if (valueOffset + 8 > body.length) return null;
+  const dv = new DataView(body.buffer, body.byteOffset + valueOffset);
+  const value = dv.getBigInt64(0, true);
+  return {
+    field: {
+      name,
+      type: "Int64Property", // editable like an Int64
+      kind: "int",
+      value,
+      valueOffset,
+      valueLen: 8,
+      sizeOffset,
+      tagOffset: pos,
+    },
+    end: valueOffset + 8,
+  };
 }
 
 export function findField(fields: ScalarField[], name: string): ScalarField | undefined {

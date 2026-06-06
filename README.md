@@ -2,11 +2,13 @@
 
 A save editor for LEGO Batman: Legacy of the Dark Knight that runs in your browser. Drop in a `.sav`, edit what you want, download it. Decrypt, edit, and re-encrypt all happen on your machine.
 
-Live: https://tt-save-editor.vercel.app · Current release: **v0.1.2**
+Live: https://tt-save-editor.vercel.app · Current release: **v0.1.3**
 
 ## What it can do
 
 Drag in `SaveSlot_0_TT.sav` and the editor decrypts it. Top of the page has a Studs box where you can just type a number, and a "Complete everything" button that marks every collectible, challenge, mission, and objective done in one click.
+
+There's a **Playtime** box (in minutes) alongside the Studs box — the editor reads/writes the `TotalPlaytime` Timespan field directly.
 
 There's also a downgrade form. It sets the build version stamp back so a pre-patch build will load the save, which is what you want if an update broke a speedrun route and the game keeps refusing with *"This save was created on an updated version."*. Type the build number directly, or load a save made on the older build and the editor reads it for you.
 

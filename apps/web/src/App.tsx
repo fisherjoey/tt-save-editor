@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { SaveFile, readBuildVersion, downgradeRecipe, FEATURED_FIELDS, type ScalarField, type EnumField } from "@tt-save/core";
+import { SaveFile, readBuildVersion, downgradeRecipe, FEATURED_FIELDS, fromDisplay, type ScalarField, type EnumField } from "@tt-save/core";
 import { Dropzone } from "./components/Dropzone.js";
 import { FieldTable } from "./components/FieldTable.js";
 import { EnumPanel } from "./components/EnumPanel.js";
@@ -120,11 +120,13 @@ export function App() {
             onEdit={(name, value) => {
               try {
                 const f = loaded.fields.find((x) => x.name === name);
-                const v = f?.type === "Int64Property" || f?.type === "UInt64Property" ? BigInt(value) : Number(value);
+                const meta = FEATURED_FIELDS.find((x) => x.name === name);
+                // Apply any unit conversion (e.g. minutes → 100ns ticks for Timespan).
+                const raw = meta?.unit ? fromDisplay(value, meta.unit) : value;
+                const v = f?.type === "Int64Property" || f?.type === "UInt64Property" ? (typeof raw === "bigint" ? raw : BigInt(raw as number | string)) : Number(raw);
                 // Apply to the primary field AND every linked field, so denormalized copies stay in sync.
                 loaded.save.setFieldAll(name, v);
-                const linked = FEATURED_FIELDS.find((x) => x.name === name)?.linkedNames ?? [];
-                for (const ln of linked) loaded.save.setFieldAll(ln, v);
+                for (const ln of meta?.linkedNames ?? []) loaded.save.setFieldAll(ln, v);
                 refreshFields();
               } catch (e) {
                 setError(e instanceof Error ? e.message : String(e));
