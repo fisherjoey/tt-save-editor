@@ -12,11 +12,15 @@ export {
   scanEnums,
   observedEnumMembers,
   setEnumValue,
+  readEnumArrayEntries,
+  insertEnumEntry,
   NotGvasError,
   BinaryReader,
   BinaryWriter,
 } from "./gvas/index.js";
-export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind, EnumField } from "./gvas/index.js";
+export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind, EnumField, EnumArrayEntry, EnumEntryInsertion } from "./gvas/index.js";
+export { COLLECTIBLES, normalizeConfidence, prettifyTagPath, deriveFacets, selectCounterTags } from "./collectibles.js";
+export type { CollectibleCounter, CollectibleTag, CollectibleFacets, Confidence } from "./collectibles.js";
 export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, CATEGORY_LABELS, prettifyKey } from "./enums.js";
 export type { EnumMeta, EnumCategory } from "./enums.js";
 export { FEATURED_FIELDS, toDisplay, fromDisplay } from "./featured.js";
