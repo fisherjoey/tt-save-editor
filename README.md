@@ -16,11 +16,11 @@ Below that, dropdowns for the discrete settings — difficulty, mission state, c
 
 The download gives you both `SaveSlot_X_TT.sav` and its matching `BackupCopy_SaveSlot_X_TT.sav`. The game checks the pair, so the tool writes both.
 
-## What v0.1.2 actually fixes (and what it doesn't)
+## What's solid and what isn't
 
-**Fixed:** the save-corruption bug from v0.1.1 (BlackcatXII's report). Changing an enum value to a member of different byte length used to silently shift the rest of that section, which made the game misread it and reset neighbouring state — that's gone. The full recursive GVAS walker now updates every parent container's `Size` field when the body changes length, so the dropdown's "same-length" restriction is lifted.
+**Solid since v0.1.2:** the save-corruption bug from v0.1.1 (BlackcatXII's report). Changing an enum value to a member of different byte length used to silently shift the rest of that section, which made the game misread it and reset neighbouring state — that's gone. The recursive GVAS walker now updates every parent container's `Size` field when the body changes length.
 
-**Not yet fixed:** in-game collectible counters (gold bricks, trophies, minikits, costumes, vehicles, etc.) **are derived from how many enum entries exist in your save, not what state they're in**. So flipping a `Locked` gold brick to `Collected` updates the file correctly but doesn't make the displayed `N/30` count go up — that needs adding a *new* entry, not editing an existing one. Insertion is a v0.1.3 thing.
+**Open in v0.1.4:** in-game collectible counters (gold bricks, trophies, minikits, costumes, vehicles, Wayne Tech, etc.) **are derived at runtime from how many enum entries exist in your save, not what state they're in**. Flipping a `Locked` gold brick to `Collected` updates the file correctly but doesn't make the displayed `N/30` count go up — that needs adding a *new* entry, not editing an existing one. Insertion is the v0.1.4 work; it needs the v0.1.2 size-update mechanism, which is already in place.
 
 State changes might still affect non-counter things (mission replay, in-world visuals, achievement triggers). We haven't fully mapped which.
 
