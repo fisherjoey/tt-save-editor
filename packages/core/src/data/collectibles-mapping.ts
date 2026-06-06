@@ -46,5 +46,7 @@ export const COUNTER_MAPPINGS: CounterMapping[] = [
     include: ["GameProgress.Definitions.StudCaches."] },
   { key: "BatTokens", label: "Bat tokens", counter: 65, verified: false, stateCategory: "BatTokens",
     include: ["GameProgress.Definitions.BatTokens."] },
-  // Trophies (Task 3) and Costumes (Task 4) appended after their counts are resolved.
+  { key: "Trophies", label: "Trophies", counter: 170, verified: false, stateCategory: "MicroBuilds",
+    include: ["GameProgress.Definitions.MicroBuilds.", "GameProgress.Definitions.Microbuilds."] },
+  // Costumes (Task 4) appended after the base/DLC count is resolved.
 ];
