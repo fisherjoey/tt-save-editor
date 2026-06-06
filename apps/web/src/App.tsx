@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { SaveFile, readBuildVersion, downgradeRecipe, FEATURED_FIELDS, fromDisplay, type ScalarField, type EnumField } from "@tt-save/core";
+import { SaveFile, readBuildVersion, downgradeRecipe, FEATURED_FIELDS, fromDisplay, COLLECTIBLES, type ScalarField, type EnumField } from "@tt-save/core";
 import { Dropzone } from "./components/Dropzone.js";
 import { FieldTable } from "./components/FieldTable.js";
 import { EnumPanel } from "./components/EnumPanel.js";
 import { QuickEdits } from "./components/QuickEdits.js";
+import { CollectiblesPanel } from "./components/CollectiblesPanel.js";
 import { Help } from "./components/Help.js";
 
 interface Loaded {
@@ -12,6 +13,7 @@ interface Loaded {
   fields: ScalarField[];
   enums: EnumField[];
   observed: Map<string, Set<string>>;
+  collPresent: Set<string>;
 }
 
 export function App() {
@@ -25,7 +27,14 @@ export function App() {
     setError(null);
     try {
       const save = SaveFile.load(bytes);
-      setLoaded({ fileName: name, save, fields: save.fields(), enums: save.enums(), observed: save.observedEnums() });
+      setLoaded({
+        fileName: name,
+        save,
+        fields: save.fields(),
+        enums: save.enums(),
+        observed: save.observedEnums(),
+        collPresent: new Set(save.enumArrayEntries().map((e) => e.tag)),
+      });
     } catch (e) {
       setLoaded(null);
       setError(e instanceof Error ? e.message : String(e));
@@ -33,7 +42,17 @@ export function App() {
   }, []);
 
   const refreshFields = useCallback(() => {
-    setLoaded((l) => (l ? { ...l, fields: l.save.fields(), enums: l.save.enums(), observed: l.save.observedEnums() } : l));
+    setLoaded((l) =>
+      l
+        ? {
+            ...l,
+            fields: l.save.fields(),
+            enums: l.save.enums(),
+            observed: l.save.observedEnums(),
+            collPresent: new Set(l.save.enumArrayEntries().map((e) => e.tag)),
+          }
+        : l,
+    );
   }, []);
 
   const loadSample = useCallback(async () => {
@@ -164,6 +183,24 @@ export function App() {
             onCompleteAll={() => {
               try {
                 loaded.save.completeAllProgress();
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
+            }}
+          />
+
+          <CollectiblesPanel
+            collectibles={COLLECTIBLES}
+            present={loaded.collPresent}
+            onAdd={(items) => {
+              try {
+                const byState = new Map<string, string[]>();
+                for (const it of items) {
+                  if (!byState.has(it.stateValue)) byState.set(it.stateValue, []);
+                  byState.get(it.stateValue)!.push(it.tag);
+                }
+                for (const [state, tags] of byState) loaded.save.addCollectibles(tags, state);
                 refreshFields();
               } catch (e) {
                 setError(e instanceof Error ? e.message : String(e));

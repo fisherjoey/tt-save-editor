@@ -172,3 +172,19 @@ details.advanced > .search, details.advanced .tableWrap { margin-top: 14px; }
 .quickInputRow { display: flex; align-items: center; gap: 8px; }
 .quickInputRow input { flex: 1; font-size: 16px; padding: 9px 11px; }
 .quickDot { color: var(--accent); font-size: 12px; }
+
+/* Collectibles panel */
+.collTools { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.viewToggle { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+.chip { background: var(--panel2); color: var(--txt); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
+.chip.on { background: var(--accent2); color: #06203c; border-color: var(--accent2); font-weight: 600; }
+.badge { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+.badge.ok { background: rgba(87, 217, 163, 0.16); color: var(--ok); }
+.badge.warn { background: rgba(255, 180, 84, 0.16); color: var(--warn); }
+.collRow { display: flex; align-items: center; gap: 9px; padding: 5px 8px; border-radius: 7px; }
+.collRow:hover { background: var(--panel); }
+.collRow input[type="checkbox"] { accent-color: var(--accent2); width: 15px; height: 15px; }
+.collName { flex: 1; font-size: 13px; }
+.collHave { color: var(--ok); font-size: 11px; font-weight: 600; }
+.collConf { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.addBar { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); background: var(--panel); }
