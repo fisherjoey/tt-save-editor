@@ -2,7 +2,7 @@
 
 A save editor for LEGO Batman: Legacy of the Dark Knight that runs in your browser. Drop in a `.sav`, edit what you want, download it. Decrypt, edit, and re-encrypt all happen on your machine.
 
-Live: https://tt-save-editor.vercel.app · Current release: **v0.1.1**
+Live: https://tt-save-editor.vercel.app · Current release: **v0.1.2**
 
 ## What it can do
 
@@ -14,11 +14,13 @@ Below that, dropdowns for the discrete settings — difficulty, mission state, c
 
 The download gives you both `SaveSlot_X_TT.sav` and its matching `BackupCopy_SaveSlot_X_TT.sav`. The game checks the pair, so the tool writes both.
 
-## Known limitation (will be lifted in v0.1.2)
+## What v0.1.2 actually fixes (and what it doesn't)
 
-Right now, enum dropdowns only show options whose byte length matches the current value. So `Unlocked → Rewarded` (both 8 chars) works fine, but `Locked → Collected` (6 vs 9) is blocked. This is a temporary safety against a save-corruption bug: changing an enum to a different byte length shifts subsequent bytes, but the containing Array/Map's outer `Size` field stays stale, which causes the game to misread the rest of that section and reset neighbouring state.
+**Fixed:** the save-corruption bug from v0.1.1 (BlackcatXII's report). Changing an enum value to a member of different byte length used to silently shift the rest of that section, which made the game misread it and reset neighbouring state — that's gone. The full recursive GVAS walker now updates every parent container's `Size` field when the body changes length, so the dropdown's "same-length" restriction is lifted.
 
-Fixing this properly means parsing UE 5.6's `StructProperty` tag format (with `TopLevelAssetPath`) well enough to walk the body recursively and find every container's `Size` field, then update them all when an edit changes byte length. That's the v0.1.2 work. See [`docs/v0.1.2-research-brief.md`](docs/v0.1.2-research-brief.md) for the open question, the bytes we've decoded so far, and what's still needed.
+**Not yet fixed:** in-game collectible counters (gold bricks, trophies, minikits, costumes, vehicles, etc.) **are derived from how many enum entries exist in your save, not what state they're in**. So flipping a `Locked` gold brick to `Collected` updates the file correctly but doesn't make the displayed `N/30` count go up — that needs adding a *new* entry, not editing an existing one. Insertion is a v0.1.3 thing.
+
+State changes might still affect non-counter things (mission replay, in-world visuals, achievement triggers). We haven't fully mapped which.
 
 ## Credit
 
@@ -58,7 +60,7 @@ pnpm -C apps/web dev           # http://localhost:5173
 
 The Studs box and the friendly enum titles live in data files: `packages/core/src/featured.ts` and `packages/core/src/enums.ts`. To map a new field: change it in-game, re-save, diff, add an entry. PRs welcome.
 
-If you have UE GVAS expertise and want to take a swing at the container-size tracking for v0.1.2, see [`docs/v0.1.2-research-brief.md`](docs/v0.1.2-research-brief.md).
+The original v0.1.2 research brief that drove the structural-parser work is at [`docs/v0.1.2-research-brief.md`](docs/v0.1.2-research-brief.md) — kept for posterity.
 
 ## Legal
 

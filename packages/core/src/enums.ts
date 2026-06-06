@@ -5,12 +5,36 @@
  * a dropdown built from the members observed in the save.
  */
 export const KNOWN_ENUMS: Record<string, string[]> = {
-  // Member lists extracted from the game's reflection data.
+  // Member lists union'd from the game's reflection data and observed across real
+  // saves (including a 100%-completion save). Conservative — only members we've
+  // actually seen used, plus the canonical Locked default for "state" enums where
+  // it's the obvious starting point.
+
   EDifficultySetting: ["Normal", "Medium", "Hard"],
-  ETtChallengeGameProgressState: ["Locked", "Unlocked", "Completed", "Rewarded"],
+
+  // Collectible / progress states
   ETtGameProgressUnlock: ["Locked", "Unlocked", "Collected"],
+  ETtGameProgressState: ["Locked", "StartedOrUnlocked", "Complete"],
+  ETtCollectableGameProgressState: ["Locked", "Unlocked", "Collected", "Consumed"],
+
+  // Missions / objectives
   ETtMissionGameProgress: ["Locked", "Unlocked", "InProgress", "Complete"],
   ETtObjectivesNodeGameProgress: ["Locked", "InProgress", "Complete"],
+
+  // Challenges / minigames
+  ETtChallengeGameProgressState: ["Locked", "Unlocked", "Completed", "Rewarded"],
+  ETtChallengeMinigameGameProgressState: ["Locked", "Unlocked", "CompletedGold"],
+
+  // Shops / upgrades / customization
+  EShopGameProgressState: ["Locked", "Unlocked", "Visited"],
+  EDinnerUpgradeGameProgressState: ["Locked", "Unlocked", "Purchased"],
+  ETtAreaCustomizationItemGameProgressState: ["Locked", "Unlocked", "Purchased"],
+
+  // Characters / purple studs
+  EDinnerCharacterGameProgressState: ["Locked", "Unlocked", "Viewed"],
+  EPurpleStudGameProgressState: ["Locked", "Unlocked", "Collected"],
+
+  // System / metadata
   ETtPlayGoInstallState: ["Unknown", "InitialChunkOnly", "Complete"],
   ETtSaveGameVersion: ["NoVersion", "Initial", "LatestVersion", "UnknownVersion", "VersionCount"],
   ETtSaveSlotValidationState: ["Unknown", "Validated", "Invalidated"],
