@@ -10,8 +10,12 @@ import {
   scanEnums,
   observedEnumMembers,
   setEnumValue,
+  readEnumArrayEntries,
+  insertEnumEntry,
   ScalarField,
   EnumField,
+  EnumArrayEntry,
+  EnumEntryInsertion,
 } from "../gvas/index.js";
 import { enumMeta } from "../enums.js";
 
@@ -91,6 +95,21 @@ export class SaveFile {
       n += fields.length;
     }
     return n;
+  }
+
+  /** Every collectible entry (tag + state) in the save's enum array(s). */
+  enumArrayEntries(): EnumArrayEntry[] {
+    return readEnumArrayEntries(this.doc.body);
+  }
+
+  /**
+   * Add a new collectible entry by cloning an existing sibling and swapping its
+   * tag (this is what actually moves displayed counters — gold bricks, Wayne Tech
+   * chips, trophies, minikits — since the game counts array membership, not state).
+   */
+  insertEnumEntry(ins: EnumEntryInsertion): this {
+    this.doc.body = insertEnumEntry(this.doc.body, ins);
+    return this;
   }
 
   getField(name: string): ScalarField | undefined {

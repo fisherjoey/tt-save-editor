@@ -1,5 +1,5 @@
 import { BinaryReader, BinaryWriter } from "./binary.js";
-import { parseStructure, ancestorContainers } from "./structure.js";
+import { parseStructure, ancestorContainers, PropertyNode } from "./structure.js";
 
 /** Fixed-width scalar property types and their value byte length. */
 const FIXED: Record<string, number> = {
@@ -308,6 +308,186 @@ export function scanEnums(body: Uint8Array): EnumField[] {
 function splitOnce(s: string, sep: string): [string, string] {
   const i = s.indexOf(sep);
   return i < 0 ? [s, ""] : [s.slice(0, i), s.slice(i + sep.length)];
+}
+
+// ── Collectible array insertion (v0.1.4) ──────────────────────────────────────
+//
+// Displayed in-game counters (gold bricks, Wayne Tech chips, trophies, minikits,
+// …) are computed from how many entries EXIST in the single, flat
+// `SavedGameProgressEnumValues` ArrayProperty<StructProperty> — not from their
+// states. Editing an existing entry's state never moves a counter; only adding a
+// new entry does. Every collectible type lives in that one array, distinguished
+// solely by its `ProgressTag` gameplay tag, so there is exactly one insertion
+// mechanism for all of them.
+//
+// Each element is a `TtGameProgressSavedEnumValue` struct serialized as tagged
+// Properties..None with two members and NO per-element size field:
+//   SavedEnumNameValue  NameProperty   → e.g. "ETtCollectableGameProgressState::Consumed"
+//   ProgressTag         StructProperty (/Script/GameplayTags.GameplayTag, tagged)
+//       TagName         NameProperty   → e.g. "GameProgress.Definitions.GoldBricks.Story.00.04.01GB"
+//       None
+//   None
+
+/** The two FString members of one array element. */
+export interface EnumArrayEntry {
+  /** The ProgressTag gameplay-tag string (identifies WHICH collectible). */
+  tag: string;
+  /** The SavedEnumNameValue, e.g. "ETtCollectableGameProgressState::Consumed". */
+  state: string;
+  /** Index within its array. */
+  index: number;
+}
+
+/**
+ * Clone an existing entry to create a new one. Per the v0.1.4 template-matching
+ * rule: pick `templateTag` from the SAME collectible category as `newTag` so the
+ * cloned struct already carries the right enum TYPE and (by default) state — e.g.
+ * to add a gold brick, clone another gold brick. `newState` only overrides the
+ * cloned member when you deliberately want a different one. This keeps every
+ * future category (Wayne Tech chips, trophies, minikits, …) on one code path:
+ * find a sibling entry, swap its tag.
+ */
+export interface EnumEntryInsertion {
+  /** Tag of an existing entry to clone (choose a sibling in the same category). */
+  templateTag: string;
+  /** The new gameplay tag to insert. */
+  newTag: string;
+  /** Optional override for the cloned SavedEnumNameValue ("EnumType::Member"). */
+  newState?: string;
+}
+
+/** Read an FString (i32 len + bytes incl. trailing NUL) at an absolute body offset. */
+function readFStringAt(body: Uint8Array, off: number): string {
+  const len = new DataView(body.buffer, body.byteOffset).getInt32(off, true);
+  if (len <= 0) return "";
+  return new TextDecoder("latin1").decode(body.subarray(off + 4, off + 4 + len - 1));
+}
+
+function fstringBytes(s: string): Uint8Array {
+  const w = new BinaryWriter();
+  w.fstring(s);
+  return w.toBytes();
+}
+
+/** Every SavedGameProgressEnumValues ArrayProperty<StructProperty> with elements. */
+function findEnumArrays(body: Uint8Array): PropertyNode[] {
+  const out: PropertyNode[] = [];
+  const stack = [...parseStructure(body)];
+  while (stack.length) {
+    const n = stack.pop()!;
+    if (n.name === "SavedGameProgressEnumValues" && n.children?.length) out.push(n);
+    if (n.children) stack.push(...n.children);
+  }
+  return out;
+}
+
+interface ElementParts {
+  tag: string;
+  state: string;
+  stateNode?: PropertyNode;
+  progressTagNode?: PropertyNode;
+  tagNameNode?: PropertyNode;
+}
+
+/** Resolve the SavedEnumNameValue / ProgressTag / TagName nodes of one element. */
+function elementParts(body: Uint8Array, elem: PropertyNode): ElementParts {
+  const stateNode = elem.children?.find((c) => c.name === "SavedEnumNameValue");
+  const progressTagNode = elem.children?.find((c) => c.name === "ProgressTag");
+  const tagNameNode = progressTagNode?.children?.find((c) => c.name === "TagName");
+  return {
+    tag: tagNameNode ? readFStringAt(body, tagNameNode.valueStart) : "",
+    state: stateNode ? readFStringAt(body, stateNode.valueStart) : "",
+    ...(stateNode ? { stateNode } : {}),
+    ...(progressTagNode ? { progressTagNode } : {}),
+    ...(tagNameNode ? { tagNameNode } : {}),
+  };
+}
+
+/** List every collectible entry (tag + state) across the save's enum array(s). */
+export function readEnumArrayEntries(body: Uint8Array): EnumArrayEntry[] {
+  const out: EnumArrayEntry[] = [];
+  for (const arr of findEnumArrays(body)) {
+    arr.children!.forEach((elem, index) => {
+      const { tag, state } = elementParts(body, elem);
+      out.push({ tag, state, index });
+    });
+  }
+  return out;
+}
+
+/**
+ * Insert a new collectible entry by cloning an existing one and swapping its tag
+ * (and optionally its state). Returns a NEW body. Splices the rebuilt element
+ * before the array's end, increments the array's element-count int32, and bumps
+ * every ancestor container's Size (the array's own included) by the new element's
+ * byte length — the same ancestor-walk that keeps string edits valid.
+ */
+export function insertEnumEntry(body: Uint8Array, ins: EnumEntryInsertion): Uint8Array {
+  let arr: PropertyNode | undefined;
+  let template: PropertyNode | undefined;
+  for (const a of findEnumArrays(body)) {
+    const el = a.children!.find((e) => elementParts(body, e).tag === ins.templateTag);
+    if (el) {
+      arr = a;
+      template = el;
+      break;
+    }
+  }
+  if (!arr || !template) {
+    throw new Error(`insertEnumEntry: no existing entry with tag "${ins.templateTag}" to clone`);
+  }
+  const { stateNode, progressTagNode, tagNameNode } = elementParts(body, template);
+  if (!stateNode || !progressTagNode || !tagNameNode) {
+    throw new Error("insertEnumEntry: template element is missing SavedEnumNameValue/ProgressTag/TagName");
+  }
+
+  const newTagBytes = fstringBytes(ins.newTag);
+  const newStateBytes = ins.newState ? fstringBytes(ins.newState) : null;
+  const deltaTag = newTagBytes.length - (tagNameNode.valueEnd - tagNameNode.valueStart);
+
+  // Rebuild the template's bytes with the two FStrings swapped and every affected
+  // Size int32 fixed. Spans not touched are copied verbatim, so the element stays
+  // byte-identical to a real one except for the strings we changed.
+  const w = new BinaryWriter();
+  // SavedEnumNameValue: name/type/arrayIndex …
+  w.bytes(body.subarray(template.valueStart, stateNode.sizeOffset));
+  if (newStateBytes) {
+    w.i32(newStateBytes.length);
+    w.bytes(body.subarray(stateNode.sizeOffset + 4, stateNode.valueStart)); // flags
+    w.bytes(newStateBytes);
+  } else {
+    w.bytes(body.subarray(stateNode.sizeOffset, stateNode.valueEnd)); // size + flags + value, unchanged
+  }
+  // ProgressTag: name/type/typename …
+  w.bytes(body.subarray(stateNode.valueEnd, progressTagNode.sizeOffset));
+  w.i32(progressTagNode.size + deltaTag); // GameplayTag struct Size grows with the tag
+  // flags + GameplayTag framing + TagName name/type/arrayIndex …
+  w.bytes(body.subarray(progressTagNode.sizeOffset + 4, tagNameNode.sizeOffset));
+  w.i32(newTagBytes.length); // TagName Size
+  w.bytes(body.subarray(tagNameNode.sizeOffset + 4, tagNameNode.valueStart)); // flags
+  w.bytes(newTagBytes);
+  // closing "None" (GameplayTag) + "None" (element)
+  w.bytes(body.subarray(tagNameNode.valueEnd, template.valueEnd));
+
+  const newElem = w.toBytes();
+  const delta = newElem.length;
+
+  // Splice the element in just before the array's end.
+  const out = new Uint8Array(body.length + delta);
+  out.set(body.subarray(0, arr.valueEnd), 0);
+  out.set(newElem, arr.valueEnd);
+  out.set(body.subarray(arr.valueEnd), arr.valueEnd + delta);
+
+  const dv = new DataView(out.buffer);
+  // Element-count int32 at the array's value start: +1.
+  dv.setInt32(arr.valueStart, dv.getInt32(arr.valueStart, true) + 1, true);
+  // Bump every ancestor Size (array included). An offset just past the count is
+  // strictly inside the array, so ancestorContainers returns the array too. All
+  // ancestor sizeOffsets sit before the splice point, so they stay valid in `out`.
+  for (const a of ancestorContainers(parseStructure(body), arr.valueStart + 4)) {
+    dv.setInt32(a.sizeOffset, dv.getInt32(a.sizeOffset, true) + delta, true);
+  }
+  return out;
 }
 
 /** Distinct members observed for each enum type across the save (for dropdown options). */
