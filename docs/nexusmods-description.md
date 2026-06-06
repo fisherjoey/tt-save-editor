@@ -1,4 +1,4 @@
-# NexusMods listing copy (v0.1.1)
+# NexusMods listing copy (v0.1.2)
 
 ## Short description (single line, ≤350 chars)
 
@@ -31,7 +31,7 @@ Self-host the source: clone https://github.com/fisherjoey/tt-save-editor, `pnpm 
 
 ### Main features
 
-- Studs: a labelled number box at the top. Type your new total, download. (v0.1.1 fix — the game stores the wallet in multiple denormalized fields and the editor now writes them all in sync.)
+- Studs: a labelled number box at the top. Type your new total, download. (Writes both `StudsCollected` and the two `Saved_Total` fields the game actually reads from.)
 - "Complete everything" button: one click marks every collectible, challenge, mission, and objective done.
 - Downgrade: sets the build version stamp back so a pre-patch build will accept the save. Type the older build's number directly, or load a reference save made on that build and the editor reads it for you. This is the fix for the *"This save was created on an updated version"* lockout.
 - Dropdowns for every discrete setting (difficulty, mission state, collectibles, objectives, save validation, install state, and so on). Each entry is labelled with the gameplay tag that identifies it, so when an enum appears 8 times you can tell which is which.
@@ -39,9 +39,10 @@ Self-host the source: clone https://github.com/fisherjoey/tt-save-editor, `pnpm 
 - Always writes both `SaveSlot` and `BackupCopy`. The game checks the pair, so the tool writes both.
 - The save you drop in never leaves your computer.
 
-### Known issues (v0.1.1)
+### Known limits (as of v0.1.2)
 
-- **Some enum changes are temporarily blocked.** When you flip a setting from `Locked` to `Unlocked` (both 8 chars including some other members) it works fine, but `Locked → Collected` (6 vs 9 chars) is blocked for now. Changing an enum to a member with a *different byte length* shifts subsequent bytes; the containing Array/Map's outer Size field stays stale and the game misreads the rest of the section — which resets adjacent state (this is the bug @BlackcatXII hit when editing Batcave platforms). The dropdown only shows same-length options until v0.1.2 ships the proper fix.
+- **In-game collectible counters don't move when you edit existing entries.** The displayed "3/30 gold bricks" comes from how many gold-brick entries exist in your save, not what state they're in. So flipping `Locked → Collected` updates the file correctly but the count stays put. Adding new entries (the "+1 gold brick" operation) is on the roadmap for v0.1.3.
+- **Mapping for Wayne Tech chips, playtime, and similar denormalized fields is still pending.** The Studs box works because we mapped that one; the others need the same treatment.
 
 ### Requirements
 
@@ -54,12 +55,12 @@ The game (obviously). Any modern browser. That's it.
 
 - **@ManOfX305**, **@SoggyNoodlez**, **@microchiral** — reported the Studs box was a no-op (which led to finding that the game's wallet is stored at `Saved_Total`, not `StudsCollected`, and rolling out the fix in v0.1.1).
 
-- **@BlackcatXII** — reported the Batcave-platform edit corrupting neighbouring progress, which uncovered the parent Array/Map size issue underpinning the v0.1.2 work.
+- **@BlackcatXII** — reported the Batcave-platform edit corrupting neighbouring progress. v0.1.2 ships the parent-container-size tracking that fixes that class of bug.
 
-- **@Yoan96111**, **@Ruxxtin**, **@WiLLUSCUS** — feature requests (Wayne Tech chips, playtime, redo missions) that are tracked for v0.1.2.
+- **@Yoan96111**, **@Ruxxtin**, **@WiLLUSCUS** — feature requests (Wayne Tech chips, playtime, redo missions) tracked for v0.1.3.
 
 ### Links
 
 - Editor: https://tt-save-editor.vercel.app
 - Source (MIT): https://github.com/fisherjoey/tt-save-editor
-- Latest release: https://github.com/fisherjoey/tt-save-editor/releases/tag/v0.1.1
+- Latest release: https://github.com/fisherjoey/tt-save-editor/releases/tag/v0.1.2
