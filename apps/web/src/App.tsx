@@ -6,31 +6,62 @@ import { EnumPanel } from "./components/EnumPanel.js";
 import { QuickEdits } from "./components/QuickEdits.js";
 import { CollectiblesPanel } from "./components/CollectiblesPanel.js";
 import { MissionsPanel } from "./components/MissionsPanel.js";
+import { CompletionOverview } from "./components/CompletionOverview.js";
+import { UnlockEverythingPanel } from "./components/UnlockEverythingPanel.js";
+import { FixMySaveHelp } from "./components/FixMySaveHelp.js";
 import { Help } from "./components/Help.js";
+
+type Mode = "choose" | "fix" | "unlock" | "fill" | "edit";
 
 interface Loaded {
   fileName: string;
   save: SaveFile;
+  originalBytes: Uint8Array;
   fields: ScalarField[];
   enums: EnumField[];
   observed: Map<string, Set<string>>;
   collPresent: Set<string>;
 }
 
+function downloadBytes(name: string, bytes: Uint8Array) {
+  const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: "application/octet-stream" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function collectibleCompletion(present: Set<string>) {
+  let have = 0;
+  let total = 0;
+  for (const c of COLLECTIBLES) {
+    total += c.counter;
+    have += c.tags.filter((t) => present.has(t.tag)).length;
+  }
+  return { have, total, pct: total ? Math.round((have / total) * 100) : 0 };
+}
+
 export function App() {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [help, setHelp] = useState(false);
+  const [mode, setMode] = useState<Mode>("choose");
+  const [unlocking, setUnlocking] = useState(false);
+  const [unlockResult, setUnlockResult] = useState<{ collectiblesAdded: number; progressCompleted: number; studsSet: number } | null>(null);
   const [, force] = useState(0);
   const rerender = () => force((n) => n + 1);
 
   const onFile = useCallback((name: string, bytes: Uint8Array) => {
     setError(null);
+    setMode("choose");
+    setUnlockResult(null);
     try {
       const save = SaveFile.load(bytes);
       setLoaded({
         fileName: name,
         save,
+        originalBytes: bytes,
         fields: save.fields(),
         enums: save.enums(),
         observed: save.observedEnums(),
@@ -112,146 +143,126 @@ export function App() {
       )}
       {error && <div className="banner err">Couldn’t open that save: {error}</div>}
 
-      {loaded && (
-        <>
-          <section className="card meta">
-            <div className="metaRow">
-              <span className="k">File</span>
-              <span className="v mono">{loaded.fileName}</span>
-            </div>
-            <div className="metaRow">
-              <span className="k">Class</span>
-              <span className="v mono">{loaded.save.doc.header.saveGameClassName}</span>
-            </div>
-            <div className="metaRow">
-              <span className="k">Engine</span>
-              <span className="v mono">
-                {loaded.save.doc.header.engineMajor}.{loaded.save.doc.header.engineMinor}.{loaded.save.doc.header.enginePatch} ({loaded.save.doc.header.branch})
-              </span>
-            </div>
-            <div className="metaRow">
-              <span className="k">Build version</span>
-              <span className="v mono">{buildVersion ?? "—"}</span>
-            </div>
-          </section>
+      {loaded &&
+        (() => {
+          const l = loaded;
+          const comp = collectibleCompletion(l.collPresent);
 
-          <QuickEdits
-            fields={loaded.fields}
-            onEdit={(name, value) => {
-              try {
-                const f = loaded.fields.find((x) => x.name === name);
-                const meta = FEATURED_FIELDS.find((x) => x.name === name);
-                // Apply any unit conversion (e.g. minutes → 100ns ticks for Timespan).
-                const raw = meta?.unit ? fromDisplay(value, meta.unit) : value;
-                const v = f?.type === "Int64Property" || f?.type === "UInt64Property" ? (typeof raw === "bigint" ? raw : BigInt(raw as number | string)) : Number(raw);
-                // Apply to the primary field AND every linked field, so denormalized copies stay in sync.
-                loaded.save.setFieldAll(name, v);
-                for (const ln of meta?.linkedNames ?? []) loaded.save.setFieldAll(ln, v);
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-          />
-
-          <DowngradePanel
-            save={loaded.save}
-            onApplied={() => {
+          const onErr = (e: unknown) => setError(e instanceof Error ? e.message : String(e));
+          const onQuickEdit = (name: string, value: string) => {
+            try {
+              const f = l.fields.find((x) => x.name === name);
+              const meta = FEATURED_FIELDS.find((x) => x.name === name);
+              const raw = meta?.unit ? fromDisplay(value, meta.unit) : value;
+              const v = f?.type === "Int64Property" || f?.type === "UInt64Property" ? (typeof raw === "bigint" ? raw : BigInt(raw as number | string)) : Number(raw);
+              l.save.setFieldAll(name, v);
+              for (const ln of meta?.linkedNames ?? []) l.save.setFieldAll(ln, v);
               refreshFields();
-              rerender();
-            }}
-          />
+            } catch (e) { onErr(e); }
+          };
+          const onEnumChange = (field: EnumField, member: string) => { try { l.save.setEnum(field, member); refreshFields(); } catch (e) { onErr(e); } };
+          const onEnumBulk = (fields: EnumField[], member: string) => { try { l.save.setEnumsBulk(fields, member); refreshFields(); } catch (e) { onErr(e); } };
+          const onCompleteAll = () => { try { l.save.completeAllProgress(); refreshFields(); } catch (e) { onErr(e); } };
+          const onAddEntries = (tags: string[], state: string) => { try { l.save.addEntries(tags, state); refreshFields(); } catch (e) { onErr(e); } };
+          const onCollAdd = (items: { tag: string; stateValue: string }[]) => {
+            try {
+              const byState = new Map<string, string[]>();
+              for (const it of items) { if (!byState.has(it.stateValue)) byState.set(it.stateValue, []); byState.get(it.stateValue)!.push(it.tag); }
+              for (const [state, tags] of byState) l.save.addEntries(tags, state);
+              refreshFields();
+            } catch (e) { onErr(e); }
+          };
+          const onFieldEdit = (field: ScalarField, value: number | bigint | boolean | string) => { try { l.save.setField(field.name, value); refreshFields(); } catch (e) { onErr(e); } };
+          const onUnlockAll = () => {
+            setUnlocking(true);
+            // defer so the "Working…" state paints before the (synchronous, heavy) work
+            setTimeout(() => {
+              try {
+                let added = 0;
+                for (const c of COLLECTIBLES) added += l.save.addEntries(c.tags.map((t) => t.tag), c.stateValue);
+                const completed = l.save.completeAllProgress();
+                const STUDS = 999999999;
+                const studs = FEATURED_FIELDS.find((f) => /stud/i.test(f.name) || (f.label ?? "").toLowerCase().includes("stud"));
+                if (studs) { l.save.setFieldAll(studs.name, STUDS); for (const ln of studs.linkedNames ?? []) l.save.setFieldAll(ln, STUDS); }
+                setUnlockResult({ collectiblesAdded: added, progressCompleted: completed, studsSet: STUDS });
+                refreshFields();
+              } catch (e) { onErr(e); } finally { setUnlocking(false); }
+            }, 30);
+          };
+          const backupOriginal = () => downloadBytes(l.fileName.startsWith("BackupCopy_") ? l.fileName : `ORIGINAL_${l.fileName}`, l.originalBytes);
 
-          <EnumPanel
-            enums={loaded.enums}
-            observed={loaded.observed}
-            onChange={(field, member) => {
-              try {
-                loaded.save.setEnum(field, member);
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-            onBulk={(fields, member) => {
-              try {
-                loaded.save.setEnumsBulk(fields, member);
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-            onCompleteAll={() => {
-              try {
-                loaded.save.completeAllProgress();
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-          />
+          const downloadBar = <DownloadBar save={l.save} fileName={l.fileName} onReset={() => setLoaded(null)} />;
+          const downgrade = <DowngradePanel save={l.save} onApplied={() => { refreshFields(); rerender(); }} />;
+          const missions = <MissionsPanel enums={l.enums} present={l.collPresent} observed={l.observed} onChange={onEnumChange} onAdd={onAddEntries} />;
+          const collectibles = <CollectiblesPanel collectibles={COLLECTIBLES} present={l.collPresent} onAdd={onCollAdd} />;
+          const back = <button className="ghost backLink" onClick={() => setMode("choose")}>← What do you want to do?</button>;
 
-          <MissionsPanel
-            enums={loaded.enums}
-            present={loaded.collPresent}
-            observed={loaded.observed}
-            onChange={(field, member) => {
-              try {
-                loaded.save.setEnum(field, member);
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-            onAdd={(tags, state) => {
-              try {
-                loaded.save.addEntries(tags, state);
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-          />
+          return (
+            <>
+              <section className="card statusBar">
+                <span className="badge ok">✓ valid save</span>
+                <span className="statusInfo">{comp.have}/{comp.total} collectibles · {comp.pct}%</span>
+                <button className="ghost" onClick={backupOriginal}>⬇ Back up my original</button>
+              </section>
 
-          <CollectiblesPanel
-            collectibles={COLLECTIBLES}
-            present={loaded.collPresent}
-            onAdd={(items) => {
-              try {
-                const byState = new Map<string, string[]>();
-                for (const it of items) {
-                  if (!byState.has(it.stateValue)) byState.set(it.stateValue, []);
-                  byState.get(it.stateValue)!.push(it.tag);
-                }
-                for (const [state, tags] of byState) loaded.save.addEntries(tags, state);
-                refreshFields();
-              } catch (e) {
-                setError(e instanceof Error ? e.message : String(e));
-              }
-            }}
-          />
+              {mode === "choose" && (
+                <section className="card chooser">
+                  <h2>What do you want to do?</h2>
+                  <p className="hint">Pick a goal — switch any time. Nothing changes your real save until you download.</p>
+                  <div className="chooserGrid">
+                    <button className="chooseCard" onClick={() => setMode("fix")}>
+                      <span className="ci">🔧</span><b>Fix my save</b>
+                      <span>It won't load, or "created on an updated version of the game"</span>
+                    </button>
+                    <button className="chooseCard" onClick={() => setMode("unlock")}>
+                      <span className="ci">⭐</span><b>Unlock &amp; complete everything</b>
+                      <span>One click — max studs, all collectibles, everything done</span>
+                    </button>
+                    <button className="chooseCard" onClick={() => setMode("fill")}>
+                      <span className="ci">🎯</span><b>Fill in what I'm missing</b>
+                      <span>See how complete you are, then add specific things</span>
+                    </button>
+                    <button className="chooseCard" onClick={() => setMode("edit")}>
+                      <span className="ci">⚙️</span><b>Edit anything</b>
+                      <span>Every field &amp; setting — for power users</span>
+                    </button>
+                  </div>
+                </section>
+              )}
 
-          <details className="card advanced">
-            <summary>
-              <h2>Advanced: all raw fields</h2>
-              <span className="advHint">Every value in the save, by name. For power users.</span>
-            </summary>
-            <FieldTable
-              fields={loaded.fields}
-              onEdit={(field, value) => {
-                try {
-                  loaded.save.setField(field.name, value);
-                  refreshFields();
-                } catch (e) {
-                  setError(e instanceof Error ? e.message : String(e));
-                }
-              }}
-            />
-          </details>
+              {mode === "fix" && (<>{back}<FixMySaveHelp valid />{downgrade}{downloadBar}</>)}
 
-          <DownloadBar save={loaded.save} fileName={loaded.fileName} onReset={() => setLoaded(null)} />
-        </>
-      )}
+              {mode === "unlock" && (<>{back}<UnlockEverythingPanel onRun={onUnlockAll} running={unlocking} result={unlockResult} />{downloadBar}</>)}
+
+              {mode === "fill" && (<>{back}<CompletionOverview collectibles={COLLECTIBLES} present={l.collPresent} />{collectibles}{missions}{downloadBar}</>)}
+
+              {mode === "edit" && (
+                <>
+                  {back}
+                  <section className="card meta">
+                    <div className="metaRow"><span className="k">File</span><span className="v mono">{l.fileName}</span></div>
+                    <div className="metaRow"><span className="k">Class</span><span className="v mono">{l.save.doc.header.saveGameClassName}</span></div>
+                    <div className="metaRow"><span className="k">Engine</span><span className="v mono">{l.save.doc.header.engineMajor}.{l.save.doc.header.engineMinor}.{l.save.doc.header.enginePatch} ({l.save.doc.header.branch})</span></div>
+                    <div className="metaRow"><span className="k">Build version</span><span className="v mono">{buildVersion ?? "—"}</span></div>
+                  </section>
+                  <QuickEdits fields={l.fields} onEdit={onQuickEdit} />
+                  {downgrade}
+                  <EnumPanel enums={l.enums} observed={l.observed} onChange={onEnumChange} onBulk={onEnumBulk} onCompleteAll={onCompleteAll} />
+                  {missions}
+                  {collectibles}
+                  <details className="card advanced">
+                    <summary>
+                      <h2>Advanced: all raw fields</h2>
+                      <span className="advHint">Every value in the save, by name. For power users.</span>
+                    </summary>
+                    <FieldTable fields={l.fields} onEdit={onFieldEdit} />
+                  </details>
+                  {downloadBar}
+                </>
+              )}
+            </>
+          );
+        })()}
 
       <footer className="foot">
         <a href="https://github.com/fisherjoey/tt-save-editor" target="_blank" rel="noreferrer">
