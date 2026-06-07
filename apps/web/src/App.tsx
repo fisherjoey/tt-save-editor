@@ -8,6 +8,7 @@ import { CollectiblesPanel } from "./components/CollectiblesPanel.js";
 import { MissionsPanel } from "./components/MissionsPanel.js";
 import { CompletionOverview } from "./components/CompletionOverview.js";
 import { UnlockEverythingPanel } from "./components/UnlockEverythingPanel.js";
+import { QuickUnlock } from "./components/QuickUnlock.js";
 import { FixMySaveHelp } from "./components/FixMySaveHelp.js";
 import { Help } from "./components/Help.js";
 
@@ -30,6 +31,18 @@ function downloadBytes(name: string, bytes: Uint8Array) {
   a.download = name;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/** Turn a raw load error into a plain-language cause + next step. */
+function explainError(msg: string): { title: string; detail: string } {
+  const m = msg.toLowerCase();
+  if (m.includes("gvas") || m.includes("magic") || m.includes("not a "))
+    return { title: "That doesn't look like a LEGO Batman save", detail: "Pick a file named like SaveSlot_0_TT.sav from the game's SaveGames folder — not a screenshot, a settings file, or another game's save." };
+  if (m.includes("round") || m.includes("reproduce") || m.includes("refus"))
+    return { title: "We couldn't safely read this save", detail: "It may be from a newer game version than we support, or the file is partly damaged. Try the matching BackupCopy_… file instead." };
+  if (m.includes("decrypt") || m.includes("key") || m.includes("range") || m.includes("length") || m.includes("bounds"))
+    return { title: "This save looks damaged or unreadable", detail: "If it's a real SaveSlot_…_TT.sav, it may be corrupted — try the matching BackupCopy_… file, which the game keeps as a spare." };
+  return { title: "Couldn't open that save", detail: `${msg}. If it's a real SaveSlot_…_TT.sav, try the matching BackupCopy_… file.` };
 }
 
 function collectibleCompletion(present: Set<string>) {
@@ -141,7 +154,16 @@ export function App() {
           )}
         </>
       )}
-      {error && <div className="banner err">Couldn’t open that save: {error}</div>}
+      {error &&
+        (() => {
+          const ex = explainError(error);
+          return (
+            <div className="banner err">
+              <strong>{ex.title}</strong>
+              <span>{ex.detail}</span>
+            </div>
+          );
+        })()}
 
       {loaded &&
         (() => {
@@ -188,22 +210,40 @@ export function App() {
             } catch (e) { onErr(e); }
           };
           const onFieldEdit = (field: ScalarField, value: number | bigint | boolean | string) => { try { l.save.setField(field.name, value); refreshFields(); } catch (e) { onErr(e); } };
-          const onUnlockAll = () => {
+          const STUDS_MAX = 999999999;
+          const maxStuds = () => {
+            const studs = FEATURED_FIELDS.find((f) => /stud/i.test(f.name) || (f.label ?? "").toLowerCase().includes("stud"));
+            if (studs) { l.save.setFieldAll(studs.name, STUDS_MAX); for (const ln of studs.linkedNames ?? []) l.save.setFieldAll(ln, STUDS_MAX); }
+          };
+          // completeStory=false leaves the story playable ("everything for free roam").
+          const runUnlock = (completeStory: boolean) => {
             setUnlocking(true);
-            // defer so the "Working…" state paints before the (synchronous, heavy) work
             setTimeout(() => {
               try {
                 let added = 0;
                 for (const c of COLLECTIBLES) added += l.save.addEntries(c.tags.map((t) => t.tag), c.stateValue);
-                const completed = l.save.completeAllProgress();
-                const STUDS = 999999999;
-                const studs = FEATURED_FIELDS.find((f) => /stud/i.test(f.name) || (f.label ?? "").toLowerCase().includes("stud"));
-                if (studs) { l.save.setFieldAll(studs.name, STUDS); for (const ln of studs.linkedNames ?? []) l.save.setFieldAll(ln, STUDS); }
-                setUnlockResult({ collectiblesAdded: added, progressCompleted: completed, studsSet: STUDS });
+                const completed = completeStory ? l.save.completeAllProgress() : 0;
+                maxStuds();
+                setUnlockResult({ collectiblesAdded: added, progressCompleted: completed, studsSet: STUDS_MAX });
                 refreshFields();
               } catch (e) { onErr(e); } finally { setUnlocking(false); }
             }, 30);
           };
+          const onUnlockAll = () => runUnlock(true);
+          const onUnlockFreeRoam = () => runUnlock(false);
+          const revertAll = () => {
+            try {
+              const save = SaveFile.load(l.originalBytes);
+              setLoaded({ fileName: l.fileName, save, originalBytes: l.originalBytes, fields: save.fields(), enums: save.enums(), observed: save.observedEnums(), collPresent: new Set(save.enumArrayEntries().map((e) => e.tag)) });
+              setUnlockResult(null);
+              setError(null);
+            } catch (e) { onErr(e); }
+          };
+          const setDifficulty = (member: string) => {
+            const diffs = l.enums.filter((e) => e.enumType === "EDifficultySetting");
+            if (diffs.length) onEnumBulk(diffs, member);
+          };
+          const currentDifficulty = l.enums.find((e) => e.enumType === "EDifficultySetting")?.member;
           const backupOriginal = () => downloadBytes(l.fileName.startsWith("BackupCopy_") ? l.fileName : `ORIGINAL_${l.fileName}`, l.originalBytes);
 
           const downloadBar = <DownloadBar save={l.save} fileName={l.fileName} onReset={() => setLoaded(null)} />;
@@ -217,7 +257,10 @@ export function App() {
               <section className="card statusBar">
                 <span className="badge ok">✓ valid save</span>
                 <span className="statusInfo">{comp.have}/{comp.total} collectibles · {comp.pct}%</span>
-                <button className="ghost" onClick={backupOriginal}>⬇ Back up my original</button>
+                <div className="statusActions">
+                  <button className="ghost" onClick={backupOriginal}>⬇ Back up my original</button>
+                  <button className="ghost" onClick={revertAll} title="Discard every edit and reload the save as you first opened it">↺ Revert all changes</button>
+                </div>
               </section>
 
               {mode === "choose" && (
@@ -247,7 +290,14 @@ export function App() {
 
               {mode === "fix" && (<>{back}<FixMySaveHelp valid />{downgrade}{downloadBar}</>)}
 
-              {mode === "unlock" && (<>{back}<UnlockEverythingPanel onRun={onUnlockAll} running={unlocking} result={unlockResult} />{downloadBar}</>)}
+              {mode === "unlock" && (
+                <>
+                  {back}
+                  <UnlockEverythingPanel onRun={onUnlockAll} onRunFreeRoam={onUnlockFreeRoam} running={unlocking} result={unlockResult} />
+                  <QuickUnlock collectibles={COLLECTIBLES} present={l.collPresent} onAdd={onCollAdd} />
+                  {downloadBar}
+                </>
+              )}
 
               {mode === "fill" && (<>{back}<CompletionOverview collectibles={COLLECTIBLES} present={l.collPresent} />{collectibles}{missions}{downloadBar}</>)}
 
@@ -261,6 +311,19 @@ export function App() {
                     <div className="metaRow"><span className="k">Build version</span><span className="v mono">{buildVersion ?? "—"}</span></div>
                   </section>
                   <QuickEdits fields={l.fields} onEdit={onQuickEdit} />
+                  {currentDifficulty && (
+                    <section className="card">
+                      <h2>Difficulty</h2>
+                      <p className="hint">Make the game easier or harder. (Currently: {currentDifficulty})</p>
+                      <div className="presetRow">
+                        {[...new Set(["Normal", "Medium", "Hard", currentDifficulty])].map((d) => (
+                          <button key={d} className={currentDifficulty === d ? "chip on" : "chip"} onClick={() => setDifficulty(d)}>
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+                    </section>
+                  )}
                   {downgrade}
                   <EnumPanel enums={l.enums} observed={l.observed} onChange={onEnumChange} onBulk={onEnumBulk} onCompleteAll={onCompleteAll} />
                   {missions}

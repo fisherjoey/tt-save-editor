@@ -1,9 +1,12 @@
 export function UnlockEverythingPanel({
   onRun,
+  onRunFreeRoam,
   running,
   result,
 }: {
   onRun: () => void;
+  /** Unlock everything but DON'T mark the story complete (keeps it playable). */
+  onRunFreeRoam: () => void;
   running: boolean;
   result: { collectiblesAdded: number; progressCompleted: number; studsSet: number } | null;
 }) {
@@ -17,6 +20,10 @@ export function UnlockEverythingPanel({
 
       <button className="primary unlockBig" disabled={running} onClick={onRun}>
         {running ? "Working…" : "⭐ Unlock & complete everything"}
+      </button>
+
+      <button className="ghost freeRoamBtn" disabled={running} onClick={onRunFreeRoam}>
+        🦇 Unlock everything, but keep the story to play
       </button>
 
       <p className="reassure">

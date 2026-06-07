@@ -16,9 +16,10 @@ export interface FeaturedField {
    *  so we have to set both (and any duplicates of either) together. */
   linkedNames?: string[];
   /** Display/parse unit. For Timespan-typed fields the raw value is 100ns ticks
-   *  (`Int64` underneath), which is awful to type. `minutes` shows/accepts the
-   *  value as minutes; the editor converts both directions. */
-  unit?: "raw" | "minutes";
+   *  (`Int64` underneath), which is awful to type. `minutes` shows/accepts whole
+   *  minutes; `hms` shows/accepts `H:MM:SS` (sub-minute precision); the editor
+   *  converts both directions. */
+  unit?: "raw" | "minutes" | "hms";
 }
 
 export const FEATURED_FIELDS: FeaturedField[] = [
@@ -31,18 +32,26 @@ export const FEATURED_FIELDS: FeaturedField[] = [
   {
     name: "TotalPlaytime",
     label: "Playtime",
-    help: "Total playtime in minutes (UE Timespan, stored as 100ns ticks internally)",
-    unit: "minutes",
+    help: "Total playtime as H:MM:SS (UE Timespan, stored as 100ns ticks internally)",
+    unit: "hms",
   },
 ];
+
+const TICKS_PER_SEC = 10_000_000n;
 
 /** Convert a raw field value (as it appears in the save) to its display value. */
 export function toDisplay(value: number | bigint | boolean | string, unit?: FeaturedField["unit"]): string {
   if (unit === "minutes") {
-    // 100ns ticks → minutes
     const ticks = typeof value === "bigint" ? value : BigInt(Number(value) | 0);
-    const minutes = Number(ticks / 600_000_000n);
-    return String(minutes);
+    return String(Number(ticks / 600_000_000n));
+  }
+  if (unit === "hms") {
+    const ticks = typeof value === "bigint" ? value : BigInt(Number(value) | 0);
+    const total = Number(ticks / TICKS_PER_SEC);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   }
   return String(value);
 }
@@ -53,6 +62,17 @@ export function fromDisplay(input: string, unit?: FeaturedField["unit"]): bigint
     const m = Number(input);
     if (!Number.isFinite(m) || m < 0) throw new Error("Playtime must be a non-negative number of minutes");
     return BigInt(Math.round(m)) * 600_000_000n;
+  }
+  if (unit === "hms") {
+    const parts = input.trim().split(":").map((p) => Number(p));
+    if (!parts.length || parts.some((p) => !Number.isFinite(p) || p < 0)) {
+      throw new Error("Playtime must look like H:MM:SS (or M:SS, or a number of seconds)");
+    }
+    let sec = 0;
+    if (parts.length === 3) sec = parts[0]! * 3600 + parts[1]! * 60 + parts[2]!;
+    else if (parts.length === 2) sec = parts[0]! * 60 + parts[1]!;
+    else sec = parts[0]!;
+    return BigInt(Math.round(sec)) * TICKS_PER_SEC;
   }
   return input;
 }

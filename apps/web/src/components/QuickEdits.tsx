@@ -14,6 +14,7 @@ export function QuickEdits({ fields, onEdit }: { fields: ScalarField[]; onEdit: 
             label={meta.label}
             help={meta.help}
             displayValue={toDisplay(field!.value as number | bigint, meta.unit)}
+            valid={meta.unit === "hms" ? /^\d{1,3}(:\d{1,2}){0,2}$/ : /^\d+$/}
             onCommit={(v) => onEdit(meta.name, v)}
           />
         ))}
@@ -22,7 +23,7 @@ export function QuickEdits({ fields, onEdit }: { fields: ScalarField[]; onEdit: 
   );
 }
 
-function QuickField({ label, help, displayValue, onCommit }: { label: string; help?: string; displayValue: string; onCommit: (v: string) => void }) {
+function QuickField({ label, help, displayValue, valid, onCommit }: { label: string; help?: string; displayValue: string; valid: RegExp; onCommit: (v: string) => void }) {
   const [draft, setDraft] = useState(displayValue);
   const dirty = draft !== displayValue;
   return (
@@ -34,13 +35,13 @@ function QuickField({ label, help, displayValue, onCommit }: { label: string; he
       <span className="quickInputRow">
         <input
           className="mono"
-          inputMode="numeric"
+          inputMode={valid.source.includes(":") ? "text" : "numeric"}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") (e.target as HTMLInputElement).blur();
           }}
-          onBlur={() => dirty && /^\d+$/.test(draft) && onCommit(draft)}
+          onBlur={() => dirty && valid.test(draft) && onCommit(draft)}
         />
         {dirty && <span className="quickDot" title="unsaved change">●</span>}
       </span>
