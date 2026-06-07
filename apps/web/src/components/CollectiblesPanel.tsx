@@ -8,13 +8,22 @@ type FlatTag = CollectibleTag & {
   verified: boolean;
 };
 
-const SOURCE_ORDER = ["story", "hub", "shop", "other"] as const;
-const SOURCE_LABELS: Record<string, string> = {
-  story: "Story missions",
-  hub: "Free-roam / hub",
-  shop: "Shop",
-  other: "Other",
-};
+type View = "category" | "mission" | "district";
+
+interface Group {
+  key: string;
+  label: string;
+  /** true/false for category counters; null for mission/district groups (mixed). */
+  verified: boolean | null;
+  /** Denominator shown next to have/N. */
+  counter: number;
+  /** Sort key. */
+  order: string;
+  tags: FlatTag[];
+}
+
+const pretty = (s: string) => s.replace(/([a-z])([A-Z])/g, "$1 $2");
+const pad = (n: number | undefined) => String(n ?? 0).padStart(2, "0");
 
 export function CollectiblesPanel({
   collectibles,
@@ -26,7 +35,7 @@ export function CollectiblesPanel({
   present: Set<string>;
   onAdd: (items: { tag: string; stateValue: string }[]) => void;
 }) {
-  const [view, setView] = useState<"category" | "source">("category");
+  const [view, setView] = useState<View>("category");
   const [q, setQ] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
@@ -39,21 +48,59 @@ export function CollectiblesPanel({
   );
   const stateByTag = useMemo(() => new Map(flat.map((t) => [t.tag, t.stateValue])), [flat]);
 
-  const groups = useMemo(() => {
+  // chapter.mission -> a real mission name (e.g. "Iceberg Lounge (Ch.1 M5)"), from the tag names.
+  const missionNames = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const t of flat) {
+      if (t.facets.source !== "story") continue;
+      const key = `${t.facets.chapter}.${t.facets.mission}`;
+      const prefix = t.name.split(" — ")[0]!;
+      if (/\(Ch\./.test(prefix) && !m.has(key)) m.set(key, prefix);
+    }
+    return m;
+  }, [flat]);
+
+  const groups: Group[] = useMemo(() => {
     if (view === "category") {
       return collectibles.map((c) => ({
         key: c.key,
         label: c.label,
         verified: c.verified,
         counter: c.counter,
+        order: c.key,
         tags: flat.filter((t) => t.counterKey === c.key),
       }));
     }
-    return SOURCE_ORDER.map((src) => {
-      const tags = flat.filter((t) => t.facets.source === src);
-      return { key: src, label: SOURCE_LABELS[src]!, verified: false, counter: tags.length, tags };
-    }).filter((g) => g.tags.length > 0);
-  }, [view, collectibles, flat]);
+    const map = new Map<string, Group>();
+    const push = (key: string, label: string, order: string, t: FlatTag) => {
+      let g = map.get(key);
+      if (!g) {
+        g = { key, label, verified: null, counter: 0, order, tags: [] };
+        map.set(key, g);
+      }
+      g.tags.push(t);
+      g.counter = g.tags.length;
+    };
+    for (const t of flat) {
+      const f = t.facets;
+      if (view === "mission") {
+        if (f.source === "story") {
+          const mk = `${f.chapter}.${f.mission}`;
+          push(`m:${mk}`, missionNames.get(mk) ?? `Chapter ${f.chapter} · Mission ${f.mission}`, `0:${pad(f.chapter)}.${pad(f.mission)}`, t);
+        } else {
+          push("free", "Free-roam & activities", "9", t);
+        }
+      } else {
+        // district view
+        if (f.district) push(`d:${f.district}`, f.district, `1:${f.district}`, t);
+        else if (f.area) push(`a:${f.area}`, pretty(f.area), `2:${f.area}`, t);
+        else if (f.source === "story") push("story", "Story missions", "3", t);
+        else if (f.source === "shop") push("shop", "Shop", "4", t);
+        else push("other", "Other", "5", t);
+      }
+    }
+    return [...map.values()].sort((a, b) => a.order.localeCompare(b.order));
+  }, [view, collectibles, flat, missionNames]);
 
   if (collectibles.length === 0) return null;
 
@@ -77,6 +124,12 @@ export function CollectiblesPanel({
     setSelected(new Set());
   };
 
+  const tab = (v: View, label: string) => (
+    <button className={view === v ? "chip on" : "chip"} onClick={() => setView(v)}>
+      {label}
+    </button>
+  );
+
   return (
     <section className="card">
       <h2>Collectibles</h2>
@@ -88,12 +141,9 @@ export function CollectiblesPanel({
       <div className="collTools">
         <div className="viewToggle">
           <span>View by</span>
-          <button className={view === "category" ? "chip on" : "chip"} onClick={() => setView("category")}>
-            Category
-          </button>
-          <button className={view === "source" ? "chip on" : "chip"} onClick={() => setView("source")}>
-            Source
-          </button>
+          {tab("category", "Category")}
+          {tab("mission", "Mission")}
+          {tab("district", "District")}
         </div>
         <button className="primary" onClick={() => addTags(flat.map((t) => t.tag))}>
           Max out everything
@@ -108,16 +158,12 @@ export function CollectiblesPanel({
         const have = g.tags.filter((t) => present.has(t.tag)).length;
         const missing = g.tags.filter((t) => !present.has(t.tag)).map((t) => t.tag);
         return (
-          <details key={g.key} className="enumGroup" open={!!needle || view === "source"}>
+          <details key={g.key} className="enumGroup" open={!!needle || view !== "category"}>
             <summary>
               <span className="groupTitle">
                 {g.label}
-                {view === "category" &&
-                  (g.verified ? (
-                    <span className="badge ok">✓ verified</span>
-                  ) : (
-                    <span className="badge warn">untested</span>
-                  ))}
+                {g.verified === true && <span className="badge ok">✓ verified</span>}
+                {g.verified === false && <span className="badge warn">untested</span>}
               </span>
               <span className="groupCount">
                 {have}/{g.counter}
@@ -141,6 +187,7 @@ export function CollectiblesPanel({
                     />
                     <span className="collName" title={t.tag}>
                       {t.name}
+                      {view !== "category" && <span className="collCat"> · {t.counterLabel}</span>}
                     </span>
                     {inSave ? (
                       <span className="collHave">have</span>
