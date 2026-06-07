@@ -33,6 +33,13 @@ describe("collectibles helpers", () => {
   it("derives shop facet for ShopItems", () => {
     expect(deriveFacets("GameProgress.Definitions.ShopItems.Vehicles.Gordon.PoliceCruiser").source).toBe("shop");
   });
+
+  it("treats non-island hub tags (MilestoneRewards) as hub with an area, not 'other'", () => {
+    const f = deriveFacets("GameProgress.Definitions.GoldBricks.Hub.MilestoneRewards.FastTravel.01GB");
+    expect(f.source).toBe("hub");
+    expect(f.area).toBe("MilestoneRewards");
+    expect(f.district).toBeUndefined();
+  });
 });
 
 describe("selectCounterTags", () => {

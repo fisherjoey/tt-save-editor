@@ -9,6 +9,8 @@ export interface CollectibleFacets {
   mission?: number;
   island?: string;
   district?: string;
+  /** Hub sub-area when not an island/district (e.g. "MilestoneRewards"). */
+  area?: string;
 }
 
 export interface CollectibleTag {
@@ -53,11 +55,21 @@ export function deriveFacets(tag: string): CollectibleFacets {
   if (tag.includes(".ShopItems.")) return { source: "shop" };
   const story = tag.match(/\.Story\.(\d+)\.(\d+)\./);
   if (story) return { source: "story", chapter: Number(story[1]), mission: Number(story[2]) };
-  const hub = tag.match(/\.Hub\.([A-Z]+)\.([A-Z0-9]+)\./);
-  if (hub) {
-    const island = ISLANDS[hub[1]!];
-    const district = DISTRICTS[hub[2]!];
-    return { source: "hub", ...(island ? { island } : {}), ...(district ? { district } : {}) };
+  if (tag.includes(".Hub.")) {
+    const seg = tag.match(/\.Hub\.([A-Za-z0-9]+)(?:\.([A-Za-z0-9]+))?/);
+    const seg1 = seg?.[1];
+    const seg2 = seg?.[2];
+    if (seg1 && ISLANDS[seg1]) {
+      const island = ISLANDS[seg1];
+      const district = seg2 ? DISTRICTS[seg2] : undefined;
+      return {
+        source: "hub",
+        island,
+        ...(district ? { district } : seg2 ? { area: seg2 } : {}),
+      };
+    }
+    // Hub, but organised by sub-area rather than island (e.g. MilestoneRewards).
+    return { source: "hub", ...(seg1 ? { area: seg1 } : {}) };
   }
   return { source: "other" };
 }

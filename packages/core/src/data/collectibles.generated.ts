@@ -163,7 +163,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Fast Travel (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -171,7 +172,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Wayne Tech Caches (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -189,7 +191,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "A R Challenges (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -197,7 +200,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Wayne Tech Caches (Milestone Reward) — Gold Brick #2",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -205,7 +209,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "A R Challenges (Milestone Reward) — Gold Brick #2",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -213,7 +218,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Poison Ivy (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -221,7 +227,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Zoo Animals (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -229,7 +236,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "A R Challenges (Milestone Reward) — Gold Brick #3",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -237,7 +245,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Wayne Tech Caches (Milestone Reward) — Gold Brick #3",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -245,7 +254,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Photofit (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -253,7 +263,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "R V C Rooms (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -261,7 +272,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Killer Croc (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -269,7 +281,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "Catwoman Heist (Milestone Reward) — Gold Brick #1",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       },
       {
@@ -277,7 +290,8 @@ export const COLLECTIBLES: CollectibleCounter[] = [
         "name": "R V C Rooms (Milestone Reward) — Gold Brick #2",
         "confidence": "high",
         "facets": {
-          "source": "other"
+          "source": "hub",
+          "area": "MilestoneRewards"
         }
       }
     ]
