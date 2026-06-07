@@ -31,12 +31,12 @@ export function QuickUnlock({
   const presets = useMemo(
     () =>
       [
-        { label: "Every Batmobile", items: flat.filter((f) => /batmobile/i.test(f.name)) },
+        { label: "All Batmobiles (cars only)", items: flat.filter((f) => /batmobile/i.test(f.name)) },
         { label: "All vehicles", items: flat.filter((f) => f.counterKey === "Vehicles") },
         { label: "All costumes", items: flat.filter((f) => f.counterKey === "Costumes") },
         { label: "All gold bricks", items: flat.filter((f) => f.counterKey === "GoldBricks") },
-        { label: "All minikits", items: flat.filter((f) => f.counterKey === "Minikits") },
-        { label: "All Wayne Tech chips", items: flat.filter((f) => f.counterKey === "WayneTechChips") },
+        { label: "All Riddler Trophies", items: flat.filter((f) => f.counterKey === "Minikits") },
+        { label: "All WayneTech Chips", items: flat.filter((f) => f.counterKey === "WayneTechChips") },
       ].filter((p) => p.items.length > 0),
     [flat],
   );
@@ -52,7 +52,7 @@ export function QuickUnlock({
   return (
     <section className="card">
       <h2>Unlock specific things</h2>
-      <p className="hint">Search for a character, costume, vehicle, or collectible and add just that — or grab a themed bundle.</p>
+      <p className="hint">Search for a costume, vehicle, or collectible and add just that — or grab a themed bundle. (Characters are unlocked as costumes.)</p>
       <div className="presetRow">
         {presets.map((p) => {
           const missing = p.items.filter((i) => !present.has(i.tag)).length;

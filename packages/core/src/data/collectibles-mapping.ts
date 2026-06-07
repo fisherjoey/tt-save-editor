@@ -36,9 +36,9 @@ export const COUNTER_MAPPINGS: CounterMapping[] = [
     include: ["GameProgress.Definitions.GoldBricks."] },
   { key: "RedBricks", label: "Red bricks", counter: 23, verified: false, stateCategory: "RedBricks",
     include: ["GameProgress.Definitions.RedBricks."] },
-  { key: "Minikits", label: "Minikits", counter: 121, verified: false, stateCategory: "RiddlerTrophies",
+  { key: "Minikits", label: "Riddler Trophies", counter: 121, verified: false, stateCategory: "RiddlerTrophies",
     include: ["GameProgress.Definitions.RiddlerTrophies."] },
-  { key: "WayneTechChips", label: "Wayne Tech chips", counter: 200, verified: false, stateCategory: "WayneTechChips",
+  { key: "WayneTechChips", label: "WayneTech Chips", counter: 200, verified: false, stateCategory: "WayneTechChips",
     include: ["GameProgress.Definitions.WayneTechChips."] },
   { key: "Vehicles", label: "Vehicles", counter: 30, verified: false, stateCategory: "ShopItems",
     include: ["GameProgress.Definitions.ShopItems.Vehicles."] },
@@ -46,7 +46,7 @@ export const COUNTER_MAPPINGS: CounterMapping[] = [
     include: ["GameProgress.Definitions.StudCaches."] },
   { key: "BatTokens", label: "Bat tokens", counter: 65, verified: false, stateCategory: "BatTokens",
     include: ["GameProgress.Definitions.BatTokens."] },
-  { key: "Trophies", label: "Trophies", counter: 170, verified: false, stateCategory: "MicroBuilds",
+  { key: "Trophies", label: "MicroBuilds", counter: 170, verified: false, stateCategory: "MicroBuilds",
     include: ["GameProgress.Definitions.MicroBuilds.", "GameProgress.Definitions.Microbuilds."] },
   // Costumes: `counter` = all insertable Characters.* tags (125). The in-game base-game
   // counter shows /101; DLC character variants inflate the tag count. Unverified category —

@@ -4,7 +4,19 @@ import { decrypt } from "../src/crypt/index.js";
 import { parse } from "../src/gvas/index.js";
 import { readEnumArrayEntries } from "../src/gvas/scan.js";
 import { normalizeConfidence, prettifyTagPath, deriveFacets, selectCounterTags } from "../src/collectibles.js";
-import { COUNTER_MAPPINGS } from "../src/data/collectibles-mapping.js";
+import { COUNTER_MAPPINGS, DISTRICTS } from "../src/data/collectibles-mapping.js";
+
+/**
+ * Replace raw district codes in a display name with their friendly names.
+ * "South Island – OG02 — Red Brick #1" → "Old Gotham South — Red Brick #1"
+ * (the district name already implies the island, so the code + island prefix drop out).
+ */
+function cleanName(name: string): string {
+  const lead = name.match(/^(.*?)\s*[–-]\s*([A-Za-z]{2,4}\d{0,2})\s+(—.*)$/);
+  if (lead && DISTRICTS[lead[2]!]) return `${DISTRICTS[lead[2]!]} ${lead[3]}`.trim();
+  // Otherwise swap any stray district code for its name in place.
+  return name.replace(/\b([A-Za-z]{2,4}\d{0,2})\b/g, (m) => DISTRICTS[m] ?? m);
+}
 
 const here = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 const SAVE = here("../test/fixtures/slot0_thirdparty_100pct.sav");
@@ -44,7 +56,7 @@ const out = COUNTER_MAPPINGS.map((m) => {
     stateValue: canonicalState(m.stateCategory),
     tags: tags.map((t) => ({
       tag: t,
-      name: names[t]?.name ?? prettifyTagPath(t),
+      name: cleanName(names[t]?.name ?? prettifyTagPath(t)),
       confidence: normalizeConfidence(names[t]?.confidence ?? "low"),
       facets: deriveFacets(t),
     })),

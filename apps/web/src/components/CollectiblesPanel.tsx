@@ -134,8 +134,10 @@ export function CollectiblesPanel({
     <section className="card">
       <h2>Collectibles</h2>
       <p className="hint">
-        Add collectibles to move the in-game counters (gold bricks, minikits, trophies…). Names come from the
-        game's data. <b>Gold bricks</b> are verified in-game; other categories should work but are untested.
+        Add collectibles to move the in-game counters (gold bricks, Riddler trophies, MicroBuilds…). Names come from
+        the game's data. <b>Gold bricks</b> are confirmed working in-game; other categories are added the same way and
+        should work too — they just aren't fully confirmed yet. Adding them can't corrupt your save (and Revert all
+        undoes anything).
       </p>
 
       <div className="collTools">
@@ -162,8 +164,12 @@ export function CollectiblesPanel({
             <summary>
               <span className="groupTitle">
                 {g.label}
-                {g.verified === true && <span className="badge ok">✓ verified</span>}
-                {g.verified === false && <span className="badge warn">untested</span>}
+                {g.verified === true && <span className="badge ok" title="Confirmed working in-game.">✓ confirmed</span>}
+                {g.verified === false && (
+                  <span className="badge warn" title="Not yet confirmed in-game — safe to add, but the counter may not move.">
+                    not confirmed
+                  </span>
+                )}
               </span>
               <span className="groupCount">
                 {have}/{g.counter}
@@ -192,7 +198,11 @@ export function CollectiblesPanel({
                     {inSave ? (
                       <span className="collHave">have</span>
                     ) : (
-                      t.confidence !== "high" && <span className="collConf">{t.confidence}</span>
+                      t.confidence !== "high" && (
+                        <span className="collConf" title="We're less certain this is the exact in-game item — safe to add, but it may not register.">
+                          unverified
+                        </span>
+                      )
                     )}
                   </label>
                 );

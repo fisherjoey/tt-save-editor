@@ -72,7 +72,9 @@ export function CompletionOverview({
             <span className={r.done ? "coCount coCount--done" : "coCount"}>
               {r.done ? "✓ done" : `${r.have}/${r.total}`}
             </span>
-            <span className={r.verified ? "badge ok" : "badge warn"}>{r.verified ? "✓ verified" : "untested"}</span>
+            <span className={r.verified ? "badge ok" : "badge warn"} title={r.verified ? "Confirmed working in-game." : "Not yet confirmed in-game — safe to add, but the counter may not move."}>
+              {r.verified ? "✓ confirmed" : "not confirmed"}
+            </span>
           </div>
         ))}
       </div>

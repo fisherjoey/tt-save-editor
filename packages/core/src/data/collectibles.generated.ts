@@ -345,7 +345,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.SI.OG02.Shop.01RB",
-        "name": "South Island – OG02 — Red Brick #1",
+        "name": "Old Gotham South — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -355,7 +355,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.SI.CAAC.Shop.01RB",
-        "name": "South Island – CAAC — Red Brick #1",
+        "name": "The Cauldron North - ACE Chemicals — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -375,7 +375,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.SI.OG03.Shop.01RB",
-        "name": "South Island – OG03 — Red Brick #1",
+        "name": "Old Gotham West — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -415,7 +415,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.NI.OT01.Shop.01RB",
-        "name": "North Island – OT01 — Red Brick #1",
+        "name": "Otisburg — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -475,7 +475,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.SI.OG01.Shop.01RB",
-        "name": "South Island – OG01 — Red Brick #1",
+        "name": "Old Gotham North — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -495,7 +495,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.CI.NT01.Shop.01RB",
-        "name": "Central Island – NT01 — Red Brick #1",
+        "name": "Newtown — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -505,7 +505,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.SI.CA01.Shop.01RB",
-        "name": "South Island – CA01 — Red Brick #1",
+        "name": "The Cauldron Central — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -525,7 +525,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.RedBricks.Hub.NI.EEAM.Shop.01RB",
-        "name": "North Island – EEAM — Red Brick #1",
+        "name": "East End - Amusement Mile — Red Brick #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -537,7 +537,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
   },
   {
     "key": "Minikits",
-    "label": "Minikits",
+    "label": "Riddler Trophies",
     "counter": 121,
     "verified": false,
     "stateValue": "ETtCollectableGameProgressState::Collected",
@@ -1756,7 +1756,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
   },
   {
     "key": "WayneTechChips",
-    "label": "Wayne Tech chips",
+    "label": "WayneTech Chips",
     "counter": 200,
     "verified": false,
     "stateValue": "ETtCollectableGameProgressState::Collected",
@@ -5662,7 +5662,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
   },
   {
     "key": "Trophies",
-    "label": "Trophies",
+    "label": "MicroBuilds",
     "counter": 170,
     "verified": false,
     "stateValue": "ETtCollectableGameProgressState::Collected",
@@ -5759,7 +5759,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.TC.TC01.Trophy.05TRO",
-        "name": "Tricorner – TC01 — MicroBuild #5",
+        "name": "Tricorner — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5769,7 +5769,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.TC.TC01.Trophy.06TRO",
-        "name": "Tricorner – TC01 — MicroBuild #6",
+        "name": "Tricorner — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5779,7 +5779,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.TC.TC01.Trophy.07TRO",
-        "name": "Tricorner – TC01 — MicroBuild #7",
+        "name": "Tricorner — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5789,7 +5789,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.TC.TC01.Trophy.08TRO",
-        "name": "Tricorner – TC01 — MicroBuild #8",
+        "name": "Tricorner — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5799,7 +5799,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.TC.TC01.Trophy.09TRO",
-        "name": "Tricorner – TC01 — MicroBuild #9",
+        "name": "Tricorner — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5809,7 +5809,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.TC.TC01.Trophy.00TRO",
-        "name": "Tricorner – TC01 — MicroBuild #0",
+        "name": "Tricorner — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5819,7 +5819,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.TC.TC01.Trophy.01TRO",
-        "name": "Tricorner – TC01 — MicroBuild #1",
+        "name": "Tricorner — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5829,7 +5829,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.TC.TC01.Trophy.02TRO",
-        "name": "Tricorner – TC01 — MicroBuild #2",
+        "name": "Tricorner — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5839,7 +5839,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.TC.TC01.Trophy.03TRO",
-        "name": "Tricorner – TC01 — MicroBuild #3",
+        "name": "Tricorner — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5849,7 +5849,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.TC.TC01.Trophy.04TRO",
-        "name": "Tricorner – TC01 — MicroBuild #4",
+        "name": "Tricorner — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5925,7 +5925,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CA01.Trophy.00TRO",
-        "name": "South Island – CA01 — MicroBuild #0",
+        "name": "The Cauldron Central — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5935,7 +5935,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CA01.Trophy.01TRO",
-        "name": "South Island – CA01 — MicroBuild #1",
+        "name": "The Cauldron Central — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5945,7 +5945,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CA01.Trophy.02TRO",
-        "name": "South Island – CA01 — MicroBuild #2",
+        "name": "The Cauldron Central — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5955,7 +5955,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CA01.Trophy.03TRO",
-        "name": "South Island – CA01 — MicroBuild #3",
+        "name": "The Cauldron Central — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5965,7 +5965,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CA01.Trophy.04TRO",
-        "name": "South Island – CA01 — MicroBuild #4",
+        "name": "The Cauldron Central — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5975,7 +5975,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CA01.Trophy.05TRO",
-        "name": "South Island – CA01 — MicroBuild #5",
+        "name": "The Cauldron Central — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5985,7 +5985,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CA01.Trophy.06TRO",
-        "name": "South Island – CA01 — MicroBuild #6",
+        "name": "The Cauldron Central — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -5995,7 +5995,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CA01.Trophy.07TRO",
-        "name": "South Island – CA01 — MicroBuild #7",
+        "name": "The Cauldron Central — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6005,7 +6005,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CA01.Trophy.08TRO",
-        "name": "South Island – CA01 — MicroBuild #8",
+        "name": "The Cauldron Central — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6015,7 +6015,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CA01.Trophy.09TRO",
-        "name": "South Island – CA01 — MicroBuild #9",
+        "name": "The Cauldron Central — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6025,7 +6025,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CAAC.Trophy.00TRO",
-        "name": "South Island – CAAC — MicroBuild #0",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6035,7 +6035,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CAAC.Trophy.01TRO",
-        "name": "South Island – CAAC — MicroBuild #1",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6045,7 +6045,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CAAC.Trophy.02TRO",
-        "name": "South Island – CAAC — MicroBuild #2",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6055,7 +6055,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CAAC.Trophy.03TRO",
-        "name": "South Island – CAAC — MicroBuild #3",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6065,7 +6065,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.CAAC.Trophy.04TRO",
-        "name": "South Island – CAAC — MicroBuild #4",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6075,7 +6075,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CAAC.Trophy.05TRO",
-        "name": "South Island – CAAC — MicroBuild #5",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6085,7 +6085,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CAAC.Trophy.06TRO",
-        "name": "South Island – CAAC — MicroBuild #6",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6095,7 +6095,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CAAC.Trophy.07TRO",
-        "name": "South Island – CAAC — MicroBuild #7",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6105,7 +6105,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CAAC.Trophy.08TRO",
-        "name": "South Island – CAAC — MicroBuild #8",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6115,7 +6115,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.CAAC.Trophy.09TRO",
-        "name": "South Island – CAAC — MicroBuild #9",
+        "name": "The Cauldron North - ACE Chemicals — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6125,7 +6125,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG01.Trophy.00TRO",
-        "name": "South Island – OG01 — MicroBuild #0",
+        "name": "Old Gotham North — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6135,7 +6135,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG01.Trophy.01TRO",
-        "name": "South Island – OG01 — MicroBuild #1",
+        "name": "Old Gotham North — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6145,7 +6145,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG01.Trophy.02TRO",
-        "name": "South Island – OG01 — MicroBuild #2",
+        "name": "Old Gotham North — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6155,7 +6155,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG01.Trophy.03TRO",
-        "name": "South Island – OG01 — MicroBuild #3",
+        "name": "Old Gotham North — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6165,7 +6165,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG01.Trophy.04TRO",
-        "name": "South Island – OG01 — MicroBuild #4",
+        "name": "Old Gotham North — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6175,7 +6175,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG02.Trophy.00TRO",
-        "name": "South Island – OG02 — MicroBuild #0",
+        "name": "Old Gotham South — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6185,7 +6185,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG02.Trophy.01TRO",
-        "name": "South Island – OG02 — MicroBuild #1",
+        "name": "Old Gotham South — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6195,7 +6195,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG02.Trophy.02TRO",
-        "name": "South Island – OG02 — MicroBuild #2",
+        "name": "Old Gotham South — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6205,7 +6205,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG02.Trophy.03TRO",
-        "name": "South Island – OG02 — MicroBuild #3",
+        "name": "Old Gotham South — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6215,7 +6215,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG02.Trophy.04TRO",
-        "name": "South Island – OG02 — MicroBuild #4",
+        "name": "Old Gotham South — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6225,7 +6225,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG03.Trophy.00TRO",
-        "name": "South Island – OG03 — MicroBuild #0",
+        "name": "Old Gotham West — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6235,7 +6235,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG03.Trophy.01TRO",
-        "name": "South Island – OG03 — MicroBuild #1",
+        "name": "Old Gotham West — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6245,7 +6245,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG03.Trophy.02TRO",
-        "name": "South Island – OG03 — MicroBuild #2",
+        "name": "Old Gotham West — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6255,7 +6255,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG03.Trophy.03TRO",
-        "name": "South Island – OG03 — MicroBuild #3",
+        "name": "Old Gotham West — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6265,7 +6265,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.SI.OG03.Trophy.04TRO",
-        "name": "South Island – OG03 — MicroBuild #4",
+        "name": "Old Gotham West — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6275,7 +6275,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG02.Trophy.06TRO",
-        "name": "South Island – OG02 — MicroBuild #6",
+        "name": "Old Gotham South — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6285,7 +6285,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG02.Trophy.05TRO",
-        "name": "South Island – OG02 — MicroBuild #5",
+        "name": "Old Gotham South — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6295,7 +6295,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG02.Trophy.07TRO",
-        "name": "South Island – OG02 — MicroBuild #7",
+        "name": "Old Gotham South — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6305,7 +6305,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG02.Trophy.08TRO",
-        "name": "South Island – OG02 — MicroBuild #8",
+        "name": "Old Gotham South — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6315,7 +6315,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG02.Trophy.09TRO",
-        "name": "South Island – OG02 — MicroBuild #9",
+        "name": "Old Gotham South — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6325,7 +6325,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG01.Trophy.05TRO",
-        "name": "South Island – OG01 — MicroBuild #5",
+        "name": "Old Gotham North — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6335,7 +6335,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG01.Trophy.06TRO",
-        "name": "South Island – OG01 — MicroBuild #6",
+        "name": "Old Gotham North — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6345,7 +6345,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG01.Trophy.07TRO",
-        "name": "South Island – OG01 — MicroBuild #7",
+        "name": "Old Gotham North — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6355,7 +6355,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG01.Trophy.08TRO",
-        "name": "South Island – OG01 — MicroBuild #8",
+        "name": "Old Gotham North — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6365,7 +6365,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG01.Trophy.09TRO",
-        "name": "South Island – OG01 — MicroBuild #9",
+        "name": "Old Gotham North — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6375,7 +6375,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG03.Trophy.05TRO",
-        "name": "South Island – OG03 — MicroBuild #5",
+        "name": "Old Gotham West — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6385,7 +6385,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG03.Trophy.06TRO",
-        "name": "South Island – OG03 — MicroBuild #6",
+        "name": "Old Gotham West — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6395,7 +6395,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG03.Trophy.07TRO",
-        "name": "South Island – OG03 — MicroBuild #7",
+        "name": "Old Gotham West — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6405,7 +6405,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG03.Trophy.08TRO",
-        "name": "South Island – OG03 — MicroBuild #8",
+        "name": "Old Gotham West — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6415,7 +6415,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.SI.OG03.Trophy.09TRO",
-        "name": "South Island – OG03 — MicroBuild #9",
+        "name": "Old Gotham West — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6717,7 +6717,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.NI.EEAM.Trophy.00TRO",
-        "name": "North Island – EEAM — MicroBuild #0",
+        "name": "East End - Amusement Mile — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6727,7 +6727,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.NI.EEAM.Trophy.01TRO",
-        "name": "North Island – EEAM — MicroBuild #1",
+        "name": "East End - Amusement Mile — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6737,7 +6737,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.NI.EEAM.Trophy.02TRO",
-        "name": "North Island – EEAM — MicroBuild #2",
+        "name": "East End - Amusement Mile — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6747,7 +6747,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.NI.EEAM.Trophy.03TRO",
-        "name": "North Island – EEAM — MicroBuild #3",
+        "name": "East End - Amusement Mile — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6757,7 +6757,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.NI.EEAM.Trophy.04TRO",
-        "name": "North Island – EEAM — MicroBuild #4",
+        "name": "East End - Amusement Mile — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6767,7 +6767,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.NI.EEAM.Trophy.09TRO",
-        "name": "North Island – EEAM — MicroBuild #9",
+        "name": "East End - Amusement Mile — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6777,7 +6777,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.NI.EEAM.Trophy.08TRO",
-        "name": "North Island – EEAM — MicroBuild #8",
+        "name": "East End - Amusement Mile — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6787,7 +6787,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.NI.EEAM.Trophy.07TRO",
-        "name": "North Island – EEAM — MicroBuild #7",
+        "name": "East End - Amusement Mile — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6797,7 +6797,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.NI.EEAM.Trophy.06TRO",
-        "name": "North Island – EEAM — MicroBuild #6",
+        "name": "East End - Amusement Mile — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6807,7 +6807,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.NI.EEAM.Trophy.05TRO",
-        "name": "North Island – EEAM — MicroBuild #5",
+        "name": "East End - Amusement Mile — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6817,7 +6817,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.GVRP.Trophy.00TRO",
-        "name": "Central Island – GVRP — MicroBuild #0",
+        "name": "Gotham Village - Robinson Park — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6827,7 +6827,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.GVRP.Trophy.01TRO",
-        "name": "Central Island – GVRP — MicroBuild #1",
+        "name": "Gotham Village - Robinson Park — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6837,7 +6837,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.GVRP.Trophy.02TRO",
-        "name": "Central Island – GVRP — MicroBuild #2",
+        "name": "Gotham Village - Robinson Park — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6847,7 +6847,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.GVRP.Trophy.03TRO",
-        "name": "Central Island – GVRP — MicroBuild #3",
+        "name": "Gotham Village - Robinson Park — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6857,7 +6857,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.GVRP.Trophy.04TRO",
-        "name": "Central Island – GVRP — MicroBuild #4",
+        "name": "Gotham Village - Robinson Park — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6867,7 +6867,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.NT01.Trophy.00TRO",
-        "name": "Central Island – NT01 — MicroBuild #0",
+        "name": "Newtown — MicroBuild #0",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6877,7 +6877,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.NT01.Trophy.01TRO",
-        "name": "Central Island – NT01 — MicroBuild #1",
+        "name": "Newtown — MicroBuild #1",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6887,7 +6887,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.NT01.Trophy.02TRO",
-        "name": "Central Island – NT01 — MicroBuild #2",
+        "name": "Newtown — MicroBuild #2",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6897,7 +6897,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.NT01.Trophy.03TRO",
-        "name": "Central Island – NT01 — MicroBuild #3",
+        "name": "Newtown — MicroBuild #3",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6907,7 +6907,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.MicroBuilds.Hub.CI.NT01.Trophy.04TRO",
-        "name": "Central Island – NT01 — MicroBuild #4",
+        "name": "Newtown — MicroBuild #4",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6917,7 +6917,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.GVRP.Trophy.05TRO",
-        "name": "Central Island – GVRP — MicroBuild #5",
+        "name": "Gotham Village - Robinson Park — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6927,7 +6927,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.GVRP.Trophy.06TRO",
-        "name": "Central Island – GVRP — MicroBuild #6",
+        "name": "Gotham Village - Robinson Park — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6937,7 +6937,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.GVRP.Trophy.07TRO",
-        "name": "Central Island – GVRP — MicroBuild #7",
+        "name": "Gotham Village - Robinson Park — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6947,7 +6947,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.GVRP.Trophy.08TRO",
-        "name": "Central Island – GVRP — MicroBuild #8",
+        "name": "Gotham Village - Robinson Park — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6957,7 +6957,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.GVRP.Trophy.09TRO",
-        "name": "Central Island – GVRP — MicroBuild #9",
+        "name": "Gotham Village - Robinson Park — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6967,7 +6967,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.NT01.Trophy.05TRO",
-        "name": "Central Island – NT01 — MicroBuild #5",
+        "name": "Newtown — MicroBuild #5",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6977,7 +6977,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.NT01.Trophy.06TRO",
-        "name": "Central Island – NT01 — MicroBuild #6",
+        "name": "Newtown — MicroBuild #6",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6987,7 +6987,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.NT01.Trophy.07TRO",
-        "name": "Central Island – NT01 — MicroBuild #7",
+        "name": "Newtown — MicroBuild #7",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -6997,7 +6997,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.NT01.Trophy.08TRO",
-        "name": "Central Island – NT01 — MicroBuild #8",
+        "name": "Newtown — MicroBuild #8",
         "confidence": "med",
         "facets": {
           "source": "hub",
@@ -7007,7 +7007,7 @@ export const COLLECTIBLES: CollectibleCounter[] = [
       },
       {
         "tag": "GameProgress.Definitions.Microbuilds.Hub.CI.NT01.Trophy.09TRO",
-        "name": "Central Island – NT01 — MicroBuild #9",
+        "name": "Newtown — MicroBuild #9",
         "confidence": "med",
         "facets": {
           "source": "hub",
