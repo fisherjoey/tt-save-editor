@@ -113,15 +113,16 @@ export class SaveFile {
   }
 
   /**
-   * Add many collectible entries at once (the "max out" / multi-select action),
-   * skipping any already present. Clones an existing array element as the structural
-   * template and writes `stateValue` for each. Returns how many were actually added.
+   * Add many enum-array entries at once (collectibles, missions, objectives — the
+   * "max out" / multi-select / add-missing action), skipping any already present.
+   * Clones an existing array element as the structural template and writes
+   * `stateValue` for each. Returns how many were actually added.
    */
-  addCollectibles(tags: string[], stateValue: string): number {
+  addEntries(tags: string[], stateValue: string): number {
     const existing = this.enumArrayEntries();
     const have = new Set(existing.map((e) => e.tag));
     const templateTag = existing[0]?.tag;
-    if (!templateTag) throw new Error("addCollectibles: no existing array element to clone from");
+    if (!templateTag) throw new Error("addEntries: no existing array element to clone from");
     let added = 0;
     for (const tag of tags) {
       if (have.has(tag)) continue;
@@ -130,6 +131,11 @@ export class SaveFile {
       added++;
     }
     return added;
+  }
+
+  /** @deprecated use addEntries — kept for callers that read better as "collectibles". */
+  addCollectibles(tags: string[], stateValue: string): number {
+    return this.addEntries(tags, stateValue);
   }
 
   getField(name: string): ScalarField | undefined {

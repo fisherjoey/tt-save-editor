@@ -5,6 +5,7 @@ import { FieldTable } from "./components/FieldTable.js";
 import { EnumPanel } from "./components/EnumPanel.js";
 import { QuickEdits } from "./components/QuickEdits.js";
 import { CollectiblesPanel } from "./components/CollectiblesPanel.js";
+import { MissionsPanel } from "./components/MissionsPanel.js";
 import { Help } from "./components/Help.js";
 
 interface Loaded {
@@ -190,6 +191,28 @@ export function App() {
             }}
           />
 
+          <MissionsPanel
+            enums={loaded.enums}
+            present={loaded.collPresent}
+            observed={loaded.observed}
+            onChange={(field, member) => {
+              try {
+                loaded.save.setEnum(field, member);
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
+            }}
+            onAdd={(tags, state) => {
+              try {
+                loaded.save.addEntries(tags, state);
+                refreshFields();
+              } catch (e) {
+                setError(e instanceof Error ? e.message : String(e));
+              }
+            }}
+          />
+
           <CollectiblesPanel
             collectibles={COLLECTIBLES}
             present={loaded.collPresent}
@@ -200,7 +223,7 @@ export function App() {
                   if (!byState.has(it.stateValue)) byState.set(it.stateValue, []);
                   byState.get(it.stateValue)!.push(it.tag);
                 }
-                for (const [state, tags] of byState) loaded.save.addCollectibles(tags, state);
+                for (const [state, tags] of byState) loaded.save.addEntries(tags, state);
                 refreshFields();
               } catch (e) {
                 setError(e instanceof Error ? e.message : String(e));

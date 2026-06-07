@@ -21,6 +21,12 @@ export {
 export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind, EnumField, EnumArrayEntry, EnumEntryInsertion } from "./gvas/index.js";
 export { COLLECTIBLES, normalizeConfidence, prettifyTagPath, deriveFacets, selectCounterTags } from "./collectibles.js";
 export type { CollectibleCounter, CollectibleTag, CollectibleFacets, Confidence } from "./collectibles.js";
+export {
+  PROGRESS_MISSION_TAGS,
+  PROGRESS_OBJECTIVE_TAGS,
+  MISSION_COMPLETE_STATE,
+  OBJECTIVE_COMPLETE_STATE,
+} from "./data/progress.generated.js";
 export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, CATEGORY_LABELS, prettifyKey } from "./enums.js";
 export type { EnumMeta, EnumCategory } from "./enums.js";
 export { FEATURED_FIELDS, toDisplay, fromDisplay } from "./featured.js";

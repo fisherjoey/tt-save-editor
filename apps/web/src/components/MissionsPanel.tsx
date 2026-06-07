@@ -1,0 +1,333 @@
+import { useMemo, useState, type ReactNode } from "react";
+import {
+  enumOptions,
+  prettifyKey,
+  COLLECTIBLES,
+  PROGRESS_MISSION_TAGS,
+  PROGRESS_OBJECTIVE_TAGS,
+  MISSION_COMPLETE_STATE,
+  OBJECTIVE_COMPLETE_STATE,
+  type EnumField,
+} from "@tt-save/core";
+
+const MISSION_TYPE = "ETtMissionGameProgress";
+const OBJECTIVE_TYPE = "ETtObjectivesNodeGameProgress";
+
+const strip = (tag: string) => prettifyKey(tag.replace(/^GameProgress\.Definitions\./, ""));
+const topCategory = (tag: string) => tag.replace(/^GameProgress\.Definitions\./, "").split(".")[0]!;
+
+// chapter.mission -> nice story-mission name, derived from the collectibles manifest.
+const STORY_MISSION_NAMES = (() => {
+  const m = new Map<string, string>();
+  for (const c of COLLECTIBLES)
+    for (const t of c.tags) {
+      if (t.facets.source !== "story") continue;
+      const key = `${t.facets.chapter}.${t.facets.mission}`;
+      const prefix = t.name.split(" — ")[0]!;
+      if (/\(Ch\./.test(prefix) && !m.has(key)) m.set(key, prefix);
+    }
+  return m;
+})();
+
+function missionName(tag: string): string {
+  const m = tag.match(/\.Story\.(\d+)\.(\d+)$/);
+  if (m) {
+    const named = STORY_MISSION_NAMES.get(`${Number(m[1])}.${Number(m[2])}`);
+    if (named) return named;
+  }
+  return strip(tag);
+}
+
+interface MissionNode {
+  tag: string;
+  name: string;
+  category: string;
+  objectives: string[];
+}
+
+/** A <details> that renders its children only once opened (or when forced open by search). */
+function LazyDetails({
+  className,
+  forceOpen,
+  summary,
+  children,
+}: {
+  className: string;
+  forceOpen: boolean;
+  summary: ReactNode;
+  children: () => ReactNode;
+}) {
+  const [opened, setOpened] = useState(false);
+  const show = forceOpen || opened;
+  return (
+    <details
+      className={className}
+      open={forceOpen || undefined}
+      onToggle={(e) => {
+        if ((e.currentTarget as HTMLDetailsElement).open) setOpened(true);
+      }}
+    >
+      <summary>{summary}</summary>
+      {show && children()}
+    </details>
+  );
+}
+
+export function MissionsPanel({
+  enums,
+  present,
+  observed,
+  onChange,
+  onAdd,
+}: {
+  enums: EnumField[];
+  /** Real array-element tags currently in the save (authoritative presence). */
+  present: Set<string>;
+  observed: Map<string, Set<string>>;
+  onChange: (field: EnumField, member: string) => void;
+  onAdd: (tags: string[], state: string) => void;
+}) {
+  const [q, setQ] = useState("");
+
+  // Editable fields, keyed by scanEnums context. Used only to EDIT entries that are
+  // present; presence itself comes from the authoritative `present` tag set.
+  const fields = useMemo(() => {
+    const map = new Map<string, EnumField>();
+    for (const e of enums) {
+      if ((e.enumType === MISSION_TYPE || e.enumType === OBJECTIVE_TYPE) && e.context) map.set(e.context, e);
+    }
+    return map;
+  }, [enums]);
+
+  const { categories, orphans } = useMemo(() => {
+    const missionSet = new Set(PROGRESS_MISSION_TAGS);
+    const objByMission = new Map<string, string[]>();
+    const orphans: string[] = [];
+    for (const o of PROGRESS_OBJECTIVE_TAGS) {
+      const parts = o.split(".");
+      let parent: string | undefined;
+      for (let i = parts.length - 1; i > 0; i--) {
+        const cand = parts.slice(0, i).join(".");
+        if (missionSet.has(cand)) {
+          parent = cand;
+          break;
+        }
+      }
+      if (parent) (objByMission.get(parent) ?? objByMission.set(parent, []).get(parent)!).push(o);
+      else orphans.push(o);
+    }
+    const byCat = new Map<string, MissionNode[]>();
+    for (const tag of PROGRESS_MISSION_TAGS) {
+      const node: MissionNode = { tag, name: missionName(tag), category: topCategory(tag), objectives: objByMission.get(tag) ?? [] };
+      (byCat.get(node.category) ?? byCat.set(node.category, []).get(node.category)!).push(node);
+    }
+    for (const list of byCat.values()) list.sort((a, b) => a.tag.localeCompare(b.tag));
+    return { categories: [...byCat.entries()].sort((a, b) => b[1].length - a[1].length), orphans };
+  }, []);
+
+  const needle = q.trim().toLowerCase();
+  const hit = (tag: string, name?: string) =>
+    !needle || tag.toLowerCase().includes(needle) || (name ?? "").toLowerCase().includes(needle);
+  const nodeMatches = (n: MissionNode) => hit(n.tag, n.name) || n.objectives.some((o) => hit(o, strip(o)));
+
+  const total = PROGRESS_MISSION_TAGS.length + PROGRESS_OBJECTIVE_TAGS.length;
+  const presentCount = useMemo(() => {
+    let n = 0;
+    for (const t of PROGRESS_MISSION_TAGS) if (present.has(t)) n++;
+    for (const t of PROGRESS_OBJECTIVE_TAGS) if (present.has(t)) n++;
+    return n;
+  }, [present]);
+
+  return (
+    <section className="card">
+      <h2>Missions &amp; objectives</h2>
+      <p className="hint">
+        Every mission &amp; objective in the game ({total.toLocaleString()} total) — not just the ones in your
+        save. Ones you have show a state dropdown; ones you haven't reached show <b>＋ add</b>. ⚠ Adding missions
+        you haven't reached is advanced and untested — it can affect story progression. In your save:{" "}
+        <b>{presentCount.toLocaleString()}</b> of {total.toLocaleString()} present.
+      </p>
+      <input className="search" placeholder="Search missions & objectives…" value={q} onChange={(e) => setQ(e.target.value)} />
+
+      {categories.map(([cat, nodes]) => {
+        const matching = needle ? nodes.filter(nodeMatches) : nodes;
+        if (!matching.length) return null;
+        const have = nodes.filter((n) => present.has(n.tag)).length;
+        return (
+          <LazyDetails
+            key={cat}
+            className="enumGroup"
+            forceOpen={!!needle}
+            summary={
+              <>
+                <span className="groupTitle">{prettifyKey(cat)}</span>
+                <span className="groupCount">
+                  {have}/{nodes.length}
+                </span>
+              </>
+            }
+          >
+            {() => (
+              <div className="missionTree">
+                {matching.slice(0, 300).map((n) => (
+                  <MissionRow key={n.tag} node={n} present={present} fields={fields} observed={observed} needle={needle} onChange={onChange} onAdd={onAdd} />
+                ))}
+                {matching.length > 300 && <p className="hint">Showing first 300 of {matching.length} — use search.</p>}
+              </div>
+            )}
+          </LazyDetails>
+        );
+      })}
+
+      {orphans.length > 0 && (!needle || orphans.some((o) => hit(o, strip(o)))) && (
+        <LazyDetails
+          className="enumGroup"
+          forceOpen={!!needle}
+          summary={
+            <>
+              <span className="groupTitle">Unlinked objectives</span>
+              <span className="groupCount">{orphans.length}</span>
+            </>
+          }
+        >
+          {() => (
+            <div className="objList">
+              {(needle ? orphans.filter((o) => hit(o, strip(o))) : orphans).slice(0, 300).map((o) => (
+                <EntryRow key={o} tag={o} type={OBJECTIVE_TYPE} addState={OBJECTIVE_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
+              ))}
+            </div>
+          )}
+        </LazyDetails>
+      )}
+    </section>
+  );
+}
+
+function MissionRow({
+  node,
+  present,
+  fields,
+  observed,
+  needle,
+  onChange,
+  onAdd,
+}: {
+  node: MissionNode;
+  present: Set<string>;
+  fields: Map<string, EnumField>;
+  observed: Map<string, Set<string>>;
+  needle: string;
+  onChange: (field: EnumField, member: string) => void;
+  onAdd: (tags: string[], state: string) => void;
+}) {
+  const completeAll = () => {
+    if (!present.has(node.tag)) onAdd([node.tag], MISSION_COMPLETE_STATE);
+    const missObjs = node.objectives.filter((o) => !present.has(o));
+    if (missObjs.length) onAdd(missObjs, OBJECTIVE_COMPLETE_STATE);
+    const m = fields.get(node.tag);
+    if (m && m.member !== "Complete") onChange(m, "Complete");
+    for (const o of node.objectives) {
+      const f = fields.get(o);
+      if (f && f.member !== "Complete") onChange(f, "Complete");
+    }
+  };
+  const missing = (present.has(node.tag) ? 0 : 1) + node.objectives.filter((o) => !present.has(o)).length;
+  return (
+    <LazyDetails
+      className="missionNode"
+      forceOpen={!!needle}
+      summary={
+        <>
+          <span className="missionTitle">{node.name}</span>
+          {present.has(node.tag) ? (
+            <span className="missionState">{fields.get(node.tag)?.member ?? "present"}</span>
+          ) : (
+            <span className="badge warn">not reached</span>
+          )}
+          {node.objectives.length > 0 && <span className="missionKids">{node.objectives.length} obj.</span>}
+        </>
+      }
+    >
+      {() => (
+        <div className="objList">
+          <div className="enumRow">
+            <span className="enumCtx">
+              <b>Mission state</b>
+            </span>
+            <EntryControl tag={node.tag} type={MISSION_TYPE} addState={MISSION_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
+          </div>
+          {missing > 0 && (
+            <div className="bulkRow">
+              <button className="primary small" onClick={completeAll}>
+                Complete mission{node.objectives.length ? ` + ${node.objectives.length} obj.` : ""}
+              </button>
+            </div>
+          )}
+          {node.objectives.map((o) => (
+            <EntryRow key={o} tag={o} type={OBJECTIVE_TYPE} addState={OBJECTIVE_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
+          ))}
+        </div>
+      )}
+    </LazyDetails>
+  );
+}
+
+function EntryRow(props: {
+  tag: string;
+  type: string;
+  addState: string;
+  present: Set<string>;
+  fields: Map<string, EnumField>;
+  observed: Map<string, Set<string>>;
+  onChange: (field: EnumField, member: string) => void;
+  onAdd: (tags: string[], state: string) => void;
+}) {
+  return (
+    <div className="enumRow objRow">
+      <span className="enumCtx" title={props.tag}>
+        {strip(props.tag)}
+      </span>
+      <EntryControl {...props} />
+    </div>
+  );
+}
+
+function EntryControl({
+  tag,
+  type,
+  addState,
+  present,
+  fields,
+  observed,
+  onChange,
+  onAdd,
+}: {
+  tag: string;
+  type: string;
+  addState: string;
+  present: Set<string>;
+  fields: Map<string, EnumField>;
+  observed: Map<string, Set<string>>;
+  onChange: (field: EnumField, member: string) => void;
+  onAdd: (tags: string[], state: string) => void;
+}) {
+  const field = fields.get(tag);
+  if (field) {
+    return (
+      <select value={field.member} onChange={(e) => onChange(field, e.target.value)}>
+        {enumOptions(type, observed.get(type), field.member).map((m) => (
+          <option key={m} value={m}>
+            {m}
+          </option>
+        ))}
+      </select>
+    );
+  }
+  // Present in the array but no editable field located (rare scanEnums/real-tag mismatch).
+  if (present.has(tag)) return <span className="collHave">present</span>;
+  return (
+    <button className="addBtn" onClick={() => onAdd([tag], addState)} title="Add as complete">
+      ＋ add
+    </button>
+  );
+}
