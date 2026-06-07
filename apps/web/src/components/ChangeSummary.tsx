@@ -1,20 +1,19 @@
 import { useMemo } from "react";
-import { summarizeChanges, hasChanges, COLLECTIBLES, PROGRESS_NAMES, prettifyKey, toDisplay, FEATURED_FIELDS } from "@tt-save/core";
+import { summarizeChanges, hasChanges, COLLECTIBLES, friendlyProgressName, enumMemberLabel, prettifyKey, toDisplay, FEATURED_FIELDS } from "@tt-save/core";
 
 const collName = new Map(COLLECTIBLES.flatMap((c) => c.tags.map((t) => [t.tag, t.name] as const)));
 const counterLabel = new Map(COLLECTIBLES.flatMap((c) => c.tags.map((t) => [t.tag, c.label] as const)));
-const strip = (t: string) => prettifyKey(t.replace(/^GameProgress\.Definitions\./, ""));
-const nameFor = (t: string) => collName.get(t) ?? PROGRESS_NAMES[t] ?? strip(t);
+const nameFor = (t: string) => collName.get(t) ?? friendlyProgressName(t);
 
 function classify(tag: string, state: string): string {
   if (counterLabel.has(tag)) return counterLabel.get(tag)!;
   if (state.startsWith("ETtMissionGameProgress")) return "Missions";
   if (state.startsWith("ETtObjectivesNodeGameProgress")) return "Objectives";
   if (state.startsWith("ETtChallenge")) return "Challenges";
-  return "Other progress";
+  return "Other unlocks";
 }
 
-const scalarLabel = (name: string) => FEATURED_FIELDS.find((x) => x.name === name)?.label ?? name;
+const scalarLabel = (name: string) => FEATURED_FIELDS.find((x) => x.name === name)?.label ?? prettifyKey(name);
 function fmtScalar(name: string, val: string): string {
   const f = FEATURED_FIELDS.find((x) => x.name === name);
   if (f) {
@@ -26,7 +25,11 @@ function fmtScalar(name: string, val: string): string {
   }
   return /^\d{4,}$/.test(val) ? Number(val).toLocaleString() : val;
 }
-const member = (s: string) => s.split("::")[1] ?? s;
+/** "ETtMissionGameProgress::Complete" → "Done". */
+const member = (s: string) => {
+  const [type, m] = s.split("::");
+  return m ? enumMemberLabel(type!, m) : s;
+};
 
 /** Collapse repeated names into [name, count], preserving first-seen order. */
 function clump(names: string[]): [string, number][] {

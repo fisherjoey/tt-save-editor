@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { enumOptions, enumMeta, CATEGORY_LABELS, prettifyKey, type EnumField, type EnumCategory } from "@tt-save/core";
+import { enumOptions, enumMeta, enumMemberLabel, CATEGORY_LABELS, prettifyKey, type EnumField, type EnumCategory } from "@tt-save/core";
 
 function label(ctx: string): string {
   return prettifyKey(ctx.replace(/^GameProgress\.Definitions\./, "").replace(/^GameProgress\./, ""));
@@ -108,7 +108,7 @@ function EnumGroup({
           <select value={bulkVal} onChange={(e) => setBulkVal(e.target.value)}>
             {options.map((m) => (
               <option key={m} value={m}>
-                {m}
+                {enumMemberLabel(type, m)}
               </option>
             ))}
           </select>
@@ -126,7 +126,7 @@ function EnumGroup({
             <select value={e.member} onChange={(ev) => onChange(e, ev.target.value)}>
               {enumOptions(type, observed.get(type), e.member).map((m) => (
                 <option key={m} value={m}>
-                  {m}
+                  {enumMemberLabel(type, m)}
                 </option>
               ))}
             </select>

@@ -30,8 +30,9 @@ export {
 export { PROGRESS_NAMES } from "./data/progress-names.generated.js";
 export { summarizeChanges, hasChanges } from "./diff.js";
 export type { SaveChanges, AddedEntry, StateChange, ScalarChange } from "./diff.js";
-export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, CATEGORY_LABELS, prettifyKey } from "./enums.js";
+export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, enumMemberLabel, CATEGORY_LABELS, prettifyKey } from "./enums.js";
 export type { EnumMeta, EnumCategory } from "./enums.js";
+export { friendlyProgressName } from "./labels.js";
 export { FEATURED_FIELDS, toDisplay, fromDisplay } from "./featured.js";
 export type { FeaturedField } from "./featured.js";
 export { SaveFile, RoundTripError } from "./sav/index.js";

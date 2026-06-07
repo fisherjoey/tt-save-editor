@@ -53,6 +53,44 @@ export function enumOptions(enumType: string, observed: Set<string> | undefined,
   return [...all];
 }
 
+/**
+ * Plain-language labels for raw enum members — what a non-technical player sees in
+ * dropdowns and the change recap. The stored value stays the raw member; only the
+ * displayed text changes. A per-enum override wins over the shared default; anything
+ * unmapped falls back to spaced words (so "InProgress" → "In progress").
+ */
+const MEMBER_LABEL_DEFAULT: Record<string, string> = {
+  Locked: "Locked",
+  Unlocked: "Available",
+  StartedOrUnlocked: "Started",
+  InProgress: "Started",
+  Complete: "Done",
+  Completed: "Done",
+  Collected: "Collected",
+  Consumed: "Used up",
+  Rewarded: "Done (reward claimed)",
+  CompletedGold: "Gold medal",
+  Visited: "Visited",
+  Purchased: "Purchased",
+  Viewed: "Viewed",
+  Validated: "Valid",
+  Invalidated: "Marked invalid",
+};
+const MEMBER_LABEL_BY_ENUM: Record<string, Record<string, string>> = {
+  ETtCollectableGameProgressState: { Locked: "Not collected", Unlocked: "Available", Collected: "Collected (done)", Consumed: "Used up" },
+  ETtGameProgressUnlock: { Locked: "Not collected", Unlocked: "Available", Collected: "Collected (done)" },
+  ETtMissionGameProgress: { Locked: "Locked", Unlocked: "Available", InProgress: "Started", Complete: "Done" },
+  ETtObjectivesNodeGameProgress: { Locked: "Locked", InProgress: "Started", Complete: "Done" },
+  ETtGameProgressState: { Locked: "Locked", StartedOrUnlocked: "Started", Complete: "Done" },
+  ETtChallengeGameProgressState: { Locked: "Locked", Unlocked: "Available", Completed: "Done", Rewarded: "Done (reward claimed)" },
+  ETtChallengeMinigameGameProgressState: { Locked: "Locked", Unlocked: "Available", CompletedGold: "Gold medal" },
+};
+
+/** The text a user should see for an enum member, e.g. ("ETtMissionGameProgress","Complete") → "Done". */
+export function enumMemberLabel(enumType: string, member: string): string {
+  return MEMBER_LABEL_BY_ENUM[enumType]?.[member] ?? MEMBER_LABEL_DEFAULT[member] ?? prettifyKey(member);
+}
+
 export type EnumCategory = "progress" | "settings" | "system";
 
 export interface EnumMeta {
@@ -66,9 +104,17 @@ export interface EnumMeta {
 /** Friendly names + grouping so non-technical users see "Collectibles", not "ETtGameProgressUnlock". */
 export const ENUM_META: Record<string, EnumMeta> = {
   ETtGameProgressUnlock: { title: "Collectibles & unlocks", category: "progress", completeValue: "Collected" },
+  ETtCollectableGameProgressState: { title: "Collectibles", category: "progress", completeValue: "Collected" },
+  ETtGameProgressState: { title: "General progress", category: "progress", completeValue: "Complete" },
   ETtChallengeGameProgressState: { title: "Challenges", category: "progress", completeValue: "Completed" },
+  ETtChallengeMinigameGameProgressState: { title: "Minigames", category: "progress", completeValue: "CompletedGold" },
   ETtMissionGameProgress: { title: "Missions", category: "progress", completeValue: "Complete" },
   ETtObjectivesNodeGameProgress: { title: "Objectives", category: "progress", completeValue: "Complete" },
+  EShopGameProgressState: { title: "Shop items", category: "progress", completeValue: "Visited" },
+  EDinnerUpgradeGameProgressState: { title: "Upgrades", category: "progress", completeValue: "Purchased" },
+  EDinnerCharacterGameProgressState: { title: "Characters", category: "progress", completeValue: "Viewed" },
+  EPurpleStudGameProgressState: { title: "Purple studs", category: "progress", completeValue: "Collected" },
+  ETtAreaCustomizationItemGameProgressState: { title: "Area customization", category: "progress", completeValue: "Purchased" },
   EDifficultySetting: { title: "Difficulty", category: "settings" },
   ETtSaveGameVersion: { title: "Save version", category: "system" },
   ETtSaveSlotValidationState: { title: "Save validation", category: "system" },
@@ -77,7 +123,8 @@ export const ENUM_META: Record<string, EnumMeta> = {
 };
 
 export function enumMeta(enumType: string): EnumMeta {
-  return ENUM_META[enumType] ?? { title: enumType.replace(/^E_?/, ""), category: "system" };
+  // Unmapped enums get a spaced-out title (not raw CamelCase) and land in System.
+  return ENUM_META[enumType] ?? { title: prettifyKey(enumType.replace(/^E_?/, "").replace(/GameProgressState$/, "")), category: "system" };
 }
 
 export const CATEGORY_LABELS: Record<EnumCategory, string> = {

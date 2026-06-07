@@ -1,10 +1,11 @@
 import { useMemo, useState, type ReactNode } from "react";
 import {
   enumOptions,
+  enumMemberLabel,
   prettifyKey,
+  friendlyProgressName,
   PROGRESS_MISSION_TAGS,
   PROGRESS_OBJECTIVE_TAGS,
-  PROGRESS_NAMES,
   MISSION_COMPLETE_STATE,
   OBJECTIVE_COMPLETE_STATE,
   type EnumField,
@@ -13,7 +14,6 @@ import {
 const MISSION_TYPE = "ETtMissionGameProgress";
 const OBJECTIVE_TYPE = "ETtObjectivesNodeGameProgress";
 
-const strip = (tag: string) => prettifyKey(tag.replace(/^GameProgress\.Definitions\./, ""));
 const topCategory = (tag: string) => tag.replace(/^GameProgress\.Definitions\./, "").split(".")[0]!;
 /** Linear order for story missions (Story.CC.MM), or null if not a story mission. */
 const storyOrder = (tag: string): number | null => {
@@ -21,13 +21,10 @@ const storyOrder = (tag: string): number | null => {
   return m ? Number(m[1]) * 1000 + Number(m[2]) : null;
 };
 
-// Real in-game names from the game's ST_Objective string table + PROG_ mission assets
-// (built into PROGRESS_NAMES); anything unmapped falls back to a prettified tag path.
-function missionName(tag: string): string {
-  // A standalone CompletionBadge (one with no base mission) reads as the mission itself.
-  return PROGRESS_NAMES[tag] ?? strip(tag.replace(/\.CompletionBadge$/, ""));
-}
-const objName = (tag: string): string => PROGRESS_NAMES[tag] ?? strip(tag);
+// Real in-game names from the game's ST_Objective string table + PROG_ mission assets,
+// with a clean human fallback (never a raw tag path) for anything unmapped.
+const missionName = friendlyProgressName;
+const objName = friendlyProgressName;
 
 interface MissionNode {
   tag: string;
@@ -310,7 +307,7 @@ function MissionRow({
         <>
           <span className="missionTitle">{node.name}</span>
           {present.has(node.tag) ? (
-            <span className="missionState">{fields.get(node.tag)?.member ?? "present"}</span>
+            <span className="missionState">{(() => { const m = fields.get(node.tag)?.member; return m ? enumMemberLabel(MISSION_TYPE, m) : "in your save"; })()}</span>
           ) : (
             <span className="badge warn">not reached</span>
           )}
@@ -469,17 +466,17 @@ function EntryControl({
       <select value={field.member} onChange={(e) => onChange(field, e.target.value)}>
         {enumOptions(type, observed.get(type), field.member).map((m) => (
           <option key={m} value={m}>
-            {m}
+            {enumMemberLabel(type, m)}
           </option>
         ))}
       </select>
     );
   }
   // Present in the array but no editable field located (rare scanEnums/real-tag mismatch).
-  if (present.has(tag)) return <span className="collHave">present</span>;
+  if (present.has(tag)) return <span className="collHave">in your save</span>;
   return (
-    <button className="addBtn" onClick={() => onAdd([tag], addState)} title="Add as complete">
-      ＋ add
+    <button className="addBtn" onClick={() => onAdd([tag], addState)} title="Add it, already marked Done">
+      ＋ add (Done)
     </button>
   );
 }
