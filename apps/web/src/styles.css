@@ -273,3 +273,8 @@ details.fixHelp[open] > summary::before { transform: rotate(90deg); }
 .metaNote { color: var(--muted); font-size: 12px; margin-left: 8px; }
 .metaTech { margin-top: 6px; }
 .metaTech > summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+
+/* Audit batch 4: sample banner, diff add glyph, invalid row */
+.sampleBanner { background: var(--accent-soft, rgba(80,140,255,0.12)); border-color: var(--accent, #4f8cff); font-size: 14px; }
+.diffAdd { color: var(--good, #46a758); font-weight: 700; }
+tr.invalid input { border-color: var(--bad, #e5484d); }

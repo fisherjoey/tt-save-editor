@@ -7,6 +7,10 @@ function label(ctx: string): string {
 
 const CATEGORY_ORDER: EnumCategory[] = ["progress", "settings", "system"];
 
+// Format/version sentinels that aren't real states a user should pick (a count marker,
+// an "unknown", etc.) — hidden from dropdowns so they can't silently break the save.
+const SENTINELS = new Set(["VersionCount", "NoVersion", "UnknownVersion"]);
+
 // Missions own their objectives by tag prefix, so we render them as a nested tree
 // instead of two flat groups.
 const MISSION_TYPE = "ETtMissionGameProgress";
@@ -50,12 +54,12 @@ export function EnumPanel({
   return (
     <section className="card">
       <h2>Progress &amp; settings</h2>
-      <p className="hint">Friendly, fixed-choice settings. Use “set all” to change a whole category at once, or expand to tweak individual entries.</p>
+      <p className="hint">Game progress and option toggles. Use <b>Set all</b> to change a whole group at once, or expand a group to change individual entries.</p>
       <div className="completeAll">
         <button className="primary" onClick={onCompleteAll}>
-          🏆 Complete everything
+          🏆 Mark all progress complete
         </button>
-        <span>Marks all collectibles, challenges, missions, and objectives as done.</span>
+        <span>Marks all collectibles, challenges, missions, and objectives as done. Doesn't add studs or items.</span>
       </div>
       <input className="search" placeholder="Search settings…" value={q} onChange={(e) => setQ(e.target.value)} />
 
@@ -63,6 +67,9 @@ export function EnumPanel({
         groups[cat].length === 0 ? null : (
           <div key={cat} className="enumCat">
             <h3 className="catTitle">{CATEGORY_LABELS[cat]}</h3>
+            {cat === "system" && (
+              <p className="hint">These control how the game reads the file. Changing them can stop the save from loading — leave them as-is unless you know what you're doing.</p>
+            )}
             {groups[cat].map(({ type, fields }) => (
               <EnumGroup key={type} type={type} fields={fields} observed={observed} needle={needle} onChange={onChange} onBulk={onBulk} defaultOpen={cat !== "system"} />
             ))}
@@ -91,10 +98,19 @@ function EnumGroup({
   defaultOpen: boolean;
 }) {
   const meta = enumMeta(type);
-  const options = enumOptions(type, observed.get(type), fields[0]!.member);
+  const cur = fields[0]!.member;
+  // Hide format/version sentinels that aren't real user-selectable states (keep the current one).
+  const options = enumOptions(type, observed.get(type), cur).filter((m) => !SENTINELS.has(m) || m === cur);
   const [bulkVal, setBulkVal] = useState(meta.completeValue && options.includes(meta.completeValue) ? meta.completeValue : options[0]!);
   const visible = needle ? fields.filter((f) => (f.context ?? "").toLowerCase().includes(needle) || f.member.toLowerCase().includes(needle)) : fields;
   if (visible.length === 0) return null;
+
+  // Setting toward anything other than the "done" value (or any change to a setting/system enum) is potentially destructive.
+  const applyBulk = () => {
+    const destructive = !meta.completeValue || bulkVal !== meta.completeValue;
+    if (destructive && fields.length > 1 && !confirm(`Set all ${fields.length} “${meta.title}” to “${enumMemberLabel(type, bulkVal)}”? This changes every entry in this group.`)) return;
+    onBulk(fields, bulkVal);
+  };
 
   return (
     <details className="enumGroup" open={defaultOpen || !!needle}>
@@ -112,7 +128,7 @@ function EnumGroup({
               </option>
             ))}
           </select>
-          <button className="primary small" onClick={() => onBulk(fields, bulkVal)}>
+          <button className="primary small" onClick={applyBulk}>
             Apply to all {fields.length}
           </button>
         </div>

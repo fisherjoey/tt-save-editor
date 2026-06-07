@@ -77,7 +77,7 @@ export function ChangeSummary({
 
       {buildChanged && (
         <div className="diffRow">
-          <b>Build version</b> {originalBuild} → {currentBuild}
+          <b>Game version</b> {originalBuild} → {currentBuild} <span className="metaNote">so it loads on the older version</span>
         </div>
       )}
       {c.scalars.map((s) => (
@@ -95,7 +95,7 @@ export function ChangeSummary({
           <div className="objList">
             {clump(names).slice(0, 60).map(([n, count], i) => (
               <div key={i} className="diffItem">
-                ＋ {n}
+                <span className="diffAdd">+</span> {n}
                 {count > 1 && <span className="missionKids">×{count}</span>}
               </div>
             ))}

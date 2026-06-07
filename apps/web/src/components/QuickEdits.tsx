@@ -25,7 +25,18 @@ export function QuickEdits({ fields, onEdit }: { fields: ScalarField[]; onEdit: 
 
 function QuickField({ label, help, displayValue, valid, onCommit }: { label: string; help?: string; displayValue: string; valid: RegExp; onCommit: (v: string) => void }) {
   const [draft, setDraft] = useState(displayValue);
+  const [error, setError] = useState<string | null>(null);
   const dirty = draft !== displayValue;
+  const isHms = valid.source.includes(":");
+  const commit = () => {
+    if (!dirty) return;
+    if (valid.test(draft)) {
+      setError(null);
+      onCommit(draft);
+    } else {
+      setError(isHms ? "Use hours:minutes:seconds, e.g. 5:00:00" : "Whole number only");
+    }
+  };
   return (
     <label className="quickField">
       <span className="quickLabel">
@@ -35,16 +46,17 @@ function QuickField({ label, help, displayValue, valid, onCommit }: { label: str
       <span className="quickInputRow">
         <input
           className="mono"
-          inputMode={valid.source.includes(":") ? "text" : "numeric"}
+          inputMode={isHms ? "text" : "numeric"}
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={(e) => { setDraft(e.target.value); if (error) setError(null); }}
           onKeyDown={(e) => {
             if (e.key === "Enter") (e.target as HTMLInputElement).blur();
           }}
-          onBlur={() => dirty && valid.test(draft) && onCommit(draft)}
+          onBlur={commit}
         />
-        {dirty && <span className="quickDot" title="unsaved change">●</span>}
+        {dirty && !error && <span className="quickDot" title="unsaved change">●</span>}
       </span>
+      {error && <span className="errLine">{error}</span>}
     </label>
   );
 }

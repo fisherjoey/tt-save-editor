@@ -26,13 +26,13 @@ export const FEATURED_FIELDS: FeaturedField[] = [
   {
     name: "StudsCollected",
     label: "Studs",
-    help: "Total stud wallet — writes StudsCollected and Saved_Total together",
+    help: "Your total studs (the game's currency). Sets your whole wallet.",
     linkedNames: ["Saved_Total"],
   },
   {
     name: "TotalPlaytime",
     label: "Playtime",
-    help: "Total playtime as H:MM:SS (UE Timespan, stored as 100ns ticks internally)",
+    help: "Total time played. Type it as hours:minutes:seconds, e.g. 12:30:00.",
     unit: "hms",
   },
 ];

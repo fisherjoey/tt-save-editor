@@ -176,9 +176,9 @@ export function MissionsPanel({
       <h2>Missions &amp; objectives</h2>
       <p className="hint">
         Every mission &amp; objective in the game ({total.toLocaleString()} total) — not just the ones in your
-        save. Ones you have show a state dropdown; ones you haven't reached show <b>＋ add</b>. ⚠ Adding missions
-        you haven't reached is advanced and untested — it can affect story progression. In your save:{" "}
-        <b>{presentCount.toLocaleString()}</b> of {total.toLocaleString()} present.
+        save. Ones you have show a state dropdown; ones you haven't reached show <b>＋ add</b>. ⚠ Adding missions you
+        haven't played yet can confuse the game's story tracking and may skip or lock cutscenes — back up your original
+        first. In your save: <b>{presentCount.toLocaleString()}</b> of {total.toLocaleString()} present.
       </p>
       <input className="search" placeholder="Search missions & objectives…" value={q} onChange={(e) => setQ(e.target.value)} />
 
@@ -254,13 +254,14 @@ export function MissionsPanel({
           forceOpen={!!needle}
           summary={
             <>
-              <span className="groupTitle">Unlinked objectives</span>
+              <span className="groupTitle">Other objectives</span>
               <span className="groupCount">{orphans.length}</span>
             </>
           }
         >
           {() => (
             <div className="objList">
+              <p className="hint">Objectives not tied to a specific mission.</p>
               {(needle ? orphans.filter((o) => hit(o, objName(o))) : orphans).slice(0, 300).map((o) => (
                 <EntryRow key={o} tag={o} type={OBJECTIVE_TYPE} addState={OBJECTIVE_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
               ))}
@@ -326,8 +327,8 @@ function MissionRow({
           {node.badge && (
             <div className="enumRow">
               <span className="enumCtx">
-                <b>Completion badge</b>
-                <small>100% reward marker</small>
+                <b>Counts toward 100%</b>
+                <small>set this to Done so this activity counts in your completion total</small>
               </span>
               <EntryControl tag={node.badge} type={MISSION_TYPE} addState={MISSION_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
             </div>
@@ -341,7 +342,7 @@ function MissionRow({
               )}
               {onUpTo && (
                 <button className="small ghost" onClick={onUpTo} title="Mark this story mission and every earlier one (and their objectives) complete">
-                  ⏩ Complete everything up to here
+                  ⏩ Mark this mission and all earlier story missions done
                 </button>
               )}
             </div>
@@ -393,8 +394,11 @@ function ClumpGroup({
         </>
       }
     >
-      {() => (
+      {() => {
+        const shortType = (nodes[0]!.name.split(/\s+[—–-]\s+/)[0] || "Item").trim();
+        return (
         <div className="objList clumpBody">
+          <p className="hint">{nodes.length} separate “{shortType}” of the same type in this area.</p>
           {missing > 0 && (
             <div className="bulkRow">
               <button className="primary small" onClick={onCompleteAll}>
@@ -405,7 +409,7 @@ function ClumpGroup({
           {nodes.map((n, i) => (
             <MissionRow
               key={n.tag}
-              node={{ ...n, name: `#${i + 1}` }}
+              node={{ ...n, name: `${shortType} #${i + 1}` }}
               present={present}
               fields={fields}
               observed={observed}
@@ -416,7 +420,8 @@ function ClumpGroup({
             />
           ))}
         </div>
-      )}
+        );
+      }}
     </LazyDetails>
   );
 }

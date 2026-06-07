@@ -1,3 +1,5 @@
+import { WhereIsMySave } from "./WhereIsMySave.js";
+
 export function FixMySaveHelp({ valid }: { valid: boolean }): JSX.Element {
   return (
     <section className="card fixHelp">
@@ -23,40 +25,7 @@ export function FixMySaveHelp({ valid }: { valid: boolean }): JSX.Element {
         build, you can hand it to the tool and it reads the right number for you.
       </p>
 
-      <details className="fixHelp">
-        <summary>Where are my save files?</summary>
-        <div className="fixHelpBody">
-          <p>
-            On <strong>Windows / Steam</strong>, they’re here (paste this into the File Explorer address bar —{" "}
-            <code>%LOCALAPPDATA%</code> expands automatically):
-          </p>
-          <p>
-            <code>
-              %LOCALAPPDATA%\Warner Bros. Interactive Entertainment\LEGO Batman - Legacy of the Dark
-              Knight\SaveGames\steam\&lt;your-id&gt;\
-            </code>
-          </p>
-          <p>
-            On <strong>Steam Deck or Linux (Proton)</strong> there’s no <code>%LOCALAPPDATA%</code>; the same folder
-            lives inside the game’s Proton prefix:
-          </p>
-          <p>
-            <code>
-              …/steamapps/compatdata/&lt;appid&gt;/pfx/drive_c/users/steamuser/AppData/Local/Warner Bros. Interactive
-              Entertainment/LEGO Batman - Legacy of the Dark Knight/SaveGames/steam/&lt;your-id&gt;/
-            </code>
-          </p>
-          <p>
-            The <strong>Epic Games</strong> version uses the same{" "}
-            <code>…\Warner Bros. Interactive Entertainment\LEGO Batman - Legacy of the Dark Knight\SaveGames\…</code>{" "}
-            path, just with an Epic-id subfolder instead of the Steam one.
-          </p>
-          <p className="hint">
-            Inside that folder the saves are named <code>SaveSlot_0_TT.sav</code> (that’s slot 0),{" "}
-            <code>SaveSlot_1_TT.sav</code>, and so on — one per save slot.
-          </p>
-        </div>
-      </details>
+      <WhereIsMySave />
 
       <details className="fixHelp">
         <summary>Why are there two files?</summary>

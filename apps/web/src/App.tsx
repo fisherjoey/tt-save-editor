@@ -10,6 +10,7 @@ import { CompletionOverview } from "./components/CompletionOverview.js";
 import { UnlockEverythingPanel } from "./components/UnlockEverythingPanel.js";
 import { QuickUnlock } from "./components/QuickUnlock.js";
 import { ChangeSummary } from "./components/ChangeSummary.js";
+import { WhereIsMySave } from "./components/WhereIsMySave.js";
 import { FixMySaveHelp } from "./components/FixMySaveHelp.js";
 import { Help } from "./components/Help.js";
 
@@ -69,12 +70,14 @@ export function App() {
   const [unlocking, setUnlocking] = useState(false);
   const [unlockResult, setUnlockResult] = useState<{ collectiblesAdded: number; progressCompleted: number; studsSet: number } | null>(null);
   const [, force] = useState(0);
+  const [isSample, setIsSample] = useState(false);
   const rerender = () => force((n) => n + 1);
 
-  const onFile = useCallback((name: string, bytes: Uint8Array) => {
+  const onFile = useCallback((name: string, bytes: Uint8Array, sample = false) => {
     setError(null);
     setMode("choose");
     setUnlockResult(null);
+    setIsSample(sample);
     try {
       const save = SaveFile.load(bytes);
       setLoaded({
@@ -110,7 +113,7 @@ export function App() {
 
   const loadSample = useCallback(async () => {
     const buf = await fetch("./sample.sav").then((r) => r.arrayBuffer());
-    onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
+    onFile("SaveSlot_0_TT.sav", new Uint8Array(buf), true);
   }, [onFile]);
 
   // Optional larger sample (a 100% save) — only present in local builds, and
@@ -124,7 +127,7 @@ export function App() {
   }, []);
   const loadBigSample = useCallback(async () => {
     const buf = await fetch("./sample-100.sav").then((r) => r.arrayBuffer());
-    onFile("SaveSlot_0_TT.sav", new Uint8Array(buf));
+    onFile("SaveSlot_0_TT.sav", new Uint8Array(buf), true);
   }, [onFile]);
 
   const buildVersion = loaded ? readBuildVersion(loaded.save) : undefined;
@@ -149,6 +152,9 @@ export function App() {
       {!loaded && (
         <>
           <Dropzone disabled={false} onFile={onFile} />
+          <div className="landingHelp">
+            <WhereIsMySave />
+          </div>
           {typeof location !== "undefined" && location.protocol !== "file:" && (
             <p className="sampleLine">
               No save handy? <button className="link" onClick={loadSample}>Try a sample save</button> — edit and download it to see how it works.
@@ -268,6 +274,11 @@ export function App() {
 
           return (
             <>
+              {isSample && (
+                <section className="card sampleBanner">
+                  👀 You're viewing a <b>sample save</b> — load your own file to edit your real game.
+                </section>
+              )}
               <section className="card statusBar">
                 <span className="badge ok">✓ Save loaded OK</span>
                 <span className="statusInfo">{comp.have}/{comp.total} collectibles · {comp.pct}%</span>
@@ -331,7 +342,7 @@ export function App() {
                   {currentDifficulty && (
                     <section className="card">
                       <h2>Difficulty</h2>
-                      <p className="hint">Make the game easier or harder. (Currently: {currentDifficulty})</p>
+                      <p className="hint">Make the game easier or harder — listed easiest → hardest. (Currently: {currentDifficulty})</p>
                       <div className="presetRow">
                         {[...new Set(["Normal", "Medium", "Hard", currentDifficulty])].map((d) => (
                           <button key={d} className={currentDifficulty === d ? "chip on" : "chip"} onClick={() => setDifficulty(d)}>

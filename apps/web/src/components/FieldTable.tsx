@@ -11,6 +11,7 @@ export function FieldTable({ fields, onEdit }: { fields: ScalarField[]; onEdit: 
 
   return (
     <div>
+      <p className="hint">Editing these directly can break your save. If unsure, use the friendly panels above — <b>Revert all changes</b> will undo mistakes.</p>
       <input className="search" placeholder={`Search ${fields.length} fields…`} value={q} onChange={(e) => setQ(e.target.value)} />
       <div className="tableWrap">
         <table className="fields">
@@ -36,28 +37,31 @@ export function FieldTable({ fields, onEdit }: { fields: ScalarField[]; onEdit: 
 
 function FieldRow({ field, onEdit }: { field: ScalarField; onEdit: (f: ScalarField, v: number | bigint | boolean | string) => void }) {
   const [draft, setDraft] = useState<string>(String(field.value));
+  const [error, setError] = useState<string | null>(null);
   const dirty = draft !== String(field.value);
 
   const commit = () => {
+    if (!dirty) return;
     if (field.kind === "bool") return; // handled by checkbox
     if (field.kind === "string") return onEdit(field, draft);
     if (field.kind === "float") {
       const n = Number(draft);
-      if (Number.isFinite(n)) onEdit(field, n);
+      if (Number.isFinite(n)) { setError(null); onEdit(field, n); } else setError("Number required");
     } else if (field.type === "Int64Property" || field.type === "UInt64Property") {
       try {
         onEdit(field, BigInt(draft));
+        setError(null);
       } catch {
-        /* ignore bad input */
+        setError("Whole number required");
       }
     } else {
       const n = Number(draft);
-      if (Number.isInteger(n)) onEdit(field, n);
+      if (Number.isInteger(n)) { setError(null); onEdit(field, n); } else setError("Whole number required");
     }
   };
 
   return (
-    <tr className={dirty ? "dirty" : ""}>
+    <tr className={error ? "invalid" : dirty ? "dirty" : ""}>
       <td className="mono name">{field.name}</td>
       <td className="ty">{field.type.replace("Property", "")}</td>
       <td className="val">
@@ -67,15 +71,18 @@ function FieldRow({ field, onEdit }: { field: ScalarField; onEdit: (f: ScalarFie
             <option value="false">false</option>
           </select>
         ) : (
-          <input
-            className="mono"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onBlur={commit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-            }}
-          />
+          <>
+            <input
+              className="mono"
+              value={draft}
+              onChange={(e) => { setDraft(e.target.value); if (error) setError(null); }}
+              onBlur={commit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+              }}
+            />
+            {error && <span className="errLine">{error}</span>}
+          </>
         )}
       </td>
     </tr>
