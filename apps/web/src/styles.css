@@ -189,3 +189,15 @@ details.advanced > .search, details.advanced .tableWrap { margin-top: 14px; }
 .collConf { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
 .addBar { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); background: var(--panel); }
 .collCat { color: var(--muted); font-size: 11px; }
+
+/* Mission → objectives nesting (Progress & settings) */
+.missionTree { display: flex; flex-direction: column; gap: 6px; padding: 4px 0 8px; }
+.missionNode { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.missionNode > summary { list-style: none; cursor: pointer; padding: 9px 12px; display: flex; align-items: center; gap: 10px; }
+.missionNode > summary::-webkit-details-marker { display: none; }
+.missionNode > summary::before { content: "▸"; color: var(--muted); transition: transform 0.15s; }
+.missionNode[open] > summary::before { transform: rotate(90deg); }
+.missionTitle { font-weight: 600; flex: 1; }
+.missionState { color: var(--muted); font-size: 12px; }
+.missionKids { color: var(--accent2); font-size: 11px; background: rgba(78,161,255,0.12); padding: 1px 7px; border-radius: 999px; }
+.objList { padding: 4px 12px 10px 28px; display: flex; flex-direction: column; gap: 4px; }
