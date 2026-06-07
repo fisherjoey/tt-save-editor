@@ -24,7 +24,8 @@ const storyOrder = (tag: string): number | null => {
 // Real in-game names from the game's ST_Objective string table + PROG_ mission assets
 // (built into PROGRESS_NAMES); anything unmapped falls back to a prettified tag path.
 function missionName(tag: string): string {
-  return PROGRESS_NAMES[tag] ?? strip(tag);
+  // A standalone CompletionBadge (one with no base mission) reads as the mission itself.
+  return PROGRESS_NAMES[tag] ?? strip(tag.replace(/\.CompletionBadge$/, ""));
 }
 const objName = (tag: string): string => PROGRESS_NAMES[tag] ?? strip(tag);
 
@@ -33,7 +34,12 @@ interface MissionNode {
   name: string;
   category: string;
   objectives: string[];
+  /** The companion "100% reward" entry, when this activity/mission has one. */
+  badge?: string;
 }
+
+/** Every progress tag this node owns — the mission itself plus its completion badge. */
+const nodeTags = (n: MissionNode): string[] => (n.badge ? [n.tag, n.badge] : [n.tag]);
 
 /** A <details> that renders its children only once opened (or when forced open by search). */
 function LazyDetails({
@@ -92,7 +98,7 @@ export function MissionsPanel({
     return map;
   }, [enums]);
 
-  const { categories, orphans, objByMission, storyMissionsOrdered } = useMemo(() => {
+  const { categories, orphans, objByMission, storyMissionsOrdered, badgeOf } = useMemo(() => {
     const missionSet = new Set(PROGRESS_MISSION_TAGS);
     const objByMission = new Map<string, string[]>();
     const orphans: string[] = [];
@@ -109,14 +115,35 @@ export function MissionsPanel({
       if (parent) (objByMission.get(parent) ?? objByMission.set(parent, []).get(parent)!).push(o);
       else orphans.push(o);
     }
-    const byCat = new Map<string, MissionNode[]>();
+    // Fold each "*.CompletionBadge" into its base mission as node.badge, so an activity
+    // and its 100% reward marker show as ONE row instead of two identically-named siblings.
+    const badgeOf = new Map<string, string>();
+    const standalone: string[] = [];
     for (const tag of PROGRESS_MISSION_TAGS) {
-      const node: MissionNode = { tag, name: missionName(tag), category: topCategory(tag), objectives: objByMission.get(tag) ?? [] };
+      if (tag.endsWith(".CompletionBadge")) {
+        const base = tag.slice(0, -".CompletionBadge".length);
+        if (missionSet.has(base)) {
+          badgeOf.set(base, tag);
+          continue;
+        }
+      }
+      standalone.push(tag);
+    }
+    const byCat = new Map<string, MissionNode[]>();
+    for (const tag of standalone) {
+      const badge = badgeOf.get(tag);
+      const node: MissionNode = {
+        tag,
+        name: missionName(tag),
+        category: topCategory(tag),
+        objectives: [...(objByMission.get(tag) ?? []), ...(badge ? objByMission.get(badge) ?? [] : [])],
+        badge,
+      };
       (byCat.get(node.category) ?? byCat.set(node.category, []).get(node.category)!).push(node);
     }
     for (const list of byCat.values()) list.sort((a, b) => a.tag.localeCompare(b.tag));
     const storyMissionsOrdered = PROGRESS_MISSION_TAGS.filter((t) => storyOrder(t) !== null).sort((a, b) => storyOrder(a)! - storyOrder(b)!);
-    return { categories: [...byCat.entries()].sort((a, b) => b[1].length - a[1].length), orphans, objByMission, storyMissionsOrdered };
+    return { categories: [...byCat.entries()].sort((a, b) => b[1].length - a[1].length), orphans, objByMission, storyMissionsOrdered, badgeOf };
   }, []);
 
   const completeUpTo = (targetTag: string) => {
@@ -127,6 +154,8 @@ export function MissionsPanel({
     for (const m of storyMissionsOrdered) {
       if (storyOrder(m)! > target) break;
       mt.push(m);
+      const badge = badgeOf.get(m);
+      if (badge) mt.push(badge);
       ot.push(...(objByMission.get(m) ?? []));
     }
     onCompleteMany(mt, ot);
@@ -196,7 +225,7 @@ export function MissionsPanel({
                         needle={needle}
                         onChange={onChange}
                         onAdd={onAdd}
-                        onComplete={() => onCompleteMany([nodes[0]!.tag], nodes[0]!.objectives)}
+                        onComplete={() => onCompleteMany(nodeTags(nodes[0]!), nodes[0]!.objectives)}
                         onUpTo={storyOrder(nodes[0]!.tag) != null ? () => completeUpTo(nodes[0]!.tag) : undefined}
                       />
                     ) : (
@@ -209,8 +238,8 @@ export function MissionsPanel({
                         needle={needle}
                         onChange={onChange}
                         onAdd={onAdd}
-                        onCompleteOne={(n) => onCompleteMany([n.tag], n.objectives)}
-                        onCompleteAll={() => onCompleteMany(nodes.map((n) => n.tag), nodes.flatMap((n) => n.objectives))}
+                        onCompleteOne={(n) => onCompleteMany(nodeTags(n), n.objectives)}
+                        onCompleteAll={() => onCompleteMany(nodes.flatMap(nodeTags), nodes.flatMap((n) => n.objectives))}
                       />
                     ),
                   )}
@@ -269,7 +298,10 @@ function MissionRow({
   /** Complete this story mission and every earlier one. Undefined for non-story missions. */
   onUpTo?: () => void;
 }) {
-  const missing = (present.has(node.tag) ? 0 : 1) + node.objectives.filter((o) => !present.has(o)).length;
+  const missing =
+    (present.has(node.tag) ? 0 : 1) +
+    (node.badge && !present.has(node.badge) ? 1 : 0) +
+    node.objectives.filter((o) => !present.has(o)).length;
   return (
     <LazyDetails
       className="missionNode"
@@ -294,6 +326,15 @@ function MissionRow({
             </span>
             <EntryControl tag={node.tag} type={MISSION_TYPE} addState={MISSION_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
           </div>
+          {node.badge && (
+            <div className="enumRow">
+              <span className="enumCtx">
+                <b>Completion badge</b>
+                <small>100% reward marker</small>
+              </span>
+              <EntryControl tag={node.badge} type={MISSION_TYPE} addState={MISSION_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
+            </div>
+          )}
           {(missing > 0 || onUpTo) && (
             <div className="bulkRow">
               {missing > 0 && (
