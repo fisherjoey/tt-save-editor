@@ -32,7 +32,7 @@ export function Dropzone({ disabled, onFile }: { disabled: boolean; onFile: (nam
       />
       <div className="dzInner">
         <div className="dzIcon">🦇</div>
-        <strong>{disabled ? "Loading keystream…" : "Drop a save file here"}</strong>
+        <strong>{disabled ? "Getting your save ready…" : "Drop a save file here"}</strong>
         <span>or click to choose a <code>SaveSlot_0_TT.sav</code></span>
         <span className="dzHint">
           Found in <code>…/AppData/Local/Warner Bros. Interactive Entertainment/LEGO Batman - Legacy of the Dark Knight/SaveGames/steam/…</code>

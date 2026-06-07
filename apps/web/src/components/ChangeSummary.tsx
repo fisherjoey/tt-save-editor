@@ -73,7 +73,7 @@ export function ChangeSummary({
   return (
     <section className="card">
       <h2>Your changes</h2>
-      <p className="hint">Everything you've changed vs the save you opened — review before you download. (Your original is always backed up.)</p>
+      <p className="hint">Everything you've changed vs the save you opened — review before you download. You can undo any time with <b>Revert all changes</b> while this tab is open; to keep a safe copy on your computer, use <b>Save a copy of my untouched original</b> first.</p>
 
       {buildChanged && (
         <div className="diffRow">

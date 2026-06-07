@@ -267,3 +267,9 @@ details.fixHelp[open] > summary::before { transform: rotate(90deg); }
 /* Clumped same-named missions */
 .missionNode.clump > summary .missionTitle { font-weight: 600; }
 .clumpBody { border-left: 2px solid var(--line); margin-left: 2px; padding-left: 8px; }
+
+/* Audit fixes: error line, meta notes, technical-details collapsible */
+.errLine { color: var(--bad, #e5484d); font-size: 14px; margin-top: 8px; }
+.metaNote { color: var(--muted); font-size: 12px; margin-left: 8px; }
+.metaTech { margin-top: 6px; }
+.metaTech > summary { cursor: pointer; color: var(--muted); font-size: 13px; }

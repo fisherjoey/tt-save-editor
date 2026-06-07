@@ -14,28 +14,28 @@ export function UnlockEverythingPanel({
     <section className="card">
       <h2>Unlock &amp; complete everything</h2>
       <p className="hint">
-        One click does it all: maxes out your studs, adds every collectible (gold bricks, minikits, trophies,
-        Wayne Tech chips, vehicles, costumes…), and marks all missions, challenges, and objectives complete.
+        One click does it all: maxes out your studs, adds every collectible (gold bricks, Riddler trophies, MicroBuilds,
+        WayneTech chips, vehicles, costumes…), and marks all missions, challenges, and objectives complete.
       </p>
 
       <button className="primary unlockBig" disabled={running} onClick={onRun}>
-        {running ? "Working…" : "⭐ Unlock & complete everything"}
+        {running ? "Working…" : "⭐ Unlock everything AND mark the story finished (100%)"}
       </button>
 
       <button className="ghost freeRoamBtn" disabled={running} onClick={onRunFreeRoam}>
-        🦇 Unlock everything, but keep the story to play
+        🦇 Unlock everything but leave the story unplayed (so you can still play through the missions)
       </button>
 
       <p className="reassure">
-        Only gold bricks are confirmed in-game; the rest use the same mechanism. Your original is backed up — try it
-        and revert if anything looks off.
+        We've confirmed gold bricks work in the game. Everything else is added the same way and should work too, but we
+        haven't tested every type — if something looks off, use <b>Revert all changes</b> (or back up your original
+        first).
       </p>
 
       {result && (
         <p className="ok">
-          ✓ Done — added {result.collectiblesAdded.toLocaleString()} collectibles, completed{" "}
-          {result.progressCompleted.toLocaleString()} entries, studs set to {result.studsSet.toLocaleString()}.
-          Download below to use it.
+          ✓ Done — added every collectible we know about, marked all missions, objectives and challenges complete, and
+          maxed out your studs ({result.studsSet.toLocaleString()}). Download below to use it.
         </p>
       )}
     </section>

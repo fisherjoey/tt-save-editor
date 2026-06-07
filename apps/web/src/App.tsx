@@ -43,10 +43,12 @@ function explainError(msg: string): { title: string; detail: string } {
   if (m.includes("gvas") || m.includes("magic") || m.includes("not a "))
     return { title: "That doesn't look like a LEGO Batman save", detail: "Pick a file named like SaveSlot_0_TT.sav from the game's SaveGames folder — not a screenshot, a settings file, or another game's save." };
   if (m.includes("round") || m.includes("reproduce") || m.includes("refus"))
-    return { title: "We couldn't safely read this save", detail: "It may be from a newer game version than we support, or the file is partly damaged. Try the matching BackupCopy_… file instead." };
+    return { title: "We couldn't safely read this save", detail: "It may be from a newer game version than this editor can read yet, or the file is partly damaged. In the same SaveGames folder there's usually a file starting with BackupCopy_ — try that one instead." };
   if (m.includes("decrypt") || m.includes("key") || m.includes("range") || m.includes("length") || m.includes("bounds"))
-    return { title: "This save looks damaged or unreadable", detail: "If it's a real SaveSlot_…_TT.sav, it may be corrupted — try the matching BackupCopy_… file, which the game keeps as a spare." };
-  return { title: "Couldn't open that save", detail: `${msg}. If it's a real SaveSlot_…_TT.sav, try the matching BackupCopy_… file.` };
+    return { title: "This save looks damaged or unreadable", detail: "If it's a real SaveSlot_…_TT.sav it may be corrupted. In the same folder, the game keeps a spare starting with BackupCopy_ — try opening that one." };
+  // Don't leak the raw exception text — log it for debugging, show a plain message.
+  if (msg) console.error("Save open failed:", msg);
+  return { title: "Couldn't open that file", detail: "Make sure it's a LEGO Batman save — a file named like SaveSlot_0_TT.sav from the game's SaveGames folder. If that one won't open, try its BackupCopy_… partner in the same folder." };
 }
 
 function collectibleCompletion(present: Set<string>) {
@@ -138,9 +140,9 @@ export function App() {
         <h1>
           TT Save Editor <span className="bat">🦇</span>
         </h1>
-        <p className="sub">LEGO Batman: Legacy of the Dark Knight — edit any field, or make a save load on an older patch.</p>
+        <p className="sub">LEGO Batman: Legacy of the Dark Knight — edit any field, or make a save load on an older version of the game.</p>
         <p className="privacy">
-          Your save is decrypted and edited entirely in your browser. Nothing is ever uploaded. <button className="link" onClick={() => setHelp(true)}>How it works</button>
+          Works entirely on your computer — nothing is uploaded, and your original save file isn't changed until you choose to download and replace it. <button className="link" onClick={() => setHelp(true)}>How it works</button>
         </p>
       </header>
 
@@ -238,6 +240,7 @@ export function App() {
           const onUnlockAll = () => runUnlock(true);
           const onUnlockFreeRoam = () => runUnlock(false);
           const revertAll = () => {
+            if (!confirm("Undo all your changes and reload the save as you first opened it?")) return;
             try {
               const save = SaveFile.load(l.originalBytes);
               setLoaded({ fileName: l.fileName, save, originalBytes: l.originalBytes, originalBody: l.originalBody, originalBuild: l.originalBuild, fields: save.fields(), enums: save.enums(), observed: save.observedEnums(), collPresent: new Set(save.enumArrayEntries().map((e) => e.tag)) });
@@ -266,10 +269,10 @@ export function App() {
           return (
             <>
               <section className="card statusBar">
-                <span className="badge ok">✓ valid save</span>
+                <span className="badge ok">✓ Save loaded OK</span>
                 <span className="statusInfo">{comp.have}/{comp.total} collectibles · {comp.pct}%</span>
                 <div className="statusActions">
-                  <button className="ghost" onClick={backupOriginal}>⬇ Back up my original</button>
+                  <button className="ghost" onClick={backupOriginal} title="Download an untouched copy of the file you opened, so you always have a safe original.">⬇ Save a copy of my untouched original</button>
                   <button className="ghost" onClick={revertAll} title="Discard every edit and reload the save as you first opened it">↺ Revert all changes</button>
                 </div>
               </section>
@@ -281,15 +284,15 @@ export function App() {
                   <div className="chooserGrid">
                     <button className="chooseCard" onClick={() => setMode("fix")}>
                       <span className="ci">🔧</span><b>Fix my save</b>
-                      <span>It won't load, or "created on an updated version of the game"</span>
+                      <span>My save won't load — including the message "This save was created on an updated version of the game."</span>
                     </button>
                     <button className="chooseCard" onClick={() => setMode("unlock")}>
                       <span className="ci">⭐</span><b>Unlock &amp; complete everything</b>
-                      <span>One click — max studs, all collectibles, everything done</span>
+                      <span>Instantly maxes studs, grabs every collectible, and marks the whole story complete (a "keep the story to play" option is inside).</span>
                     </button>
                     <button className="chooseCard" onClick={() => setMode("fill")}>
                       <span className="ci">🎯</span><b>Fill in what I'm missing</b>
-                      <span>See how complete you are, then add specific things</span>
+                      <span>Keep your progress — see how complete you are, then pick exactly which collectibles or missions to add.</span>
                     </button>
                     <button className="chooseCard" onClick={() => setMode("edit")}>
                       <span className="ci">⚙️</span><b>Edit anything</b>
@@ -317,9 +320,12 @@ export function App() {
                   {back}
                   <section className="card meta">
                     <div className="metaRow"><span className="k">File</span><span className="v mono">{l.fileName}</span></div>
-                    <div className="metaRow"><span className="k">Class</span><span className="v mono">{l.save.doc.header.saveGameClassName}</span></div>
-                    <div className="metaRow"><span className="k">Engine</span><span className="v mono">{l.save.doc.header.engineMajor}.{l.save.doc.header.engineMinor}.{l.save.doc.header.enginePatch} ({l.save.doc.header.branch})</span></div>
-                    <div className="metaRow"><span className="k">Build version</span><span className="v mono">{buildVersion ?? "—"}</span></div>
+                    <div className="metaRow"><span className="k">Game version</span><span className="v mono">{buildVersion ?? "—"}</span><span className="metaNote">the game version this save was made on</span></div>
+                    <details className="metaTech">
+                      <summary>Technical details</summary>
+                      <div className="metaRow"><span className="k">Class</span><span className="v mono">{l.save.doc.header.saveGameClassName}</span></div>
+                      <div className="metaRow"><span className="k">Engine</span><span className="v mono">{l.save.doc.header.engineMajor}.{l.save.doc.header.engineMinor}.{l.save.doc.header.enginePatch} ({l.save.doc.header.branch})</span></div>
+                    </details>
                   </section>
                   <QuickEdits fields={l.fields} onEdit={onQuickEdit} />
                   {currentDifficulty && (
@@ -368,33 +374,32 @@ function DowngradePanel({ save, onApplied }: { save: SaveFile; onApplied: () => 
   const [target, setTarget] = useState<string>("");
   const [refName, setRefName] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
 
   const readFromReference = (bytes: Uint8Array, name: string) => {
+    setErr(null);
     try {
       const sf = SaveFile.load(bytes);
       const bv = readBuildVersion(sf);
-      if (bv === undefined) throw new Error("no BuildVersion in that save");
+      if (bv === undefined) throw new Error("no version");
       setTarget(String(bv));
       setRefName(name);
-      setMsg(`Read build ${bv} from ${name}`);
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : String(e));
+      setMsg(`Found version ${bv} in ${name}.`);
+    } catch {
+      setMsg(null);
+      setErr("That file doesn't have a version number we can read — pick a different save that already works on the older version.");
     }
   };
 
   return (
     <section className="card downgrade">
-      <h2>Make this save load on an older patch</h2>
+      <h2>Make this save work on an older version of the game</h2>
       <p className="hint">
-        {downgradeRecipe.description} Current build: <span className="mono">{current ?? "—"}</span>.
+        {downgradeRecipe.description} This save is currently version <span className="mono">{current ?? "—"}</span>.
       </p>
       <div className="row">
-        <label>
-          Target build version
-          <input className="mono" inputMode="numeric" value={target} placeholder="e.g. 1281204" onChange={(e) => setTarget(e.target.value)} />
-        </label>
         <label className="refpick">
-          …or read it from a save made on that build
+          Pick a save that already works and we'll copy its version
           <input
             type="file"
             accept=".sav"
@@ -404,24 +409,32 @@ function DowngradePanel({ save, onApplied }: { save: SaveFile; onApplied: () => 
             }}
           />
         </label>
+        <label>
+          Or type the version number to match
+          <input className="mono" inputMode="numeric" value={target} placeholder="e.g. 1281204" onChange={(e) => { setTarget(e.target.value); setErr(null); }} />
+          <span className="metaNote">the version stamp the game writes into every save</span>
+        </label>
       </div>
-      {refName && <p className="hint mono">reference: {refName}</p>}
+      {refName && <p className="hint mono">from: {refName}</p>}
       <button
         className="primary"
         disabled={!/^\d+$/.test(target)}
         onClick={() => {
+          setErr(null);
           try {
             downgradeRecipe.apply(save, { targetBuildVersion: Number(target) });
-            setMsg(`Build version set to ${target}. Download below and load it on the older build.`);
+            setMsg(`Done — this save is now set to version ${target}. Download it below and it should load on that version of the game.`);
             onApplied();
-          } catch (e) {
-            setMsg(e instanceof Error ? e.message : String(e));
+          } catch {
+            setMsg(null);
+            setErr("Couldn't change the version on this save. Try the Edit mode if the file is unusual.");
           }
         }}
       >
-        Apply downgrade
+        Make it match this version
       </button>
       {msg && <p className="ok">{msg}</p>}
+      {err && <p className="errLine">{err}</p>}
     </section>
   );
 }
@@ -439,15 +452,20 @@ function DownloadBar({ save, fileName, onReset }: { save: SaveFile; fileName: st
   return (
     <section className="card downloadbar">
       <div>
-        <h2>Download</h2>
-        <p className="hint">Save both files into your game’s SaveGames folder (replace the originals — back them up first). The game cross-checks the pair.</p>
+        <h2>Download both files</h2>
+        <p className="hint">
+          <b>Important:</b> first copy your two original save files somewhere safe. Then put <b>both</b> downloaded
+          files into your game's SaveGames folder, replacing the two that are there. The game checks them against each
+          other, so you must replace both — one alone won't load. The <span className="mono">BackupCopy_</span> file is
+          <b> not</b> your backup; it's the second half of your edited save that the game requires.
+        </p>
       </div>
       <div className="dlbtns">
         <button className="primary" onClick={() => download(fileName, save.toBytes())}>
-          ⬇ {fileName}
+          ⬇ Step 1: {fileName}
         </button>
         <button className="primary" onClick={() => download(backupName, save.backupBytes())}>
-          ⬇ {backupName}
+          ⬇ Step 2: {backupName}
         </button>
         <button className="ghost" onClick={onReset}>
           Open another save
