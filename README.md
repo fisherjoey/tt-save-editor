@@ -2,19 +2,28 @@
 
 A save editor for LEGO Batman: Legacy of the Dark Knight that runs in your browser. Drop in a `.sav`, edit what you want, download it. Decrypt, edit, and re-encrypt all happen on your machine.
 
-Live: https://tt-save-editor.vercel.app · Current release: **v0.1.4**
+Live: https://tt-save-editor.vercel.app · Current release: **v0.2.0**
+
+![The task chooser](docs/screenshots/chooser.png)
 
 ## What it can do
 
-Drag in `SaveSlot_0_TT.sav` and the editor decrypts it. Top of the page has a Studs box where you can just type a number, and a "Complete everything" button that marks every collectible, challenge, mission, and objective done in one click.
+Drop in `SaveSlot_0_TT.sav`, the editor decrypts it, and instead of a wall of panels you pick a goal:
 
-There's a **Playtime** box (in minutes) alongside the Studs box — the editor reads/writes the `TotalPlaytime` Timespan field directly.
+- **🔧 Fix my save** — the original reason this exists. If the game refuses your save with *"This save was created on an updated version of the game"* after an update, this rolls the build-version stamp back so an older build will load it (type the number, or read it from a save made on the older build). Plain-language help for where saves live (Steam / Epic / Proton) and the `SaveSlot_…` + `BackupCopy_…` file pair.
+- **⭐ Unlock & complete everything** — one click: max studs, add every collectible, and complete the progress in your save. ![Unlock result](docs/screenshots/unlock.png)
+- **🎯 Fill in what I'm missing** — a completion overview (how complete you are, per category), then add specific collectibles or missions. ![Completion overview](docs/screenshots/completion.png)
+- **⚙️ Edit anything** — the full power-user surface: a Studs box, a Playtime box (minutes, writes the `TotalPlaytime` Timespan), every enum setting by gameplay tag, and an Advanced section exposing every value in the save by name.
 
-New in **v0.1.4**: a **Collectibles** panel. Pick collectibles to add — by category (gold bricks, minikits, trophies, Wayne Tech chips, vehicles, costumes, …) or sliced by source (story mission vs free-roam) — or "max out" a whole category at once, and the in-game counters actually move. Each entry shows its real in-game name (e.g. *Iceberg Lounge (Ch.1 M5) — Gold Brick #1*), pulled from the game's own data. Gold bricks are verified in-game; the other categories use the same mechanism and are marked untested.
+A status bar across the top always shows **✓ your save is valid** (it passed a byte-exact round-trip check on load), your collectible completion %, and a one-click **back up my original**.
 
-There's also a downgrade form. It sets the build version stamp back so a pre-patch build will load the save, which is what you want if an update broke a speedrun route and the game keeps refusing with *"This save was created on an updated version."*. Type the build number directly, or load a save made on the older build and the editor reads it for you.
+**Collectibles** — pick what to add by **Category** (gold bricks, minikits, trophies, Wayne Tech chips, vehicles, costumes…), by **Mission**, or by **District**, or "max out" a whole category, and the in-game counters actually move. Each entry shows its real in-game name (e.g. *Iceberg Lounge (Ch.1 M5) — Gold Brick #1*), extracted from the game's own data files.
 
-Below that, dropdowns for the discrete settings — difficulty, mission state, collectible state, objectives, save validation, install state, etc. Each entry shows the gameplay tag next to it (`Tutorials.Basic.Move`, `LeavingAreaSplines.Tricorner`, that sort of thing) so when an enum appears 8 times you can actually tell them apart. An Advanced section underneath exposes every value in the save by name.
+![Collectibles by mission](docs/screenshots/collectibles.png)
+
+**Missions & objectives** — every mission and objective in the game (not just the ones in your save), objectives nested under their mission. Ones you have are editable; ones you haven't reached can be added.
+
+> Gold bricks are confirmed to move their counter in-game; the other collectible categories use the identical mechanism and are marked **untested**. Adding missions/objectives you haven't reached is advanced and can affect story progression — your original is always backed up.
 
 The download gives you both `SaveSlot_X_TT.sav` and its matching `BackupCopy_SaveSlot_X_TT.sav`. The game checks the pair, so the tool writes both.
 
