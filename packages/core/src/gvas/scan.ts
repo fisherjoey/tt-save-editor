@@ -490,6 +490,88 @@ export function insertEnumEntry(body: Uint8Array, ins: EnumEntryInsertion): Uint
   return out;
 }
 
+/** Build one new element's bytes by cloning a template and swapping its tag (+ optional state). */
+function buildElementBytes(
+  body: Uint8Array,
+  template: PropertyNode,
+  stateNode: PropertyNode,
+  progressTagNode: PropertyNode,
+  tagNameNode: PropertyNode,
+  newTag: string,
+  newStateBytes: Uint8Array | null,
+): Uint8Array {
+  const newTagBytes = fstringBytes(newTag);
+  const deltaTag = newTagBytes.length - (tagNameNode.valueEnd - tagNameNode.valueStart);
+  const w = new BinaryWriter();
+  w.bytes(body.subarray(template.valueStart, stateNode.sizeOffset));
+  if (newStateBytes) {
+    w.i32(newStateBytes.length);
+    w.bytes(body.subarray(stateNode.sizeOffset + 4, stateNode.valueStart));
+    w.bytes(newStateBytes);
+  } else {
+    w.bytes(body.subarray(stateNode.sizeOffset, stateNode.valueEnd));
+  }
+  w.bytes(body.subarray(stateNode.valueEnd, progressTagNode.sizeOffset));
+  w.i32(progressTagNode.size + deltaTag);
+  w.bytes(body.subarray(progressTagNode.sizeOffset + 4, tagNameNode.sizeOffset));
+  w.i32(newTagBytes.length);
+  w.bytes(body.subarray(tagNameNode.sizeOffset + 4, tagNameNode.valueStart));
+  w.bytes(newTagBytes);
+  w.bytes(body.subarray(tagNameNode.valueEnd, template.valueEnd));
+  return w.toBytes();
+}
+
+/**
+ * Insert MANY entries in one pass — clones the first array element as a structural
+ * template, builds every new element, and splices them all before the array end with
+ * a single count bump + ancestor-size update. Byte-identical to inserting one at a
+ * time, but parses the body once instead of once per entry. Skips tags already present.
+ */
+export function insertEnumEntriesBatch(body: Uint8Array, tags: string[], stateValue: string): Uint8Array {
+  if (tags.length === 0) return body;
+  const tree = parseStructure(body);
+  let arr: PropertyNode | undefined;
+  const stack = [...tree];
+  while (stack.length) {
+    const n = stack.pop()!;
+    if (n.name === "SavedGameProgressEnumValues" && n.children?.length) { arr = n; break; }
+    if (n.children) stack.push(...n.children);
+  }
+  if (!arr || !arr.children?.length) throw new Error("insertEnumEntriesBatch: no SavedGameProgressEnumValues array");
+  const template = arr.children[0]!;
+  const present = new Set(arr.children.map((el) => elementParts(body, el).tag));
+  const { stateNode, progressTagNode, tagNameNode } = elementParts(body, template);
+  if (!stateNode || !progressTagNode || !tagNameNode) {
+    throw new Error("insertEnumEntriesBatch: template element missing SavedEnumNameValue/ProgressTag/TagName");
+  }
+  const newStateBytes = fstringBytes(stateValue);
+
+  const blobs: Uint8Array[] = [];
+  let added = 0;
+  for (const tag of tags) {
+    if (present.has(tag)) continue;
+    present.add(tag);
+    blobs.push(buildElementBytes(body, template, stateNode, progressTagNode, tagNameNode, tag, newStateBytes));
+    added++;
+  }
+  if (added === 0) return body;
+
+  let total = 0;
+  for (const b of blobs) total += b.length;
+  const out = new Uint8Array(body.length + total);
+  out.set(body.subarray(0, arr.valueEnd), 0);
+  let o = arr.valueEnd;
+  for (const b of blobs) { out.set(b, o); o += b.length; }
+  out.set(body.subarray(arr.valueEnd), arr.valueEnd + total);
+
+  const dv = new DataView(out.buffer);
+  dv.setInt32(arr.valueStart, dv.getInt32(arr.valueStart, true) + added, true);
+  for (const a of ancestorContainers(tree, arr.valueStart + 4)) {
+    dv.setInt32(a.sizeOffset, dv.getInt32(a.sizeOffset, true) + total, true);
+  }
+  return out;
+}
+
 /** Distinct members observed for each enum type across the save (for dropdown options). */
 export function observedEnumMembers(enums: EnumField[]): Map<string, Set<string>> {
   const m = new Map<string, Set<string>>();

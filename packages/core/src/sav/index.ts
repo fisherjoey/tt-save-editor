@@ -12,6 +12,7 @@ import {
   setEnumValue,
   readEnumArrayEntries,
   insertEnumEntry,
+  insertEnumEntriesBatch,
   ScalarField,
   EnumField,
   EnumArrayEntry,
@@ -119,18 +120,11 @@ export class SaveFile {
    * `stateValue` for each. Returns how many were actually added.
    */
   addEntries(tags: string[], stateValue: string): number {
-    const existing = this.enumArrayEntries();
-    const have = new Set(existing.map((e) => e.tag));
-    const templateTag = existing[0]?.tag;
-    if (!templateTag) throw new Error("addEntries: no existing array element to clone from");
-    let added = 0;
-    for (const tag of tags) {
-      if (have.has(tag)) continue;
-      this.doc.body = insertEnumEntry(this.doc.body, { templateTag, newTag: tag, newState: stateValue });
-      have.add(tag);
-      added++;
-    }
-    return added;
+    const have = new Set(this.enumArrayEntries().map((e) => e.tag));
+    const toAdd = tags.filter((t) => !have.has(t));
+    if (!toAdd.length) return 0;
+    this.doc.body = insertEnumEntriesBatch(this.doc.body, toAdd, stateValue);
+    return toAdd.length;
   }
 
   /** @deprecated use addEntries — kept for callers that read better as "collectibles". */

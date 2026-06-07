@@ -15,6 +15,11 @@ const OBJECTIVE_TYPE = "ETtObjectivesNodeGameProgress";
 
 const strip = (tag: string) => prettifyKey(tag.replace(/^GameProgress\.Definitions\./, ""));
 const topCategory = (tag: string) => tag.replace(/^GameProgress\.Definitions\./, "").split(".")[0]!;
+/** Linear order for story missions (Story.CC.MM), or null if not a story mission. */
+const storyOrder = (tag: string): number | null => {
+  const m = tag.match(/\.Story\.(\d+)\.(\d+)$/);
+  return m ? Number(m[1]) * 1000 + Number(m[2]) : null;
+};
 
 // Real in-game names from the game's ST_Objective string table + PROG_ mission assets
 // (built into PROGRESS_NAMES); anything unmapped falls back to a prettified tag path.
@@ -64,6 +69,7 @@ export function MissionsPanel({
   observed,
   onChange,
   onAdd,
+  onCompleteMany,
 }: {
   enums: EnumField[];
   /** Real array-element tags currently in the save (authoritative presence). */
@@ -71,6 +77,8 @@ export function MissionsPanel({
   observed: Map<string, Set<string>>;
   onChange: (field: EnumField, member: string) => void;
   onAdd: (tags: string[], state: string) => void;
+  /** Complete a batch of missions + objectives (add missing + set present to Complete), offset-safe. */
+  onCompleteMany: (missionTags: string[], objTags: string[]) => void;
 }) {
   const [q, setQ] = useState("");
 
@@ -84,7 +92,7 @@ export function MissionsPanel({
     return map;
   }, [enums]);
 
-  const { categories, orphans } = useMemo(() => {
+  const { categories, orphans, objByMission, storyMissionsOrdered } = useMemo(() => {
     const missionSet = new Set(PROGRESS_MISSION_TAGS);
     const objByMission = new Map<string, string[]>();
     const orphans: string[] = [];
@@ -107,8 +115,22 @@ export function MissionsPanel({
       (byCat.get(node.category) ?? byCat.set(node.category, []).get(node.category)!).push(node);
     }
     for (const list of byCat.values()) list.sort((a, b) => a.tag.localeCompare(b.tag));
-    return { categories: [...byCat.entries()].sort((a, b) => b[1].length - a[1].length), orphans };
+    const storyMissionsOrdered = PROGRESS_MISSION_TAGS.filter((t) => storyOrder(t) !== null).sort((a, b) => storyOrder(a)! - storyOrder(b)!);
+    return { categories: [...byCat.entries()].sort((a, b) => b[1].length - a[1].length), orphans, objByMission, storyMissionsOrdered };
   }, []);
+
+  const completeUpTo = (targetTag: string) => {
+    const target = storyOrder(targetTag);
+    if (target == null) return;
+    const mt: string[] = [];
+    const ot: string[] = [];
+    for (const m of storyMissionsOrdered) {
+      if (storyOrder(m)! > target) break;
+      mt.push(m);
+      ot.push(...(objByMission.get(m) ?? []));
+    }
+    onCompleteMany(mt, ot);
+  };
 
   const needle = q.trim().toLowerCase();
   const hit = (tag: string, name?: string) =>
@@ -155,7 +177,18 @@ export function MissionsPanel({
             {() => (
               <div className="missionTree">
                 {matching.slice(0, 300).map((n) => (
-                  <MissionRow key={n.tag} node={n} present={present} fields={fields} observed={observed} needle={needle} onChange={onChange} onAdd={onAdd} />
+                  <MissionRow
+                    key={n.tag}
+                    node={n}
+                    present={present}
+                    fields={fields}
+                    observed={observed}
+                    needle={needle}
+                    onChange={onChange}
+                    onAdd={onAdd}
+                    onComplete={() => onCompleteMany([n.tag], n.objectives)}
+                    onUpTo={storyOrder(n.tag) != null ? () => completeUpTo(n.tag) : undefined}
+                  />
                 ))}
                 {matching.length > 300 && <p className="hint">Showing first 300 of {matching.length} — use search.</p>}
               </div>
@@ -196,6 +229,8 @@ function MissionRow({
   needle,
   onChange,
   onAdd,
+  onComplete,
+  onUpTo,
 }: {
   node: MissionNode;
   present: Set<string>;
@@ -204,18 +239,11 @@ function MissionRow({
   needle: string;
   onChange: (field: EnumField, member: string) => void;
   onAdd: (tags: string[], state: string) => void;
+  /** Complete this mission + its objectives (offset-safe, handled by the parent). */
+  onComplete: () => void;
+  /** Complete this story mission and every earlier one. Undefined for non-story missions. */
+  onUpTo?: () => void;
 }) {
-  const completeAll = () => {
-    if (!present.has(node.tag)) onAdd([node.tag], MISSION_COMPLETE_STATE);
-    const missObjs = node.objectives.filter((o) => !present.has(o));
-    if (missObjs.length) onAdd(missObjs, OBJECTIVE_COMPLETE_STATE);
-    const m = fields.get(node.tag);
-    if (m && m.member !== "Complete") onChange(m, "Complete");
-    for (const o of node.objectives) {
-      const f = fields.get(o);
-      if (f && f.member !== "Complete") onChange(f, "Complete");
-    }
-  };
   const missing = (present.has(node.tag) ? 0 : 1) + node.objectives.filter((o) => !present.has(o)).length;
   return (
     <LazyDetails
@@ -241,11 +269,18 @@ function MissionRow({
             </span>
             <EntryControl tag={node.tag} type={MISSION_TYPE} addState={MISSION_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
           </div>
-          {missing > 0 && (
+          {(missing > 0 || onUpTo) && (
             <div className="bulkRow">
-              <button className="primary small" onClick={completeAll}>
-                Complete mission{node.objectives.length ? ` + ${node.objectives.length} obj.` : ""}
-              </button>
+              {missing > 0 && (
+                <button className="primary small" onClick={onComplete}>
+                  Complete this mission{node.objectives.length ? ` + ${node.objectives.length} obj.` : ""}
+                </button>
+              )}
+              {onUpTo && (
+                <button className="small ghost" onClick={onUpTo} title="Mark this story mission and every earlier one (and their objectives) complete">
+                  ⏩ Complete everything up to here
+                </button>
+              )}
             </div>
           )}
           {node.objectives.map((o) => (
