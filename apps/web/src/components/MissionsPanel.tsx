@@ -2,9 +2,9 @@ import { useMemo, useState, type ReactNode } from "react";
 import {
   enumOptions,
   prettifyKey,
-  COLLECTIBLES,
   PROGRESS_MISSION_TAGS,
   PROGRESS_OBJECTIVE_TAGS,
+  PROGRESS_NAMES,
   MISSION_COMPLETE_STATE,
   OBJECTIVE_COMPLETE_STATE,
   type EnumField,
@@ -16,27 +16,12 @@ const OBJECTIVE_TYPE = "ETtObjectivesNodeGameProgress";
 const strip = (tag: string) => prettifyKey(tag.replace(/^GameProgress\.Definitions\./, ""));
 const topCategory = (tag: string) => tag.replace(/^GameProgress\.Definitions\./, "").split(".")[0]!;
 
-// chapter.mission -> nice story-mission name, derived from the collectibles manifest.
-const STORY_MISSION_NAMES = (() => {
-  const m = new Map<string, string>();
-  for (const c of COLLECTIBLES)
-    for (const t of c.tags) {
-      if (t.facets.source !== "story") continue;
-      const key = `${t.facets.chapter}.${t.facets.mission}`;
-      const prefix = t.name.split(" — ")[0]!;
-      if (/\(Ch\./.test(prefix) && !m.has(key)) m.set(key, prefix);
-    }
-  return m;
-})();
-
+// Real in-game names from the game's ST_Objective string table + PROG_ mission assets
+// (built into PROGRESS_NAMES); anything unmapped falls back to a prettified tag path.
 function missionName(tag: string): string {
-  const m = tag.match(/\.Story\.(\d+)\.(\d+)$/);
-  if (m) {
-    const named = STORY_MISSION_NAMES.get(`${Number(m[1])}.${Number(m[2])}`);
-    if (named) return named;
-  }
-  return strip(tag);
+  return PROGRESS_NAMES[tag] ?? strip(tag);
 }
+const objName = (tag: string): string => PROGRESS_NAMES[tag] ?? strip(tag);
 
 interface MissionNode {
   tag: string;
@@ -128,7 +113,7 @@ export function MissionsPanel({
   const needle = q.trim().toLowerCase();
   const hit = (tag: string, name?: string) =>
     !needle || tag.toLowerCase().includes(needle) || (name ?? "").toLowerCase().includes(needle);
-  const nodeMatches = (n: MissionNode) => hit(n.tag, n.name) || n.objectives.some((o) => hit(o, strip(o)));
+  const nodeMatches = (n: MissionNode) => hit(n.tag, n.name) || n.objectives.some((o) => hit(o, objName(o)));
 
   const total = PROGRESS_MISSION_TAGS.length + PROGRESS_OBJECTIVE_TAGS.length;
   const presentCount = useMemo(() => {
@@ -179,7 +164,7 @@ export function MissionsPanel({
         );
       })}
 
-      {orphans.length > 0 && (!needle || orphans.some((o) => hit(o, strip(o)))) && (
+      {orphans.length > 0 && (!needle || orphans.some((o) => hit(o, objName(o)))) && (
         <LazyDetails
           className="enumGroup"
           forceOpen={!!needle}
@@ -192,7 +177,7 @@ export function MissionsPanel({
         >
           {() => (
             <div className="objList">
-              {(needle ? orphans.filter((o) => hit(o, strip(o))) : orphans).slice(0, 300).map((o) => (
+              {(needle ? orphans.filter((o) => hit(o, objName(o))) : orphans).slice(0, 300).map((o) => (
                 <EntryRow key={o} tag={o} type={OBJECTIVE_TYPE} addState={OBJECTIVE_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
               ))}
             </div>
@@ -285,7 +270,7 @@ function EntryRow(props: {
   return (
     <div className="enumRow objRow">
       <span className="enumCtx" title={props.tag}>
-        {strip(props.tag)}
+        {objName(props.tag)}
       </span>
       <EntryControl {...props} />
     </div>

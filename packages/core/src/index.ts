@@ -27,6 +27,7 @@ export {
   MISSION_COMPLETE_STATE,
   OBJECTIVE_COMPLETE_STATE,
 } from "./data/progress.generated.js";
+export { PROGRESS_NAMES } from "./data/progress-names.generated.js";
 export { KNOWN_ENUMS, enumOptions, ENUM_META, enumMeta, CATEGORY_LABELS, prettifyKey } from "./enums.js";
 export type { EnumMeta, EnumCategory } from "./enums.js";
 export { FEATURED_FIELDS, toDisplay, fromDisplay } from "./featured.js";

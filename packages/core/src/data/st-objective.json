@@ -1,0 +1,2450 @@
+[
+[
+"OBJ_C00M01_ENTERGARDEN",
+"Go to the garden"
+],
+[
+"OBJ_C00M01_FINDCOSTUMEPARTS",
+"Find Bruce's costume"
+],
+[
+"OBJ_C00M01_FOLLOWPATH",
+"Collect Bruce's hat"
+],
+[
+"OBJ_C01M06D_ANALYSEBEAR",
+"Analyse the bear"
+],
+[
+"OBJ_C01M06D_BUILDGENERATOR",
+"Build a generator to restore power to the chemical analysis machine"
+],
+[
+"OBJ_C01M06D_LEAVEWAYNETECH",
+"Leave WayneTech"
+],
+[
+"OBJ_C01M06D_PLUGINCELLS",
+"Plug power cells into the generator"
+],
+[
+"OBJ_C01M06D_RESTOREPOWER",
+"Restore power to the chemical analysis machine"
+],
+[
+"OBJ_C01M06D_USECHEMANALYSIS",
+"Use the chemical analysis machine"
+],
+[
+"OBJ_C00M04C_OBJ01",
+"Go to the temple"
+],
+[
+"OBJ_C00M04C_OBJ02",
+"Start the next trial"
+],
+[
+"OBJ_C00M04C_OBJ03",
+"Find the keys to open the door"
+],
+[
+"OBJ_C00M04C_OBJ04",
+"Use the shuriken to distract the guard"
+],
+[
+"OBJ_C00M04C_OBJ05",
+"Go to the shrine"
+],
+[
+"OBJ_C00M04C_OBJ06",
+"Stun and flurry the enemy"
+],
+[
+"OBJ_C00M04C_OBJ07",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04E_OBJ01",
+"Sneak past the sleeping guards"
+],
+[
+"OBJ_C00M04E_OBJ02",
+"Go to the throne room"
+],
+[
+"OBJ_C00M04E_OBJ03",
+"Find a way to get outside"
+],
+[
+"OBJ_C00M04E_OBJ04",
+"Follow the mountain path"
+],
+[
+"OBJ_C00M04E_OBJ05",
+"Build something to cross the gap"
+],
+[
+"OBJ_C00M04E_OBJ06",
+"Continue through the temple"
+],
+[
+"OBJ_C00M04E_OBJ07",
+"Reach the courtyard"
+],
+[
+"OBJ_C00M04E_OBJ08",
+"Find a way to open the door"
+],
+[
+"OBJ_C05M05_OBJ01",
+"Escort the Joker"
+],
+[
+"OBJ_C05M05_OBJ02_A",
+"Talk to Officer Cash"
+],
+[
+"OBJ_C05M05_OBJ02",
+"Question the Joker"
+],
+[
+"OBJ_C05M05_OBJ03",
+"Defeat the enemies"
+],
+[
+"OBJ_C05M05_OBJ04",
+"Find a way out"
+],
+[
+"OBJ_C05M05_OBJ06",
+"Escape"
+],
+[
+"OBJ_C00M03_OBJ01",
+"Find a blue flower"
+],
+[
+"OBJ_C02M07_OBJ01",
+"Go to the parade"
+],
+[
+"OBJ_C02M08_OBJ01",
+"Release the balloons"
+],
+[
+"OBJ_C02M08_OBJ01_A",
+"Medieval float"
+],
+[
+"OBJ_C02M08_OBJ01_B",
+"Jungle float"
+],
+[
+"OBJ_C02M08_OBJ0_C",
+"Castle float"
+],
+[
+"OBJ_C02M08_OBJ02",
+"Find a way to reach the Joker"
+],
+[
+"OBJ_C02M08_OBJ03",
+"Defeat the Joker"
+],
+[
+"OBJ_C00M01_OBJ01",
+"Go to the garden"
+],
+[
+"OBJ_C00M01_OBJ02",
+"Find Bruce's costume"
+],
+[
+"OBJ_C00M01_OBJ03",
+"Collect Bruce's hat"
+],
+[
+"OBJ_C00M01_OBJ04",
+"Collect Bruce's hat"
+],
+[
+"OBJ_C01M05_OBJ01",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M05_OBJ02",
+"Reach the V.I.P. Lounge"
+],
+[
+"OBJ_C01M05_OBJ03",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M05_OBJ04",
+"Speak to Flass"
+],
+[
+"OBJ_C01M05_OBJ06",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M05_OBJ07",
+"Search for the food items"
+],
+[
+"OBJ_C01M05_OBJ09",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M05_OBJ10",
+"Chase Falcone"
+],
+[
+"OBJ_C01M05_OBJ11",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M05_OBJ12",
+"Chase Falcone"
+],
+[
+"OBJ_C01M05_OBJ13",
+"Chase Falcone"
+],
+[
+"OBJ_C02M02_OBJ01",
+"Stop the Mime Van"
+],
+[
+"OBJ_C02M02_OBJ02",
+"Stop the Mime Vans"
+],
+[
+"OBJ_C02M02_OBJ03",
+"Go to Tricorner Bridge"
+],
+[
+"OBJ_C02M02_OBJ04",
+"Fire rockets at the truck"
+],
+[
+"OBJ_C02M02_OBJ05",
+"Stop the Mime Van"
+],
+[
+"OBJ_C02M02_OBJ06",
+"Cross the bridge"
+],
+[
+"OBJ_C02M02_OBJ07",
+"Clear a path using rockets"
+],
+[
+"OBJ_C02M02_OBJ08",
+"Go to the car dealership"
+],
+[
+"OBJ_C02M02_OBJ09",
+"Find the Mime Van"
+],
+[
+"OBJ_C02M02_OBJ10",
+"Stop the Mime Vans"
+],
+[
+"OBJ_C02M02_OBJ11",
+"Stop the Mime Van"
+],
+[
+"OBJ_C02M02_OBJ12",
+"Go to Shreck's Department Store"
+],
+[
+"OBJ_C02M03_OBJ01",
+"Look for a way out"
+],
+[
+"OBJ_C02M03_OBJ02",
+"Find the elevator"
+],
+[
+"OBJ_C02M03_OBJ03",
+"Use the elevator"
+],
+[
+"OBJ_C02M03_OBJ04",
+"Look for a way out"
+],
+[
+"OBJ_C02M03_OBJ05",
+"Look for a way out"
+],
+[
+"OBJ_C02M03_OBJ06",
+"Find a way past the doors"
+],
+[
+"OBJ_C02M03_OBJ07",
+"Defeat the enemies"
+],
+[
+"OBJ_C02M03_OBJ08",
+"Look for a way out"
+],
+[
+"OBJ_C02M03_OBJ09",
+"Look for a way out"
+],
+[
+"OBJ_C03M02_OBJ01",
+"Hit all three gift boxes"
+],
+[
+"OBJ_C03M02_OBJ02_A",
+"Build the spotlight"
+],
+[
+"OBJ_C03M02_OBJ02_B",
+"Use the spotlight"
+],
+[
+"OBJ_C03M02_OBJ03_A",
+"Shine the spotlight on the Graysons"
+],
+[
+"OBJ_C03M02_OBJ04",
+"Cross the tether cable"
+],
+[
+"OBJ_C03M02_OBJ05",
+"Use the Cable Launcher"
+],
+[
+"OBJ_C03M02_OBJ06_A",
+"Cross the tether cable"
+],
+[
+"OBJ_C03M02_OBJ06_B",
+"Hit the target"
+],
+[
+"OBJ_C03M02_OBJ06_C",
+"Build the platform"
+],
+[
+"OBJ_C03M02_OBJ06_D",
+"Hit all three targets"
+],
+[
+"OBJ_C03M02_OBJ06_E",
+"Cross the gap"
+],
+[
+"OBJ_C03M02_OBJ07",
+"Use the trapeze to swing across"
+],
+[
+"OBJ_C03M02_OBJ08",
+"Hit the target"
+],
+[
+"OBJ_C03M02_OBJ09",
+"Build the cannon"
+],
+[
+"OBJ_C03M02_OBJ10",
+"Light the fuse"
+],
+[
+"OBJ_C03M02_OBJ11",
+"Defeat the enemies"
+],
+[
+"OBJ_C03M02_OBJ12_A",
+"Defuse Two-Face's Bomb"
+],
+[
+"OBJ_C03M02_OBJ13",
+"Defeat the enemies"
+],
+[
+"OBJ_C03M02_OBJ14",
+"Find a way to reach the bomb"
+],
+[
+"OBJ_C03M02_OBJ15_A",
+"Defuse Two-Face's Bomb"
+],
+[
+"OBJ_C00M04B_OBJ00",
+"Go to Ra's"
+],
+[
+"OBJ_C00M04B_OBJ01",
+"Clear the path"
+],
+[
+"OBJ_C00M04B_OBJ02",
+"Go to Ra's"
+],
+[
+"OBJ_C00M04B_OBJ03",
+"Stand on the pressure plate"
+],
+[
+"OBJ_C00M04B_OBJ04",
+"Sneak past the guard"
+],
+[
+"OBJ_C00M04B_OBJ05",
+"Start the next trial"
+],
+[
+"OBJ_C00M04B_OBJ05_A",
+"Follow Ra's"
+],
+[
+"OBJ_C00M04B_OBJ05_B",
+"Stand on the pressure plate"
+],
+[
+"OBJ_C00M04B_OBJ06",
+"Perform a sneak attack"
+],
+[
+"OBJ_C00M04B_OBJ07",
+"Reach the exit without being seen"
+],
+[
+"OBJ_C00M04B_OBJ08",
+"Grapple to a perch"
+],
+[
+"OBJ_C00M04B_OBJ09",
+"Perform a takedown from above"
+],
+[
+"OBJ_C00M04B_OBJ10",
+"Stand on the pressure plates"
+],
+[
+"OBJ_C00M04B_OBJ11",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04B_OBJ11_A",
+"Complete the stealth trial"
+],
+[
+"OBJ_C00M04B_OBJ11_B",
+"Go to the next room"
+],
+[
+"OBJ_C00M04B_OBJ12",
+"Complete the stealth trial"
+],
+[
+"OBJ_C00M04B_OBJ13",
+"Go to Ra's"
+],
+[
+"OBJ_C01M02_OBJ01",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M02_OBJ02",
+"Chase Detective Flass"
+],
+[
+"OBJ_C01M02_OBJ03",
+"Gum up the machine cogs"
+],
+[
+"OBJ_C01M02_OBJ04",
+"Chase Detective Flass"
+],
+[
+"OBJ_C01M02_OBJ05",
+"Build something to reach Flass"
+],
+[
+"OBJ_C01M02_OBJ06",
+"Use the battering ram"
+],
+[
+"OBJ_C01M02_OBJ07",
+"Talk to Detective Flass"
+],
+[
+"OBJ_C00M04F_OBJ01",
+"Defeat Ra's"
+],
+[
+"OBJ_C00M04F_OBJ02",
+"Escape the temple"
+],
+[
+"OBJ_C00M04F_OBJ03",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04F_OBJ04",
+"Escape the temple"
+],
+[
+"OBJ_C00M04F_OBJ06",
+"Escape the temple"
+],
+[
+"OBJ_C00M04F_OBJ07",
+"Defeat Ra's"
+],
+[
+"OBJ_C00M02_OBJ01",
+"Defeat Falcone's henchmen"
+],
+[
+"OBJ_C03M01B_OBJ01",
+"Get ready for the circus"
+],
+[
+"OBJ_C01M06B_OBJ01",
+"Clear the path to the elevator"
+],
+[
+"OBJ_C01M06B_OBJ02",
+"Find a way to access the elevator"
+],
+[
+"OBJ_C01M06B_OBJ03",
+"Pull down the elevator ramp"
+],
+[
+"OBJ_C01M06B_OBJ04",
+"Ride the elevator upstairs"
+],
+[
+"OBJ_C01M06B_OBJ05",
+"Turn the power on"
+],
+[
+"OBJ_C01M06B_OBJ06",
+"Place the bear on the scanner"
+],
+[
+"OBJ_C01M06B_OBJ07",
+"Turn on the computer to begin analysis"
+],
+[
+"OBJ_C01M06B_OBJ08",
+"Build a gadget bench"
+],
+[
+"OBJ_C01M06B_OBJ09",
+"Open the nearby container"
+],
+[
+"OBJ_C01M06B_OBJ10",
+"Purchase an upgrade"
+],
+[
+"OBJ_C01M06E_OBJ01",
+"Set up the glider"
+],
+[
+"OBJ_C01M06E_OBJ02",
+"Rescue the citizen"
+],
+[
+"OBJ_C03M03_OBJ01",
+"Go to East End"
+],
+[
+"OBJ_C03M03_OBJ02",
+"Go to the AR Simulation Trial"
+],
+[
+"OBJ_C03M03_OBJ03",
+"Complete the AR Trials as Robin"
+],
+[
+"OBJ_C03M03_OBJ03_A",
+"Complete the AR Traversal Trial"
+],
+[
+"OBJ_C03M03_OBJ03_B",
+"Complete the AR Combat Trial"
+],
+[
+"OBJ_C03M03_OBJ04",
+"Go to the Riddler puzzle"
+],
+[
+"OBJ_C03M03_OBJ05",
+"Solve the mysterious puzzle"
+],
+[
+"OBJ_C03M03_OBJ06",
+"Go to the location from the photo"
+],
+[
+"OBJ_C03M03_OBJ07",
+"Defeat the Two-Face enemies"
+],
+[
+"OBJ_C03M03_OBJ08",
+"Enter the mysterious room"
+],
+[
+"OBJ_C03M03_OBJ09",
+"Complete the Cluemaster Challenge"
+],
+[
+"OBJ_C03M03_OBJ10",
+"Talk to the Haly's Circus Ringmaster"
+],
+[
+"OBJ_C03M03_OBJ11",
+"Start the investigation"
+],
+[
+"OBJ_C03M03_OBJ12",
+"Go to Gotham Water & Power"
+],
+[
+"OBJ_C01M01_OBJ03",
+"Follow the bat"
+],
+[
+"OBJ_C01M01_OBJ04",
+"Go down the well"
+],
+[
+"OBJ_C01M01_OBJ05",
+"Explore the cave"
+],
+[
+"OBJ_C01M01_OBJ07",
+"Help Alfred get across"
+],
+[
+"OBJ_C01M01_OBJ09",
+"Reach the Wayne Manor foundations"
+],
+[
+"OBJ_C01M01_OBJ10",
+"Uncover the car"
+],
+[
+"OBJ_C01M06A_OBJ01",
+"Go to the tunnel"
+],
+[
+"OBJ_C01M06A_OBJ02",
+"Open the tunnel entrance"
+],
+[
+"OBJ_C01M06A_OBJ03",
+"Use the passage to the Batcave"
+],
+[
+"OBJ_C01M06C_OBJ01",
+"Go to Wayne Tower"
+],
+[
+"OBJ_C02M05C_OBJ01",
+"Go to the junkyard"
+],
+[
+"OBJ_C02M05C_OBJ03",
+"Search the junkyard for a Joker Card"
+],
+[
+"OBJ_C02M05C_OBJ04",
+"Crack the safe"
+],
+[
+"OBJ_C02M05C_OBJ05",
+"Inspect the card"
+],
+[
+"OBJ_C02M05C_OBJ06",
+"Go to City Hall"
+],
+[
+"OBJ_C02M05C_OBJ09",
+"Go to the GCPD building"
+],
+[
+"OBJ_C02M05C_OBJ10",
+"Investigate the area"
+],
+[
+"OBJ_C02M05C_OBJ11",
+"Help the officer"
+],
+[
+"OBJ_C02M05C_OBJ12",
+"Speak to the officer"
+],
+[
+"OBJ_C02M05C_OBJ13",
+"Go to the stolen vehicle's last location"
+],
+[
+"OBJ_C02M05C_OBJ14",
+"Find a way to open the warehouse shutter"
+],
+[
+"OBJ_C02M09_OBJ01",
+"Go to the Bat-Signal"
+],
+[
+"OBJ_HUB_OPENGARAGEDOOR",
+"Open the shutters"
+],
+[
+"OBJ_C01M07_OBJ01",
+"Go to ACE Chemicals"
+],
+[
+"OBJ_C01M07_OBJ02",
+"Investigate the helicopter"
+],
+[
+"OBJ_C01M08_OBJ01",
+"Analyse the bears"
+],
+[
+"OBJ_C01M08_OBJ01A1",
+"Release the crane yard container"
+],
+[
+"OBJ_C01M08_OBJ01A2",
+"Analyse the crane yard bear"
+],
+[
+"OBJ_C01M08_OBJ01B1",
+"Explore the train depot"
+],
+[
+"OBJ_C01M08_OBJ01B2",
+"Analyse the train depot bear"
+],
+[
+"OBJ_C01M08_OBJ01C1",
+"Search the cooling tower"
+],
+[
+"OBJ_C01M08_OBJ01C2",
+"Analyse the cooling tower bear"
+],
+[
+"OBJ_C01M08_OBJ02",
+"Get to the entrance"
+],
+[
+"OBJ_C01M08_OBJ04",
+"Enter the factory"
+],
+[
+"OBJ_C01M09_OBJ01",
+"Defeat the guard"
+],
+[
+"OBJ_C01M09_OBJ02",
+"Pick up the key"
+],
+[
+"OBJ_C01M09_OBJ03",
+"Activate the elevator"
+],
+[
+"OBJ_C01M09_OBJ04",
+"Cross the large gap"
+],
+[
+"OBJ_C01M09_OBJ05",
+"Follow the bears"
+],
+[
+"OBJ_C01M09_OBJ06",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M09_OBJ07",
+"Shut down the mixing machine"
+],
+[
+"OBJ_C02M06_OBJ01",
+"Go to the main gallery"
+],
+[
+"OBJ_C02M06_OBJ02",
+"Disable the security gate"
+],
+[
+"OBJ_C02M06_OBJ03",
+"Open the vault"
+],
+[
+"OBJ_C01M03_OBJ01",
+"Investigate the radio call"
+],
+[
+"OBJ_C01M03_OBJ02",
+"Stop the purse snatchers"
+],
+[
+"OBJ_C01M03_OBJ03",
+"Drive to the break-in"
+],
+[
+"OBJ_C01M03_OBJ04",
+"Stop the break-in"
+],
+[
+"OBJ_C01M03_OBJ05A",
+"Talk to Renee"
+],
+[
+"OBJ_C01M03_OBJ05B",
+"Find the poster pieces"
+],
+[
+"OBJ_C01M03_OBJ05C",
+"Return to Renee"
+],
+[
+"OBJ_C01M03_OBJ05D",
+"Identify the suspect"
+],
+[
+"OBJ_C01M03_OBJ06",
+"Track down Cobblepot"
+],
+[
+"OBJ_C01M03_OBJ07",
+"Talk to Cobblepot"
+],
+[
+"OBJ_C01M03_OBJ08",
+"Stop Cobblepot"
+],
+[
+"OBJ_C01M04_OBJ01",
+"Go to the Iceberg Lounge"
+],
+[
+"OBJ_C01M04_OBJ02",
+"Defeat the Falcone Grunts"
+],
+[
+"OBJ_C01M04_OBJ03",
+"Enter the Iceberg Lounge"
+],
+[
+"OBJ_C01M10_OBJ01",
+"Chase Red Hood One"
+],
+[
+"OBJ_C01M10_OBJ02",
+"Dodge the rockets"
+],
+[
+"OBJ_C01M10_OBJ03",
+"Chase Red Hood One"
+],
+[
+"OBJ_C01M10_OBJ04",
+"Defeat the henchmen"
+],
+[
+"OBJ_C01M10_OBJ05",
+"Chase Red Hood One"
+],
+[
+"OBJ_C02M05C_OBJ15",
+"Enter the warehouse"
+],
+[
+"OBJ_C02M05C_OBJ15_A",
+"Defeat Condiment King"
+],
+[
+"OBJ_C02M05C_OBJ16",
+"Find a way to open the evidence box"
+],
+[
+"OBJ_C04M02_OBJ00",
+"Open the security door"
+],
+[
+"OBJ_C04M02_OBJ01A",
+"Save the partygoers"
+],
+[
+"OBJ_C04M02_OBJ01B",
+"Save the partygoers"
+],
+[
+"OBJ_C04M02_OBJ01C",
+"Save the partygoers"
+],
+[
+"OBJ_C04M02_OBJ02A",
+"Investigate the banging doors"
+],
+[
+"OBJ_C04M02_OBJ02B",
+"Follow Firefly"
+],
+[
+"OBJ_C04M02_OBJ02C",
+"Destroy the door"
+],
+[
+"OBJ_C04M02_OBJ03",
+"Save the partygoers"
+],
+[
+"OBJ_C04M02_OBJ04",
+"Find Firefly"
+],
+[
+"OBJ_C04M02_OBJ05A",
+"Fuel the rocket"
+],
+[
+"OBJ_C04M02_OBJ05B",
+"Activate the ignition"
+],
+[
+"OBJ_C04M02_OBJ06",
+"Defeat Firefly"
+],
+[
+"OBJ_C04M05C_OBJ01",
+"Go to the observatory"
+],
+[
+"OBJ_C04M05C_OBJ02",
+"Defeat the enemies"
+],
+[
+"OBJ_C04M05C_OBJ03",
+"Enter the observatory"
+],
+[
+"OBJ_C04M06_OBJ01",
+"Defeat Mr. Freeze"
+],
+[
+"OBJ_C04M06_OBJ03",
+"Defeat the Mr. Freeze Mech"
+],
+[
+"OBJ_C05M02_OBJ01",
+"Chase the Joker"
+],
+[
+"OBJ_C05M02_OBJ02",
+"Intercept the Joker"
+],
+[
+"OBJ_C05M02_OBJ03",
+"Catch up to the Joker"
+],
+[
+"OBJ_C05M02_OBJ04",
+"Grapple the Joker's truck"
+],
+[
+"OBJ_C05M02_OBJ05",
+"Catch up to the Joker"
+],
+[
+"OBJ_C05M02_OBJ06",
+"Get on the truck"
+],
+[
+"OBJ_C05M02_OBJ07",
+"Stop the Joker"
+],
+[
+"OBJ_C06M01_STREETS_OBJ01",
+"Go to Wayne Tower"
+],
+[
+"OBJ_C06M01_STREETS_OBJ02",
+"Find a way through the blockage"
+],
+[
+"OBJ_C06M01_TAL_OBJ01",
+"Defeat Talia"
+],
+[
+"OBJ_C06M01_TAL_OBJ03",
+"Disarm the bomb"
+],
+[
+"OBJ_C04M01_OBJ01",
+"Go to the Gotham Museum"
+],
+[
+"OBJ_C04M05B_OBJ01",
+"Go to WayneTech"
+],
+[
+"OBJ_C04M05B_OBJ02",
+"Get the research from the truck"
+],
+[
+"OBJ_C04M05B_OBJ02_A",
+"Talk to Lucius"
+],
+[
+"OBJ_C04M05B_OBJ02_B",
+"Get the research from the truck"
+],
+[
+"OBJ_C04M05B_OBJ02_C",
+"Wash away the chemicals"
+],
+[
+"OBJ_C04M05B_OBJ03",
+"Find the research"
+],
+[
+"OBJ_C04M05B_OBJ03_A",
+"Find the research"
+],
+[
+"OBJ_C04M05B_OBJ03_B",
+"Inspect the snowglobe"
+],
+[
+"OBJ_C04M05B_OBJ04",
+"Go to ACE Chemicals"
+],
+[
+"OBJ_C04M05B_OBJ05",
+"Find the chemical"
+],
+[
+"OBJ_C04M05B_OBJ05_A",
+"Collect the chemical"
+],
+[
+"OBJ_C04M05B_OBJ05_B",
+"Investigate the container"
+],
+[
+"OBJ_C04M05B_OBJ05_C",
+"Search for the missing chemicals"
+],
+[
+"OBJ_C04M05B_OBJ06",
+"Find the chemical"
+],
+[
+"OBJ_C04M05B_OBJ06_A",
+"Find the chemical"
+],
+[
+"OBJ_C04M05B_OBJ06_B",
+"Defeat the enemies"
+],
+[
+"OBJ_C04M05B_OBJ06_C",
+"Collect the chemical"
+],
+[
+"OBJ_C04M05B_OBJ07",
+"Defeat the enemies"
+],
+[
+"OBJ_C04M05B_OBJ07_A",
+"Defeat the enemies"
+],
+[
+"OBJ_C04M05B_OBJ07_B",
+"Investigate the truck"
+],
+[
+"OBJ_C04M05B_OBJ08",
+"Go to Sionis Industries"
+],
+[
+"OBJ_C04M05B_OBJ08_A",
+"Go to Sionis Industries"
+],
+[
+"OBJ_C04M05B_OBJ08_B",
+"Talk to Black Mask"
+],
+[
+"OBJ_C04M05B_OBJ09",
+"Disable Black Mask's security system"
+],
+[
+"OBJ_C04M05B_OBJ09_A",
+"Terminal 1: Carry a battery"
+],
+[
+"OBJ_C04M05B_OBJ09_B",
+"Terminal 2: Basic Stealth"
+],
+[
+"OBJ_C04M05B_OBJ09_C",
+"Terminal 3: Thermal Trail"
+],
+[
+"OBJ_C04M05B_OBJ09_D",
+"Terminal 4: Enemy and camera puzzle"
+],
+[
+"OBJ_C04M05B_OBJ10",
+"Destroy Black Mask's car"
+],
+[
+"OBJ_C02M02_OBJ13",
+"Talk to the mime"
+],
+[
+"OBJ_C03M07_OBJ01",
+"Go to the Bat-Signal"
+],
+[
+"OBJ_C04M07_OBJ01",
+"Go to the Bat-Signal"
+],
+[
+"OBJ_C03M05_OBJ01",
+"Go to the botanical gardens"
+],
+[
+"OBJ_C04M05B_OBJ10_A",
+"Stop Black Mask's escape"
+],
+[
+"OBJ_C04M05B_OBJ10_B",
+"Stop Black Mask's escape"
+],
+[
+"OBJ_C04M05B_OBJ10_C",
+"Destroy Black Mask's car"
+],
+[
+"OBJ_C03M01A_OBJ01",
+"Go to the friend's apartment"
+],
+[
+"OBJ_C01M03B_OBJ01",
+"Go to Harvey Bullock"
+],
+[
+"OBJ_C01M03B_OBJ02",
+"Talk to Harvey Bullock"
+],
+[
+"OBJ_C01M03B_OBJ03",
+"Enter the suspicious building"
+],
+[
+"OBJ_C01M03C_OBJ01",
+"Solve the puzzle"
+],
+[
+"OBJ_C01M03C_OBJ02",
+"Leave the Riddler Room"
+],
+[
+"OBJ_C03M03B_OBJ02",
+"Go to Gotham Water & Power"
+],
+[
+"OBJ_C03M03B_OBJ03",
+"Talk to the foreman"
+],
+[
+"OBJ_C05M01_OBJ01",
+"Go to the bank"
+],
+[
+"OBJ_C05M01_OBJ02",
+"Stop the robbery"
+],
+[
+"OBJ_C05M01_OBJ03",
+"Talk to the Joker's captive"
+],
+[
+"OBJ_C05M01_OBJ04A",
+"Go to the construction site"
+],
+[
+"OBJ_C05M01_OBJ04B",
+"Defeat the Joker's minions"
+],
+[
+"OBJ_C05M01_OBJ04C",
+"Release the hostage"
+],
+[
+"OBJ_C05M01_OBJ4D",
+"Talk to the hostage"
+],
+[
+"OBJ_C05M01_OBJ05A",
+"Go to the parade site"
+],
+[
+"OBJ_C05M01_OBJ05B",
+"Talk to the sign spinner"
+],
+[
+"OBJ_C03M04_OBJ01",
+"Destroy the plant pod"
+],
+[
+"OBJ_C03M04_OBJ02",
+"Destroy the giant plant's pods"
+],
+[
+"OBJ_C03M04_OBJ03",
+"Analyse the plant"
+],
+[
+"OBJ_C03M04_OBJ04",
+"Release the coolant"
+],
+[
+"OBJ_C03M04_OBJ05",
+"Collect the spray bottle"
+],
+[
+"OBJ_C03M04_OBJ06",
+"Defeat the giant plant"
+],
+[
+"OBJ_C03M01B_OBJ02",
+"Change into a different outfit"
+],
+[
+"OBJ_C03M01A_OBJ02",
+"Break into the apartment"
+],
+[
+"OBJ_C00M04C_OBJ02C",
+"Find a way through the gauntlet"
+],
+[
+"OBJ_C00M04C_OBJ02D",
+"Get through the spikes"
+],
+[
+"OBJ_C00M04C_OBJ02E",
+"Get to the other side"
+],
+[
+"OBJ_C00M04C_OBJ06A",
+"Stun single enemy"
+],
+[
+"OBJ_C00M04C_OBJ06B",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04C_OBJ02A",
+"Collect the shuriken"
+],
+[
+"OBJ_C02M05D_OBJ01",
+"Go to the Flugelheim"
+],
+[
+"OBJ_C02M05D_OBJ02",
+"Break into the Flugelheim"
+],
+[
+"OBJ_C00M04A_OBJ00",
+"Go to the combat dojo"
+],
+[
+"OBJ_C00M04A_OBJ01",
+"Stand on your mark"
+],
+[
+"OBJ_C00M04A_OBJ02",
+"Dodge the shurikens"
+],
+[
+"OBJ_C00M04A_OBJ04",
+"Counter the attacks"
+],
+[
+"OBJ_C00M04A_OBJ06",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04A_OBJ07",
+"Defeat the remaining ninjas"
+],
+[
+"OBJ_C02M05C_OBJ17",
+"Inspect the card"
+],
+[
+"OBJ_C02M05_OBJ01",
+"Open the security door"
+],
+[
+"OBJ_C02M05_OBJ02",
+"Explore Arctic World"
+],
+[
+"OBJ_C02M05_OBJ03",
+"Reach the penguin exhibit"
+],
+[
+"OBJ_C02M05_OBJ04",
+"Turn off the ice traps"
+],
+[
+"OBJ_C02M05_OBJ05",
+"Reach the penguin exhibit"
+],
+[
+"OBJ_C02M05_OBJ06",
+"Open the security door"
+],
+[
+"OBJ_C02M05_OBJ07",
+"Confront Cobblepot"
+],
+[
+"OBJ_C02M05_OBJ08",
+"Defeat the enemies"
+],
+[
+"OBJ_C02M05_OBJ09",
+"Explore Arctic World"
+],
+[
+"OBJ_C02M05_OBJ10",
+"Reach the explorers exhibit"
+],
+[
+"OBJ_C01M06B_OBJ11",
+"Check the progress of the bear"
+],
+[
+"OBJ_C01M06B_OBJ12",
+"Return to the Batmobile"
+],
+[
+"OBJ_C01M10_FR_OBJ01",
+"Go to GCPD on Tricorner"
+],
+[
+"OBJ_C01M10_FR_OBJ02",
+"Build the device"
+],
+[
+"OBJ_C01M10_FR_OBJ03",
+"Complete Chapter"
+],
+[
+"OBJ_C03M06_OBJ01",
+"Investigate the botanical gardens"
+],
+[
+"OBJ_C03M06_OBJ02",
+"Investigate the botanical gardens"
+],
+[
+"OBJ_C03M06_OBJ03",
+"Defeat the giant plant"
+],
+[
+"OBJ_C03M06_OBJ04",
+"Investigate the botanical gardens"
+],
+[
+"OBJ_C03M06_OBJ05A",
+"Investigate the botanical gardens"
+],
+[
+"OBJ_C03M06_OBJ05B",
+"Defeat the plant monsters"
+],
+[
+"OBJ_C03M06_OBJ05C",
+"Talk to the scared scientist"
+],
+[
+"OBJ_C03M06_OBJ06",
+"Find Dr. Isley's lab"
+],
+[
+"OBJ_C03M06_OBJ07",
+"Find Dr. Isley's lab"
+],
+[
+"OBJ_C03M06_OBJ08",
+"Find Dr. Isley's lab"
+],
+[
+"OBJ_C03M06_OBJ09",
+"Find Dr. Isley's lab"
+],
+[
+"OBJ_C03M06_OBJ10",
+"Find Dr. Isley's lab"
+],
+[
+"OBJ_C03M06_OBJ11A",
+"Find Dr. Isley's lab"
+],
+[
+"OBJ_C03M06_OBJ11B",
+"Find the lab entrance"
+],
+[
+"OBJ_C03M06_OBJ11C",
+"Enter the lab"
+],
+[
+"OBJ_C02M03_OBJ05A",
+"Look for a way out"
+],
+[
+"OBJ_C02M03_OBJ05B",
+"Open the shutters"
+],
+[
+"OBJ_C02M03_OBJ05C",
+"Look for a way out"
+],
+[
+"OBJ_C04M06_OBJ02_A",
+"Shut down the energy shield"
+],
+[
+"OBJ_C04M06_OBJ02_C",
+"Hack the telescope"
+],
+[
+"OBJ_C04M06_OBJ02_E",
+"Disable the freeze ray"
+],
+[
+"OBJ_C00M04D_OBJ01",
+"Defeat the armed ninja"
+],
+[
+"OBJ_C00M04D_OBJ02",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04D_OBJ03",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04D_OBJ04",
+"Move to next ice platform"
+],
+[
+"OBJ_C00M04D_OBJ05",
+"Defeat the ninjas"
+],
+[
+"OBJ_C00M04D_OBJ06",
+"Avoid the shurikens"
+],
+[
+"OBJ_C02M05B_OBJ01",
+"Defeat the Penguin"
+],
+[
+"OBJ_C02M05B_OBJ02",
+"Defeat the Penguin"
+],
+[
+"OBJ_C01M07_OBJ01A",
+"Go to ACE Chemicals"
+],
+[
+"OBJ_C01M07_OBJ01B",
+"Glide over the walls"
+],
+[
+"OBJ_C02M04B_OBJ01",
+"Go to the zoo"
+],
+[
+"OBJ_C02M04B_OBJ02",
+"Search the area"
+],
+[
+"OBJ_C02M04B_OBJ02A",
+"Investigate the calls for help"
+],
+[
+"OBJ_C02M04B_OBJ02B",
+"Help the zookeeper"
+],
+[
+"OBJ_C02M04B_OBJ03",
+"Help the zookeeper"
+],
+[
+"OBJ_C02M04B_OBJ04",
+"Talk to the zookeeper"
+],
+[
+"OBJ_C02M04B_OBJ05A",
+"Free the trapped zookeeper"
+],
+[
+"OBJ_C02M04B_OBJ05B",
+"Free the trapped zookeeper"
+],
+[
+"OBJ_C02M04B_OBJ05C",
+"Collect the trackers"
+],
+[
+"OBJ_C02M04B_OBJ05D",
+"Collect the trackers"
+],
+[
+"OBJ_C02M04B_OBJ06",
+"Find the polar bear"
+],
+[
+"OBJ_C02M04B_OBJ07",
+"Put a tracker on the polar bear"
+],
+[
+"OBJ_C02M04B_OBJ08",
+"Talk to the zookeeper"
+],
+[
+"OBJ_C02M04B_OBJ09",
+"Enter Arctic World through the roof window"
+],
+[
+"OBJ_C02M04B_OBJ10",
+"Enter Arctic World"
+],
+[
+"OBJ_C02M08_OBJ01_C",
+"Space float"
+],
+[
+"OBJ_C01M06E_OBJ01A",
+"Open the glider"
+],
+[
+"OBJ_C01M06E_OBJ01B",
+"Set up the glider's speed"
+],
+[
+"OBJ_C01M06E_OBJ01C",
+"Set up the glider's movement"
+],
+[
+"OBJ_C01M06E_OBJ01D",
+"Set up the glider's boost"
+],
+[
+"OBJ_C01M06E_OBJ01E",
+"Slow the glider down"
+],
+[
+"OBJ_C01M06E_OBJ01F",
+"Stop gliding"
+],
+[
+"OBJ_C01M06E_OBJ01G",
+"Close the glider"
+],
+[
+"OBJ_C01M06E_OBJ01H",
+"Find a way to go higher"
+],
+[
+"OBJ_C01M06E_OBJ01I",
+"Use the updraft to glide higher"
+],
+[
+"OBJ_C01M06E_OBJ02A",
+"Launch into a glide"
+],
+[
+"OBJ_C01M06E_OBJ02B",
+"Find the citizen"
+],
+[
+"OBJ_C01M06E_OBJ02C",
+"Go to the citizen"
+],
+[
+"OBJ_C01M06E_OBJ03",
+"Defeat the attackers"
+],
+[
+"OBJ_C01M06E_OBJ04",
+"Protect the citizen"
+],
+[
+"OBJ_C02M05C_OBJ07_A",
+"Speak to Renee"
+],
+[
+"OBJ_C02M05C_OBJ07_B",
+"Defeat the mimes"
+],
+[
+"OBJ_C02M05C_OBJ07_C",
+"Speak to Renee again"
+],
+[
+"OBJ_C01M05_OBJ14",
+"Defeat the enemies"
+],
+[
+"OBJ_C01M05_OBJ15",
+"Catch Falcone"
+],
+[
+"OBJ_C00M04C_OBJ02B01",
+"Use the shuriken to destroy three targets"
+],
+[
+"OBJ_C00M04C_OBJ02B02",
+"Use the shuriken to destroy three targets"
+],
+[
+"OBJ_C00M04C_OBJ02B03",
+"Use the shuriken to destroy three targets"
+],
+[
+"OBJ_C05M03_OBJ01",
+"Investigate the docks"
+],
+[
+"OBJ_C05M03_OBJ02",
+"Get into the shipping container"
+],
+[
+"OBJ_C05M03_OBJ03",
+"Investigate the shipping container"
+],
+[
+"OBJ_C05M03_OBJ04B",
+"Go to the Tunnel of Love"
+],
+[
+"OBJ_C05M03_OBJ05A",
+"Find the missing pieces of the door"
+],
+[
+"OBJ_C05M03_OBJ05B",
+"Find the missing pieces of the door"
+],
+[
+"OBJ_C05M03_OBJ05C",
+"Find the missing pieces of the door"
+],
+[
+"OBJ_C05M03_OBJ06",
+"Put the pieces back in place"
+],
+[
+"OBJ_C05M03_OBJ07",
+"Investigate the Tunnel of Love"
+],
+[
+"OBJ_C06M01_BANE_OBJ01",
+"Defeat Bane"
+],
+[
+"OBJ_C06M01_BANE_OBJ02",
+"Defeat Bane"
+],
+[
+"OBJ_C06M01_BANE_OBJ03",
+"Defeat Bane"
+],
+[
+"OBJ_C06M01_STREETS_OBJ03",
+"Go to Wayne Tower"
+],
+[
+"OBJ_C06M01_STREETS_OBJ04",
+"Hack the Tumbler"
+],
+[
+"OBJ_C06M01_STREETS_OBJ05",
+"Destroy the Tumblers"
+],
+[
+"OBJ_C06M01_STREETS_OBJ06",
+"Go to Wayne Tower"
+],
+[
+"OBJ_C06M01_TAL_OBJ02",
+"Find way to the bomb"
+],
+[
+"OBJ_C06M01_TAL_OBJ05",
+"Defeat Talia"
+],
+[
+"OBJ_C04M05A_OBJ01",
+"Free Frozen Jim"
+],
+[
+"OBJ_C04M05A_OBJ02",
+"Retrieve Frozen Jim"
+],
+[
+"OBJ_C04M05A_OBJ03",
+"Take Frozen Jim to the Batcomputer"
+],
+[
+"OBJ_C04M05A_OBJ04",
+"Analyse Frozen Jim"
+],
+[
+"OBJ_C05M05_OBJ05A",
+"Defeat the enemies"
+],
+[
+"OBJ_C05M05_OBJ05C",
+"Defeat the enemies"
+],
+[
+"OBJ_C03M06PI_OBJ01",
+"Defeat Poison Ivy"
+],
+[
+"OBJ_C03M06PI_OBJ02",
+"Defeat the Snapdragon"
+],
+[
+"OBJ_C05M04_FR_OBJ01",
+"Go to the GCPD on North Island"
+],
+[
+"OBJ_C01M10_OBJ01A",
+"Chase Red Hood One"
+],
+[
+"OBJ_C01M10_OBJ01B",
+"Find a way over the wall"
+],
+[
+"OBJ_C01M10_OBJ01C",
+"Look for a way out"
+],
+[
+"OBJ_C02M01_OBJ01",
+"Improve the Batcave"
+],
+[
+"OBJ_C02M01_OBJ01A01",
+"Build the expansion"
+],
+[
+"OBJ_C02M01_OBJ01A02",
+"Complete construction"
+],
+[
+"OBJ_C02M01_OBJ01B01",
+"Build the terminal"
+],
+[
+"OBJ_C02M01_OBJ01B02",
+"Build the Batmobile"
+],
+[
+"OBJ_C02M01_OBJ02",
+"Follow the blue bat"
+],
+[
+"OBJ_C02M01_OBJ03",
+"Collect the new gadget"
+],
+[
+"OBJ_C02M01_OBJ04",
+"Return to the wall"
+],
+[
+"OBJ_C02M01_OBJ05",
+"Enter the strange shop"
+],
+[
+"OBJ_C02M01_OBJ06A",
+"Buy something from the shop"
+],
+[
+"OBJ_C02M01_OBJ07",
+"Answer the Batphone"
+],
+[
+"OBJ_C01M05_OBJ_RETURN",
+"Return to Iceberg Lounge"
+],
+[
+"OBJ_GCDEMO_OBJ01",
+"Explore Tricorner"
+],
+[
+"OBJ_C01M09_OBJ_RETURN",
+"Return to ACE Chemicals"
+],
+[
+"OBJ_C02M03_OBJ_RETURN",
+"Return to Shreck's"
+],
+[
+"OBJ_C02M05_OBJ_RETURN",
+"Return to Arctic World"
+],
+[
+"OBJ_C02M06_OBJ_RETURN",
+"Return to the Flugelheim"
+],
+[
+"OBJ_C02M08_OBJ_RETURN",
+"Return to the parade"
+],
+[
+"OBJ_C03M02_OBJ_RETURN",
+"Return to the hippodrome"
+],
+[
+"OBJ_C03M04_OBJ_RETURN",
+"Return to Gotham Water and Power"
+],
+[
+"OBJ_C03M06_OBJ_RETURN",
+"Return to the botanical gardens"
+],
+[
+"OBJ_C04M02_OBJ_RETURN",
+"Return to Gotham Museum"
+],
+[
+"OBJ_C04M06_OBJ_RETURN",
+"Return to the observatory"
+],
+[
+"OBJ_C05M02_OBJ_RETURN",
+"Return to the hospital"
+],
+[
+"OBJ_C05M05_OBJ_RETURN",
+"Return to Arkham"
+],
+[
+"OBJ_C04M02_OBJ04C",
+"Find a way to open the door"
+],
+[
+"OBJ_C04M02_OBJ04D",
+"Find the code"
+],
+[
+"OBJ_C04M02_OBJ04E",
+"Enter code"
+],
+[
+"OBJ_C03M03_OBJ06_A",
+"Inspect the picture"
+],
+[
+"OBJ_ACT_RID_ENTERCHALLENGEROOM",
+"Enter the Riddler Challenge Room"
+],
+[
+"OBJ_ACT_RID_SOLVECHALLENGEROOM",
+"Solve the Riddler Challenge Room"
+],
+[
+"OBJ_ACT_RID_COLLECTPUZZLEBOX",
+"Collect the Riddler Puzzle Box"
+],
+[
+"OBJ_ACT_CLUE_ENTERCHALLENGEROOM",
+"Enter the Cluemaster Challenge Room"
+],
+[
+"OBJ_ACT_CLUE_SOLVECHALLENGEROOM",
+"Solve the Cluemaster Challenge Room"
+],
+[
+"OBJ_ACT_CLUE_COLLECTPUZZLEBOX",
+"Collect the Cluemaster Puzzle Box"
+],
+[
+"OBJ_ACT_IVY_DESTROYPODS",
+"Destroy the giant plant's pods"
+],
+[
+"OBJ_ACT_IVY_FREEZEANDSMASH",
+"Freeze and smash the giant plant"
+],
+[
+"OBJ_ACT_WANT_FINDPIECES",
+"Find the pieces of the wanted poster"
+],
+[
+"OBJ_ACT_WANT_ASSEMBLEPOSTER",
+"Assemble the wanted poster"
+],
+[
+"OBJ_ACT_FAST_CLEARWAYTODOOR",
+"Unlock the shutter to the tunnel"
+],
+[
+"OBJ_ACT_FAST_OPENDOOR",
+"Open the shutters"
+],
+[
+"OBJ_ACT_CAT_BREAKINTOAPARTMENT",
+"Break into the apartment"
+],
+[
+"OBJ_ACT_CAT_BREAKINTOOFFICE",
+"Break into the office"
+],
+[
+"OBJ_ACT_CAT_BREAKINTOWAREHOUSE",
+"Break into the warehouse"
+],
+[
+"OBJ_ACT_CAT_BREAKINTOSHRECKS",
+"Break into Shreck's Department Store"
+],
+[
+"OBJ_ACT_CAT_BREAKINTOICEBERG",
+"Break into the Iceberg Lounge"
+],
+[
+"OBJ_ACT_CAT_FINDTHESAFE",
+"Find the safe"
+],
+[
+"OBJ_ACT_CAT_FINDTHEVAULT",
+"Find the vault"
+],
+[
+"OBJ_ACT_CAT_OPENWAYTOSAFE",
+"Open the way to the safe"
+],
+[
+"OBJ_ACT_CAT_OPENWAYTOVAULT",
+"Open the way to the vault"
+],
+[
+"OBJ_ACT_CAT_CRACKOPENSAFE",
+"Crack open the safe"
+],
+[
+"OBJ_ACT_CAT_CRACKOPENVAULT",
+"Crack open the vault"
+],
+[
+"OBJ_ACT_ZOO_TC01_00_PUTTRACKERON",
+"Put trackers on the cobras"
+],
+[
+"OBJ_ACT_ZOO_TC01_01_PUTTRACKERON",
+"Put a tracker on the brown bear"
+],
+[
+"OBJ_ACT_ZOO_CAAC_00_PUTTRACKERON",
+"Put a tracker on the parrot"
+],
+[
+"OBJ_ACT_ZOO_OG01_00_PUTTRACKERON",
+"Put trackers on the koala bears"
+],
+[
+"OBJ_ACT_ZOO_OG01_01_PUTTRACKERON",
+"Put trackers on the coyotes"
+],
+[
+"OBJ_ACT_ZOO_OG02_00_PUTTRACKERON",
+"Put trackers on the meerkats"
+],
+[
+"OBJ_ACT_ZOO_OG02_01_PUTTRACKERON",
+"Put a tracker on the penguin"
+],
+[
+"OBJ_ACT_ZOO_OG02_02_PUTTRACKERON",
+"Put a tracker on the zebra"
+],
+[
+"OBJ_ACT_ZOO_OG03_00_PUTTRACKERON",
+"Put a tracker on the tiger"
+],
+[
+"OBJ_ACT_ZOO_OG03_01_PUTTRACKERON",
+"Put a tracker on the toucan"
+],
+[
+"OBJ_ACT_ZOO_GVRP_00_PUTTRACKERON",
+"Put trackers on the lions"
+],
+[
+"OBJ_ACT_ZOO_GVRP_01_PUTTRACKERON",
+"Put trackers on the polar bears"
+],
+[
+"OBJ_ACT_ZOO_GVRP_02_PUTTRACKERON",
+"Put trackers on the elephants"
+],
+[
+"OBJ_ACT_ZOO_GVRP_03_PUTTRACKERON",
+"Put trackers on the wolves"
+],
+[
+"OBJ_ACT_ZOO_GVRP_04_PUTTRACKERON",
+"Put trackers on the leopards"
+],
+[
+"OBJ_ACT_ZOO_NT01_00_PUTTRACKERON",
+"Put trackers on the frogs"
+],
+[
+"OBJ_ACT_ZOO_NT01_01_PUTTRACKERON",
+"Put trackers on the parrots"
+],
+[
+"OBJ_ACT_ZOO_NT01_02_PUTTRACKERON",
+"Put a tracker on the panther"
+],
+[
+"OBJ_ACT_ZOO_EEAM_00_PUTTRACKERON",
+"Put trackers on the sloths"
+],
+[
+"OBJ_ACT_ZOO_EEAM_01_PUTTRACKERON",
+"Put a tracker on the black bear"
+],
+[
+"OBJ_ACT_WANT_ARRESTSUSPECT_F",
+"Arrest the suspect from the wanted poster"
+],
+[
+"OBJ_ACT_WANT_ARRESTSUSPECT_M",
+"Arrest the suspect from the wanted poster"
+],
+[
+"OBJ_ACT_WANT_ARRESTSUSPECT_N",
+"Arrest the suspect from the wanted poster"
+],
+[
+"OBJ_ACT_WANT_CATCHSUSPECT_F",
+"Catch the suspect from the wanted poster"
+],
+[
+"OBJ_ACT_WANT_CATCHSUSPECT_M",
+"Catch the suspect from the wanted poster"
+],
+[
+"OBJ_ACT_WANT_CATCHSUSPECT_N",
+"Catch the suspect from the wanted poster"
+],
+[
+"OBJ_ACT_CAT_LEAVETHEAPARTMENT",
+"Leave the apartment"
+],
+[
+"OBJ_ACT_CAT_TALKTOSOFIA",
+"Talk to Sofia Falcone"
+],
+[
+"OBJ_ACT_CROC_TALKTO_BULLOCK",
+"Talk to Detective Bullock"
+],
+[
+"OBJ_ACT_CROC_TALKTO_WAYLON",
+"Talk to Waylon Jones"
+],
+[
+"OBJ_ACT_CROC_INVESTIGATEAREA",
+"Investigate the area"
+],
+[
+"OBJ_C03M03_OBJ11_A",
+"Continue the investigation"
+],
+[
+"OBJ_C03M06_OBJ03A",
+"Destroy the giant plant's pods"
+],
+[
+"OBJ_C03M06_OBJ03B",
+"Spray the giant plant"
+],
+[
+"OBJ_C06M01_TAL_OBJ04",
+"Defeat Talia"
+],
+[
+"OBJ_C02M05_OBJ11",
+"Find the Penguin"
+],
+[
+"OBJ_C02M05_OBJ12",
+"Defeat the enemies"
+],
+[
+"OBJ_C02M05_OBJ13",
+"Find the Penguin"
+],
+[
+"OBJ_C06M01_TAL_OBJ02_A",
+"Stop the mechanism"
+],
+[
+"OBJ_C06M01_TAL_OBJ02_B",
+"Stop another mechanism"
+],
+[
+"OBJ_C06M01_TAL_OBJ02_C",
+"Reach the bomb"
+],
+[
+"OBJ_ACT_CAT_LEAVETHEOFFICE",
+"Leave the office"
+],
+[
+"OBJ_ACT_CAT_LEAVETHEWAREHOUSE",
+"Leave the warehouse"
+],
+[
+"OBJ_ACT_RID_EXIT",
+"Exit the Riddler Room"
+],
+[
+"OBJ_C01M03B_RET_OBJ",
+"Return to the puzzle room"
+],
+[
+"OBJ_C01M03B_RET_DESC",
+"Return to the Riddler room"
+],
+[
+"OBJ_C01M05_RET_OBJ",
+"Return to the club"
+],
+[
+"OBJ_C01M05_RET_DESC",
+"Return to the Iceberg Lounge"
+],
+[
+"OBJ_C01M08_RET_OBJ",
+"Return to the helipad"
+],
+[
+"OBJ_C01M08_RET_DESC",
+"Return to the ACE Chemicals helipad"
+],
+[
+"OBJ_C01M09A_RET_OBJ",
+"Return to ACE"
+],
+[
+"OBJ_C01M09A_RET_DESC",
+"Return to the vent at Ace Chemicals"
+],
+[
+"OBJ_C01M09B_RET_OBJ",
+"Return to ACE Chemicals"
+],
+[
+"OBJ_C01M09B_RET_DESC",
+"Return to the vent at Ace Chemicals"
+],
+[
+"OBJ_C02M03_RET_OBJ",
+"Return to Shreck's"
+],
+[
+"OBJ_C02M03_RET_DESC",
+"Return to Shreck's Department Store"
+],
+[
+"OBJ_C02M05A_RET_OBJ",
+"Return to the hideout"
+],
+[
+"OBJ_C02M05A_RET_DESC",
+"Return to Arctic World"
+],
+[
+"OBJ_C02M05B_RET_OBJ",
+"Return to Arctic World"
+],
+[
+"OBJ_C02M05B_RET_DESC",
+"Return to Arctic World"
+],
+[
+"OBJ_C02M06_RET_OBJ",
+"Return to the Flugelheim Museum"
+],
+[
+"OBJ_C02M06_RET_DESC",
+"Return to the Flugelheim Museum"
+],
+[
+"OBJ_C02M08_RET_OBJ",
+"Return to Wayne Tower"
+],
+[
+"OBJ_C02M08_RET_DESC",
+"Return to Wayne Tower"
+],
+[
+"OBJ_C03M01A_RET_OBJ",
+"Return to the Apartment"
+],
+[
+"OBJ_C03M01A_RET_DESC",
+"Return to the Apartment"
+],
+[
+"OBJ_C03M02_RET_OBJ",
+"Return to the hippodrome"
+],
+[
+"OBJ_C03M02_RET_DESC",
+"Return to the hippodrome"
+],
+[
+"OBJ_C03M03B_RET_OBJ",
+"Return to the puzzle room"
+],
+[
+"OBJ_C03M03B_RET_DESC",
+"Return to the puzzle room"
+],
+[
+"OBJ_C03M03C_RET_OBJ",
+"Return to the puzzle room"
+],
+[
+"OBJ_C03M03C_RET_DESC",
+"Return to the Cluemaster Room"
+],
+[
+"OBJ_C03M04B_RET_OBJ",
+"Return to Gotham Water and Power"
+],
+[
+"OBJ_C03M04B_RET_DESC",
+"Return to Gotham Water and Power"
+],
+[
+"OBJ_C03M06A_RET_OBJ",
+"Return to the gardens"
+],
+[
+"OBJ_C03M06A_RET_DESC",
+"Return to the botanical gardens"
+],
+[
+"OBJ_C03M06B_RET_OBJ",
+"Return to the botanical gardens"
+],
+[
+"OBJ_C03M06B_RET_DESC",
+"Return to the botanical gardens"
+],
+[
+"OBJ_C04M02_RET_OBJ",
+"Return to the Museum"
+],
+[
+"OBJ_C04M02_RET_DESC",
+"Return to the Museum"
+],
+[
+"OBJ_C04M06_RET_OBJ",
+"Return to the Observatory"
+],
+[
+"OBJ_C04M06_RET_DESC",
+"Return to the Observatory"
+],
+[
+"OBJ_C05M02_RET_OBJ",
+"Return to the hospital"
+],
+[
+"OBJ_C05M02_RET_DESC",
+"Return to the hospital"
+],
+[
+"OBJ_C05M05_RET_OBJ",
+"Return to GCPD North"
+],
+[
+"OBJ_C05M05_RET_DESC",
+"Return to GCPD North"
+],
+[
+"OBJ_C03M02_OBJ06_B_ALT",
+"Stand on the platform"
+],
+[
+"OBJ_C03M02_OBJ10_ALT",
+"Jump into the cannon"
+],
+[
+"OBJ_C01M06D_RET_OBJ",
+"Return to WayneTech"
+],
+[
+"OBJ_C01M06D_RET_DESC",
+"Return to WayneTech"
+],
+[
+"OBJ_C02M05C01_RET_OBJ",
+"Return to the warehouse"
+],
+[
+"OBJ_C02M05C01_RET_DESC",
+"Return to the warehouse"
+],
+[
+"OBJ_C04M02_OBJ03B",
+"Build a cannon"
+],
+[
+"OBJ_C02M01_OBJ02A",
+"Answer the Batphone"
+],
+[
+"OBJ_ACT_CAT_ENTERICEBERGLOUNGE",
+"Enter the Iceberg Lounge"
+],
+[
+"OBJ_ACT_CAT_EXITICEBERGLOUNGE",
+"Exit the Iceberg Lounge"
+],
+[
+"OBJ_C04M05B_OBJ02_D",
+"Find a water source"
+],
+[
+"OBJ_C04M05B_OBJ02_E",
+"Wash away the chemicals"
+],
+[
+"OBJ_C02M01_OBJ06B",
+"Leave the shop"
+],
+[
+"OBJ_C05M03_OBJ04A",
+"Go to Amusement Mile"
+],
+[
+"OBJ_ACT_CAT_EMPTYTHESAFE",
+"Empty the safe"
+],
+[
+"OBJ_ACT_CLUE_EXIT",
+"Exit the Cluemaster Room"
+],
+[
+"OBJ_C05M03_OBJ04C",
+"Enter the Tunnel of Love"
+],
+[
+"OBJ_ACT_CAT_SEARCHOFFICE",
+"Search the office"
+],
+[
+"OBJ_ACT_CAT_UNLOCKSTORAGEUNITS",
+"Unlock the storage units"
+],
+[
+"OBJ_ACT_CAT_EXPLORESTORAGEUNITY012",
+"Explore Storage Unit Y-012"
+],
+[
+"OBJ_C04M06_OBJ02_B",
+"Link the generator to the shield"
+],
+[
+"OBJ_C04M06_OBJ02_D",
+"Lower the telescope"
+],
+[
+"OBJ_ACT_PUZZLEROOM_ENTER",
+"Enter the puzzle room"
+],
+[
+"OBJ_ACT_PUZZLEROOM_SOLVE",
+"Solve the puzzle room"
+],
+[
+"OBJ_ACT_PUZZLEROOM_GOTONEXT",
+"Move to the next puzzle room"
+],
+[
+"OBJ_ACT_PUZZLEROOM_COLLECTBOX",
+"Collect the puzzle box"
+],
+[
+"OBJ_ACT_PUZZLEROOM_EXIT",
+"Exit the puzzle room"
+],
+[
+"OBJ_ACT_CROC_FOLLOWWAYLONTRAIL",
+"Follow Waylon's trail"
+],
+[
+"OBJ_ACT_CROC_FINDOUTGCPDPLANS",
+"Find out what the GCPD are planning"
+],
+[
+"OBJ_ACT_CROC_GOBEHINDHIPPODROME",
+"Meet Waylon behind the hippodrome"
+],
+[
+"OBJ_ACT_CROC_DEFEATKILLERCROC",
+"Defeat Killer Croc"
+],
+[
+"OBJ_C02M02_OBJ09_A",
+"Inspect the Mime Van"
+],
+[
+"OBJ_ACT_CROC_CHECKONWAYLON",
+"Check on Waylon"
+],
+[
+"OBJ_ACT_FAST_RESTOREBILLBOARDPOWER",
+"Restore power to the billboard"
+],
+[
+"OBJ_ACT_FAST_TALKTOTHEWORKER",
+"Talk to the worker"
+],
+[
+"OBJ_C01M06B_OBJ11B",
+"Pick up the bear"
+]
+]
