@@ -174,25 +174,50 @@ export function MissionsPanel({
               </>
             }
           >
-            {() => (
-              <div className="missionTree">
-                {matching.slice(0, 300).map((n) => (
-                  <MissionRow
-                    key={n.tag}
-                    node={n}
-                    present={present}
-                    fields={fields}
-                    observed={observed}
-                    needle={needle}
-                    onChange={onChange}
-                    onAdd={onAdd}
-                    onComplete={() => onCompleteMany([n.tag], n.objectives)}
-                    onUpTo={storyOrder(n.tag) != null ? () => completeUpTo(n.tag) : undefined}
-                  />
-                ))}
-                {matching.length > 300 && <p className="hint">Showing first 300 of {matching.length} — use search.</p>}
-              </div>
-            )}
+            {() => {
+              // Clump same-named missions (e.g. 6 "Killer Croc — Gotham Village") under one group.
+              const byName = new Map<string, MissionNode[]>();
+              for (const n of matching) {
+                const a = byName.get(n.name);
+                if (a) a.push(n);
+                else byName.set(n.name, [n]);
+              }
+              const groups = [...byName.values()];
+              return (
+                <div className="missionTree">
+                  {groups.slice(0, 300).map((nodes) =>
+                    nodes.length === 1 ? (
+                      <MissionRow
+                        key={nodes[0]!.tag}
+                        node={nodes[0]!}
+                        present={present}
+                        fields={fields}
+                        observed={observed}
+                        needle={needle}
+                        onChange={onChange}
+                        onAdd={onAdd}
+                        onComplete={() => onCompleteMany([nodes[0]!.tag], nodes[0]!.objectives)}
+                        onUpTo={storyOrder(nodes[0]!.tag) != null ? () => completeUpTo(nodes[0]!.tag) : undefined}
+                      />
+                    ) : (
+                      <ClumpGroup
+                        key={nodes[0]!.name}
+                        nodes={nodes}
+                        present={present}
+                        fields={fields}
+                        observed={observed}
+                        needle={needle}
+                        onChange={onChange}
+                        onAdd={onAdd}
+                        onCompleteOne={(n) => onCompleteMany([n.tag], n.objectives)}
+                        onCompleteAll={() => onCompleteMany(nodes.map((n) => n.tag), nodes.flatMap((n) => n.objectives))}
+                      />
+                    ),
+                  )}
+                  {groups.length > 300 && <p className="hint">Showing first 300 of {groups.length} — use search.</p>}
+                </div>
+              );
+            }}
           </LazyDetails>
         );
       })}
@@ -285,6 +310,72 @@ function MissionRow({
           )}
           {node.objectives.map((o) => (
             <EntryRow key={o} tag={o} type={OBJECTIVE_TYPE} addState={OBJECTIVE_COMPLETE_STATE} present={present} fields={fields} observed={observed} onChange={onChange} onAdd={onAdd} />
+          ))}
+        </div>
+      )}
+    </LazyDetails>
+  );
+}
+
+/** Groups several identically-named missions (e.g. 6 "Killer Croc — Gotham Village" instances) under one collapsible header. */
+function ClumpGroup({
+  nodes,
+  present,
+  fields,
+  observed,
+  needle,
+  onChange,
+  onAdd,
+  onCompleteOne,
+  onCompleteAll,
+}: {
+  nodes: MissionNode[];
+  present: Set<string>;
+  fields: Map<string, EnumField>;
+  observed: Map<string, Set<string>>;
+  needle: string;
+  onChange: (field: EnumField, member: string) => void;
+  onAdd: (tags: string[], state: string) => void;
+  onCompleteOne: (n: MissionNode) => void;
+  onCompleteAll: () => void;
+}) {
+  const have = nodes.filter((n) => present.has(n.tag)).length;
+  const missing = nodes.reduce((s, n) => s + (present.has(n.tag) ? 0 : 1) + n.objectives.filter((o) => !present.has(o)).length, 0);
+  return (
+    <LazyDetails
+      className="missionNode clump"
+      forceOpen={!!needle}
+      summary={
+        <>
+          <span className="missionTitle">{nodes[0]!.name}</span>
+          <span className="missionKids">×{nodes.length}</span>
+          <span className={have === nodes.length ? "missionState" : "badge warn"}>
+            {have}/{nodes.length}
+          </span>
+        </>
+      }
+    >
+      {() => (
+        <div className="objList clumpBody">
+          {missing > 0 && (
+            <div className="bulkRow">
+              <button className="primary small" onClick={onCompleteAll}>
+                Complete all {nodes.length}
+              </button>
+            </div>
+          )}
+          {nodes.map((n, i) => (
+            <MissionRow
+              key={n.tag}
+              node={{ ...n, name: `#${i + 1}` }}
+              present={present}
+              fields={fields}
+              observed={observed}
+              needle={needle}
+              onChange={onChange}
+              onAdd={onAdd}
+              onComplete={() => onCompleteOne(n)}
+            />
           ))}
         </div>
       )}

@@ -9,6 +9,7 @@ import { MissionsPanel } from "./components/MissionsPanel.js";
 import { CompletionOverview } from "./components/CompletionOverview.js";
 import { UnlockEverythingPanel } from "./components/UnlockEverythingPanel.js";
 import { QuickUnlock } from "./components/QuickUnlock.js";
+import { ChangeSummary } from "./components/ChangeSummary.js";
 import { FixMySaveHelp } from "./components/FixMySaveHelp.js";
 import { Help } from "./components/Help.js";
 
@@ -18,6 +19,9 @@ interface Loaded {
   fileName: string;
   save: SaveFile;
   originalBytes: Uint8Array;
+  /** Decrypted body as first loaded — the baseline for the change summary. */
+  originalBody: Uint8Array;
+  originalBuild?: number;
   fields: ScalarField[];
   enums: EnumField[];
   observed: Map<string, Set<string>>;
@@ -75,6 +79,8 @@ export function App() {
         fileName: name,
         save,
         originalBytes: bytes,
+        originalBody: save.doc.body.slice(),
+        originalBuild: readBuildVersion(save),
         fields: save.fields(),
         enums: save.enums(),
         observed: save.observedEnums(),
@@ -234,7 +240,7 @@ export function App() {
           const revertAll = () => {
             try {
               const save = SaveFile.load(l.originalBytes);
-              setLoaded({ fileName: l.fileName, save, originalBytes: l.originalBytes, fields: save.fields(), enums: save.enums(), observed: save.observedEnums(), collPresent: new Set(save.enumArrayEntries().map((e) => e.tag)) });
+              setLoaded({ fileName: l.fileName, save, originalBytes: l.originalBytes, originalBody: l.originalBody, originalBuild: l.originalBuild, fields: save.fields(), enums: save.enums(), observed: save.observedEnums(), collPresent: new Set(save.enumArrayEntries().map((e) => e.tag)) });
               setUnlockResult(null);
               setError(null);
             } catch (e) { onErr(e); }
@@ -246,7 +252,12 @@ export function App() {
           const currentDifficulty = l.enums.find((e) => e.enumType === "EDifficultySetting")?.member;
           const backupOriginal = () => downloadBytes(l.fileName.startsWith("BackupCopy_") ? l.fileName : `ORIGINAL_${l.fileName}`, l.originalBytes);
 
-          const downloadBar = <DownloadBar save={l.save} fileName={l.fileName} onReset={() => setLoaded(null)} />;
+          const downloadBar = (
+            <>
+              <ChangeSummary before={l.originalBody} after={l.save.doc.body} originalBuild={l.originalBuild} currentBuild={buildVersion} />
+              <DownloadBar save={l.save} fileName={l.fileName} onReset={() => setLoaded(null)} />
+            </>
+          );
           const downgrade = <DowngradePanel save={l.save} onApplied={() => { refreshFields(); rerender(); }} />;
           const missions = <MissionsPanel enums={l.enums} present={l.collPresent} observed={l.observed} onChange={onEnumChange} onAdd={onAddEntries} onCompleteMany={onCompleteMany} />;
           const collectibles = <CollectiblesPanel collectibles={COLLECTIBLES} present={l.collPresent} onAdd={onCollAdd} />;

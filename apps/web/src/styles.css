@@ -257,3 +257,13 @@ details.fixHelp[open] > summary::before { transform: rotate(90deg); }
 .freeRoamBtn { display: block; width: 100%; margin-top: 10px; }
 .banner.err strong { display: block; font-size: 14px; margin-bottom: 2px; }
 .banner.err span { font-size: 13px; opacity: 0.92; }
+
+/* Change summary (diff) */
+.diffRow { padding: 7px 0; font-size: 14px; border-bottom: 1px solid var(--line); }
+.diffRow:last-of-type { border-bottom: none; }
+.diffRow b { color: var(--muted); font-weight: 600; margin-right: 8px; }
+.diffItem { font-size: 13px; padding: 3px 0; color: var(--txt); }
+
+/* Clumped same-named missions */
+.missionNode.clump > summary .missionTitle { font-weight: 600; }
+.clumpBody { border-left: 2px solid var(--line); margin-left: 2px; padding-left: 8px; }
