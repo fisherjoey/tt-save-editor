@@ -85,12 +85,29 @@ describe("COLLECTIBLES manifest (committed)", () => {
   });
 });
 
+// DLC / pre-order items that a non-DLC 100% save legitimately won't contain. The
+// test's purpose is to catch typo'd/invalid tags, not to require DLC ownership.
+const DLC_ABSENT_OK = new Set([
+  "GameProgress.Definitions.Characters.Batman.DC27",
+  "GameProgress.Definitions.Characters.Batman.BlackLantern",
+  "GameProgress.Definitions.Characters.Batman.DarkKnightsOfSteel",
+]);
+
 describe.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("manifest vs 100% save", () => {
-  it("every manifest tag exists in the 100% save", () => {
-    const save = new Set(
-      readEnumArrayEntries(parse(decrypt(fx("slot0_thirdparty_100pct.sav"))).body).map((e) => e.tag),
-    );
-    for (const c of COLLECTIBLES) for (const t of c.tags) expect(save.has(t.tag), t.tag).toBe(true);
+  const save = new Set(
+    readEnumArrayEntries(parse(decrypt(fx("slot0_thirdparty_100pct.sav"))).body).map((e) => e.tag),
+  );
+
+  it("every manifest tag exists in the 100% save (modulo known DLC)", () => {
+    for (const c of COLLECTIBLES)
+      for (const t of c.tags)
+        if (!DLC_ABSENT_OK.has(t.tag)) expect(save.has(t.tag), t.tag).toBe(true);
+  });
+
+  it("all 41 gameplay challenges are catalogued and present in the maxed save", () => {
+    const ch = COLLECTIBLES.find((c) => c.key === "Challenges")!;
+    expect(ch.counter).toBe(41);
+    for (const t of ch.tags) expect(save.has(t.tag), t.tag).toBe(true);
   });
 });
 

@@ -1,4 +1,5 @@
 import { COLLECTIBLES as GENERATED } from "./data/collectibles.generated.js";
+import { CHALLENGES } from "./data/challenges.generated.js";
 import { ISLANDS, DISTRICTS } from "./data/collectibles-mapping.js";
 
 export type Confidence = "high" | "med" | "low";
@@ -32,8 +33,10 @@ export interface CollectibleCounter {
   tags: CollectibleTag[];
 }
 
-/** The committed, generated catalogue the UI consumes. */
-export const COLLECTIBLES: CollectibleCounter[] = GENERATED;
+/** The committed, generated catalogue the UI consumes. Challenges live in the same
+ *  insertable enum array as collectibles, so they're folded in here and flow through
+ *  the same unlock / completion / panel machinery. */
+export const COLLECTIBLES: CollectibleCounter[] = [...GENERATED, ...CHALLENGES];
 
 /** What a given gameplay tag is, looked up from the catalogue. */
 export interface CollectibleRef {

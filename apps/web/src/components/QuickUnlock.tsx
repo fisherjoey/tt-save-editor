@@ -37,6 +37,7 @@ export function QuickUnlock({
         { label: "All gold bricks", items: flat.filter((f) => f.counterKey === "GoldBricks") },
         { label: "All Riddler Trophies", items: flat.filter((f) => f.counterKey === "Minikits") },
         { label: "All WayneTech Chips", items: flat.filter((f) => f.counterKey === "WayneTechChips") },
+        { label: "All challenges", items: flat.filter((f) => f.counterKey === "Challenges") },
       ].filter((p) => p.items.length > 0),
     [flat],
   );

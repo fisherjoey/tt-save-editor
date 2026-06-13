@@ -106,7 +106,7 @@ export const ENUM_META: Record<string, EnumMeta> = {
   ETtGameProgressUnlock: { title: "Collectibles & unlocks", category: "progress", completeValue: "Collected" },
   ETtCollectableGameProgressState: { title: "Collectibles", category: "progress", completeValue: "Collected" },
   ETtGameProgressState: { title: "General progress", category: "progress", completeValue: "Complete" },
-  ETtChallengeGameProgressState: { title: "Challenges", category: "progress", completeValue: "Completed" },
+  ETtChallengeGameProgressState: { title: "Challenges", category: "progress", completeValue: "Rewarded" },
   ETtChallengeMinigameGameProgressState: { title: "Minigames", category: "progress", completeValue: "CompletedGold" },
   ETtMissionGameProgress: { title: "Missions", category: "progress", completeValue: "Complete" },
   ETtObjectivesNodeGameProgress: { title: "Objectives", category: "progress", completeValue: "Complete" },
