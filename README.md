@@ -2,7 +2,7 @@
 
 A save editor for LEGO Batman: Legacy of the Dark Knight that runs in your browser. Drop in a `.sav`, edit what you want, download it. Decrypt, edit, and re-encrypt all happen on your machine.
 
-Live: https://tt-save-editor.vercel.app · Current release: **v0.2.0**
+Live: https://tt-save-editor.vercel.app · Current release: **v1.0.0**
 
 ![The task chooser](docs/screenshots/chooser.png)
 
