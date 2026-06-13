@@ -35,6 +35,31 @@ export interface CollectibleCounter {
 /** The committed, generated catalogue the UI consumes. */
 export const COLLECTIBLES: CollectibleCounter[] = GENERATED;
 
+/** What a given gameplay tag is, looked up from the catalogue. */
+export interface CollectibleRef {
+  /** Counter key, e.g. "GoldBricks". */
+  key: string;
+  /** Counter label, e.g. "Gold bricks". */
+  label: string;
+  /** This entry's in-game name, e.g. "Iceberg Lounge (Ch.1 M5) — Gold Brick #1". */
+  name: string;
+  verified: boolean;
+}
+
+let _index: Map<string, CollectibleRef> | null = null;
+
+/** Tag → catalogue info, so any panel can label/group a raw entry by its real
+ *  collectible category instead of its bare enum type. Built once, then cached. */
+export function collectibleIndex(): Map<string, CollectibleRef> {
+  if (_index) return _index;
+  const m = new Map<string, CollectibleRef>();
+  for (const c of COLLECTIBLES) {
+    for (const t of c.tags) m.set(t.tag, { key: c.key, label: c.label, name: t.name, verified: c.verified });
+  }
+  _index = m;
+  return m;
+}
+
 export function normalizeConfidence(c: string): Confidence {
   if (c === "medium") return "med";
   if (c === "high" || c === "med" || c === "low") return c;

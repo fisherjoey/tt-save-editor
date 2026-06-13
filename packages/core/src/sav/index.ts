@@ -13,6 +13,7 @@ import {
   readEnumArrayEntries,
   insertEnumEntry,
   insertEnumEntriesBatch,
+  removeEnumEntriesBatch,
   ScalarField,
   EnumField,
   EnumArrayEntry,
@@ -130,6 +131,19 @@ export class SaveFile {
   /** @deprecated use addEntries — kept for callers that read better as "collectibles". */
   addCollectibles(tags: string[], stateValue: string): number {
     return this.addEntries(tags, stateValue);
+  }
+
+  /**
+   * Remove collectible/challenge entries by tag (the inverse of addEntries) — drops
+   * each from its enum array and fixes the count + ancestor sizes. Only tags actually
+   * present are removed. Returns how many were removed.
+   */
+  removeEntries(tags: string[]): number {
+    const have = new Set(this.enumArrayEntries().map((e) => e.tag));
+    const toRemove = tags.filter((t) => have.has(t));
+    if (!toRemove.length) return 0;
+    this.doc.body = removeEnumEntriesBatch(this.doc.body, toRemove);
+    return toRemove.length;
   }
 
   getField(name: string): ScalarField | undefined {

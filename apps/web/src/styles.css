@@ -185,7 +185,9 @@ details.advanced > .search, details.advanced .tableWrap { margin-top: 14px; }
 .collRow:hover { background: var(--panel); }
 .collRow input[type="checkbox"] { accent-color: var(--accent2); width: 15px; height: 15px; }
 .collName { flex: 1; font-size: 13px; }
-.collHave { color: var(--ok); font-size: 11px; font-weight: 600; }
+.collHave { color: var(--ok); font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.removeBtn { background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 6px; padding: 0 6px; line-height: 1.6; font-size: 11px; cursor: pointer; }
+.removeBtn:hover { color: var(--bad, #e5484d); border-color: var(--bad, #e5484d); }
 .collConf { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
 .addBar { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); background: var(--panel); }
 .collCat { color: var(--muted); font-size: 11px; }

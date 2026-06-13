@@ -572,6 +572,79 @@ export function insertEnumEntriesBatch(body: Uint8Array, tags: string[], stateVa
   return out;
 }
 
+/**
+ * Remove collectible entries by tag — the exact inverse of insertEnumEntriesBatch.
+ * Splices each matching element out of its array, decrements that array's
+ * element-count int32, and shrinks every ancestor container's Size by the bytes
+ * removed inside it. Tags not present are ignored; returns the body unchanged when
+ * nothing matches. insert(tag) followed by remove(tag) is byte-for-byte identity.
+ */
+export function removeEnumEntriesBatch(body: Uint8Array, tags: string[]): Uint8Array {
+  if (tags.length === 0) return body;
+  const want = new Set(tags);
+  const tree = parseStructure(body);
+
+  // Locate every element whose tag we want to drop, remembering its array.
+  const removals: { arr: PropertyNode; elem: PropertyNode }[] = [];
+  const stack = [...tree];
+  while (stack.length) {
+    const n = stack.pop()!;
+    if (n.name === "SavedGameProgressEnumValues" && n.children?.length) {
+      for (const elem of n.children) {
+        if (want.has(elementParts(body, elem).tag)) removals.push({ arr: n, elem });
+      }
+    }
+    if (n.children) stack.push(...n.children);
+  }
+  if (removals.length === 0) return body;
+
+  // Removed byte spans (elements never overlap), ascending.
+  const spans = removals
+    .map((r) => ({ start: r.elem.valueStart, end: r.elem.valueEnd }))
+    .sort((a, b) => a.start - b.start);
+  const totalRemoved = spans.reduce((n, s) => n + (s.end - s.start), 0);
+
+  // Splice: copy the gaps between removed spans into a smaller body.
+  const out = new Uint8Array(body.length - totalRemoved);
+  let cursor = 0;
+  let o = 0;
+  for (const s of spans) {
+    out.set(body.subarray(cursor, s.start), o);
+    o += s.start - cursor;
+    cursor = s.end;
+  }
+  out.set(body.subarray(cursor), o);
+
+  // New-body offset for an old offset that lies before/after (never inside) removed spans.
+  const mapOffset = (off: number) =>
+    off - spans.reduce((n, s) => n + (s.end <= off ? s.end - s.start : 0), 0);
+
+  const dv = new DataView(out.buffer);
+
+  // Each affected array's element-count int32 drops by how many we removed from it.
+  const removedPerArray = new Map<PropertyNode, number>();
+  for (const r of removals) removedPerArray.set(r.arr, (removedPerArray.get(r.arr) ?? 0) + 1);
+  for (const [arr, n] of removedPerArray) {
+    const at = mapOffset(arr.valueStart);
+    dv.setInt32(at, dv.getInt32(at, true) - n, true);
+  }
+
+  // Every container holding removed bytes (the arrays + their ancestors) shrinks by
+  // the bytes removed inside it. Ancestor Size offsets all precede their contents,
+  // so they're never inside a removed span.
+  const containers = new Map<number, PropertyNode>();
+  for (const r of removals) {
+    for (const a of ancestorContainers(tree, r.elem.valueStart)) containers.set(a.sizeOffset, a);
+  }
+  for (const a of containers.values()) {
+    let shrink = 0;
+    for (const s of spans) if (s.start >= a.valueStart && s.end <= a.valueEnd) shrink += s.end - s.start;
+    const at = mapOffset(a.sizeOffset);
+    dv.setInt32(at, dv.getInt32(at, true) - shrink, true);
+  }
+  return out;
+}
+
 /** Distinct members observed for each enum type across the save (for dropdown options). */
 export function observedEnumMembers(enums: EnumField[]): Map<string, Set<string>> {
   const m = new Map<string, Set<string>>();

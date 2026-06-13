@@ -19,8 +19,8 @@ export {
   BinaryWriter,
 } from "./gvas/index.js";
 export type { GvasDocument, GvasHeader, CustomVersion, ScalarField, ScalarKind, EnumField, EnumArrayEntry, EnumEntryInsertion } from "./gvas/index.js";
-export { COLLECTIBLES, normalizeConfidence, prettifyTagPath, deriveFacets, selectCounterTags } from "./collectibles.js";
-export type { CollectibleCounter, CollectibleTag, CollectibleFacets, Confidence } from "./collectibles.js";
+export { COLLECTIBLES, collectibleIndex, normalizeConfidence, prettifyTagPath, deriveFacets, selectCounterTags } from "./collectibles.js";
+export type { CollectibleCounter, CollectibleTag, CollectibleFacets, CollectibleRef, Confidence } from "./collectibles.js";
 export {
   PROGRESS_MISSION_TAGS,
   PROGRESS_OBJECTIVE_TAGS,

@@ -204,6 +204,7 @@ export function App() {
           const onEnumBulk = (fields: EnumField[], member: string) => { try { l.save.setEnumsBulk(fields, member); refreshFields(); } catch (e) { onErr(e); } };
           const onCompleteAll = () => { try { l.save.completeAllProgress(); refreshFields(); } catch (e) { onErr(e); } };
           const onAddEntries = (tags: string[], state: string) => { try { l.save.addEntries(tags, state); refreshFields(); } catch (e) { onErr(e); } };
+          const onRemoveEntries = (tags: string[]) => { try { l.save.removeEntries(tags); refreshFields(); } catch (e) { onErr(e); } };
           // Complete a batch of missions + objectives safely: add the missing ones first
           // (this shifts byte offsets), then set present ones via the offset-safe bulk path.
           const onCompleteMany = (missionTags: string[], objTags: string[]) => {
@@ -273,7 +274,7 @@ export function App() {
           );
           const downgrade = <DowngradePanel save={l.save} onApplied={() => { refreshFields(); rerender(); }} />;
           const missions = <MissionsPanel enums={l.enums} present={l.collPresent} observed={l.observed} onChange={onEnumChange} onAdd={onAddEntries} onCompleteMany={onCompleteMany} />;
-          const collectibles = <CollectiblesPanel collectibles={COLLECTIBLES} present={l.collPresent} onAdd={onCollAdd} />;
+          const collectibles = <CollectiblesPanel collectibles={COLLECTIBLES} present={l.collPresent} onAdd={onCollAdd} onRemove={onRemoveEntries} />;
           const back = <button className="ghost backLink" onClick={() => setMode("choose")}>← What do you want to do?</button>;
 
           return (

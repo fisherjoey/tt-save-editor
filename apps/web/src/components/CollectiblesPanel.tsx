@@ -29,11 +29,14 @@ export function CollectiblesPanel({
   collectibles,
   present,
   onAdd,
+  onRemove,
 }: {
   collectibles: CollectibleCounter[];
   /** Tags already in the save. */
   present: Set<string>;
   onAdd: (items: { tag: string; stateValue: string }[]) => void;
+  /** Remove entries already in the save (optional — enables the ✕ / "Remove" actions). */
+  onRemove?: (tags: string[]) => void;
 }) {
   const [view, setView] = useState<View>("category");
   const [q, setQ] = useState("");
@@ -119,6 +122,11 @@ export function CollectiblesPanel({
     const items = tags.filter((t) => !present.has(t)).map((t) => ({ tag: t, stateValue: stateByTag.get(t)! }));
     if (items.length) onAdd(items);
   };
+  const removeTags = (tags: string[]) => {
+    if (!onRemove) return;
+    const have = tags.filter((t) => present.has(t));
+    if (have.length) onRemove(have);
+  };
   const addSelected = () => {
     addTags([...selected]);
     setSelected(new Set());
@@ -137,7 +145,7 @@ export function CollectiblesPanel({
         Add collectibles to move the in-game counters (gold bricks, Riddler trophies, MicroBuilds…). Names come from
         the game's data. <b>Gold bricks</b> are confirmed working in-game; other categories are added the same way and
         should work too — they just aren't fully confirmed yet. Adding them can't corrupt your save (and Revert all
-        undoes anything).
+        undoes anything).{onRemove && " Entries already in your save show ✕ to remove them — removal is safe for the file but isn't yet confirmed to take items out in-game."}
       </p>
 
       <div className="collTools">
@@ -179,6 +187,11 @@ export function CollectiblesPanel({
               <button className="primary small" disabled={!missing.length} onClick={() => addTags(missing)}>
                 Max out (+{missing.length})
               </button>
+              {onRemove && (
+                <button className="ghost small" disabled={!have} onClick={() => removeTags(g.tags.map((t) => t.tag))}>
+                  Remove all (−{have})
+                </button>
+              )}
             </div>
             <div className="enumList">
               {visible.slice(0, 400).map((t) => {
@@ -196,7 +209,19 @@ export function CollectiblesPanel({
                       {view !== "category" && <span className="collCat"> · {t.counterLabel}</span>}
                     </span>
                     {inSave ? (
-                      <span className="collHave">have</span>
+                      <span className="collHave">
+                        have
+                        {onRemove && (
+                          <button
+                            type="button"
+                            className="removeBtn"
+                            title="Remove this from the save"
+                            onClick={(ev) => { ev.preventDefault(); removeTags([t.tag]); }}
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </span>
                     ) : (
                       t.confidence !== "high" && (
                         <span className="collConf" title="We're less certain this is the exact in-game item — safe to add, but it may not register.">
