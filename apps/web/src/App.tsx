@@ -9,6 +9,7 @@ import { MissionsPanel } from "./components/MissionsPanel.js";
 import { CompletionOverview } from "./components/CompletionOverview.js";
 import { UnlockEverythingPanel } from "./components/UnlockEverythingPanel.js";
 import { QuickUnlock } from "./components/QuickUnlock.js";
+import { BatSignalPicker } from "./components/BatSignalPicker.js";
 import { ChangeSummary } from "./components/ChangeSummary.js";
 import { WhereIsMySave } from "./components/WhereIsMySave.js";
 import { FixMySaveHelp } from "./components/FixMySaveHelp.js";
@@ -357,6 +358,7 @@ export function App() {
                       </div>
                     </section>
                   )}
+                  <BatSignalPicker enums={l.enums} onChange={onEnumChange} />
                   {downgrade}
                   <EnumPanel enums={l.enums} observed={l.observed} onChange={onEnumChange} onBulk={onEnumBulk} onCompleteAll={onCompleteAll} />
                   {missions}

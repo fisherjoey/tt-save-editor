@@ -116,6 +116,7 @@ export const ENUM_META: Record<string, EnumMeta> = {
   EPurpleStudGameProgressState: { title: "Purple studs", category: "progress", completeValue: "Collected" },
   ETtAreaCustomizationItemGameProgressState: { title: "Area customization", category: "progress", completeValue: "Purchased" },
   EDifficultySetting: { title: "Difficulty", category: "settings" },
+  E_BatsignalProgress: { title: "Bat-signal style", category: "settings" },
   ETtSaveGameVersion: { title: "Save version", category: "system" },
   ETtSaveSlotValidationState: { title: "Save validation", category: "system" },
   ETtPlayGoInstallState: { title: "Install state", category: "system" },
