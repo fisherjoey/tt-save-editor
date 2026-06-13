@@ -52,6 +52,10 @@ function explainError(msg: string): { title: string; detail: string } {
   return { title: "Couldn't open that file", detail: "Make sure it's a LEGO Batman save — a file named like SaveSlot_0_TT.sav from the game's SaveGames folder. If that one won't open, try its BackupCopy_… partner in the same folder." };
 }
 
+/** Collectible counters surfaced as currency-style quick actions at the top, next to Studs.
+ *  WayneTech chips behave like a second wallet, so people expect to set them there. */
+const QUICK_COUNTERS = COLLECTIBLES.filter((c) => c.key === "WayneTechChips");
+
 function collectibleCompletion(present: Set<string>) {
   let have = 0;
   let total = 0;
@@ -338,7 +342,7 @@ export function App() {
                       <div className="metaRow"><span className="k">Engine</span><span className="v mono">{l.save.doc.header.engineMajor}.{l.save.doc.header.engineMinor}.{l.save.doc.header.enginePatch} ({l.save.doc.header.branch})</span></div>
                     </details>
                   </section>
-                  <QuickEdits fields={l.fields} onEdit={onQuickEdit} />
+                  <QuickEdits fields={l.fields} onEdit={onQuickEdit} counters={QUICK_COUNTERS} present={l.collPresent} onAddCounter={onCollAdd} />
                   {currentDifficulty && (
                     <section className="card">
                       <h2>Difficulty</h2>
