@@ -104,10 +104,18 @@ describe.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("manifest vs 100% save", 
         if (!DLC_ABSENT_OK.has(t.tag)) expect(save.has(t.tag), t.tag).toBe(true);
   });
 
-  it("all 41 gameplay challenges are catalogued and present in the maxed save", () => {
+  it("catalogues every gameplay challenge in the maxed save (no stale manifest)", () => {
     const ch = COLLECTIBLES.find((c) => c.key === "Challenges")!;
-    expect(ch.counter).toBe(41);
+    // Derive the expected set from the fixture so the manifest can't silently go
+    // stale (it once shipped missing UtilityBelt/ComputerWiz/Ninja, so those
+    // challenges could never be completed in-game).
+    const gameplayInSave = [...save].filter((t) => /^GameProgress\.Definitions\.Challenges\./.test(t) && !/\.Achievements\./.test(t));
+    expect(ch.counter).toBe(gameplayInSave.length);
+    const catalogued = new Set(ch.tags.map((t) => t.tag));
+    for (const t of gameplayInSave) expect(catalogued.has(t), `not catalogued: ${t}`).toBe(true);
     for (const t of ch.tags) expect(save.has(t.tag), t.tag).toBe(true);
+    // The reported case: the Utility Belt challenge must be addable.
+    expect(catalogued.has("GameProgress.Definitions.Challenges.UtilityBelt")).toBe(true);
   });
 });
 

@@ -6,7 +6,7 @@ export const CHALLENGES: CollectibleCounter[] = [
   {
     "key": "Challenges",
     "label": "Challenges",
-    "counter": 41,
+    "counter": 44,
     "verified": false,
     "stateValue": "ETtChallengeGameProgressState::Rewarded",
     "tags": [
@@ -85,6 +85,14 @@ export const CHALLENGES: CollectibleCounter[] = [
           {
                 "tag": "GameProgress.Definitions.Challenges.Collector",
                 "name": "Collector (Challenge)",
+                "confidence": "high",
+                "facets": {
+                      "source": "other"
+                }
+          },
+          {
+                "tag": "GameProgress.Definitions.Challenges.ComputerWiz",
+                "name": "Computer Wiz (Challenge)",
                 "confidence": "high",
                 "facets": {
                       "source": "other"
@@ -219,6 +227,14 @@ export const CHALLENGES: CollectibleCounter[] = [
                 }
           },
           {
+                "tag": "GameProgress.Definitions.Challenges.Ninja",
+                "name": "Ninja (Challenge)",
+                "confidence": "high",
+                "facets": {
+                      "source": "other"
+                }
+          },
+          {
                 "tag": "GameProgress.Definitions.Challenges.ParanormalInvestigator",
                 "name": "Paranormal Investigator (Challenge)",
                 "confidence": "high",
@@ -325,6 +341,14 @@ export const CHALLENGES: CollectibleCounter[] = [
           {
                 "tag": "GameProgress.Definitions.Challenges.Untouchable",
                 "name": "Untouchable (Challenge)",
+                "confidence": "high",
+                "facets": {
+                      "source": "other"
+                }
+          },
+          {
+                "tag": "GameProgress.Definitions.Challenges.UtilityBelt",
+                "name": "Utility Belt (Challenge)",
                 "confidence": "high",
                 "facets": {
                       "source": "other"
