@@ -1,7 +1,7 @@
 {
   "name": "tt-save-editor",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Open-source web save editor for LEGO Batman: Legacy of the Dark Knight",
   "license": "MIT",
   "scripts": {
