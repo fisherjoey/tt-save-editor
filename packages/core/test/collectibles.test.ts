@@ -99,9 +99,25 @@ describe.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("manifest vs 100% save", 
   );
 
   it("every manifest tag exists in the 100% save (modulo known DLC)", () => {
-    for (const c of COLLECTIBLES)
+    for (const c of COLLECTIBLES) {
+      // Purple studs are catalogued from the game's definition asset, not a save —
+      // saves are sparse, so a real save legitimately lacks the uncollected ones.
+      if (c.key === "PurpleStuds") continue;
       for (const t of c.tags)
         if (!DLC_ABSENT_OK.has(t.tag)) expect(save.has(t.tag), t.tag).toBe(true);
+    }
+  });
+
+  it("purple studs: save entries are a subset of the catalogue (84 from game files)", () => {
+    const ps = COLLECTIBLES.find((c) => c.key === "PurpleStuds")!;
+    expect(ps.counter).toBe(84);
+    expect(ps.tags.length).toBe(84);
+    const catalogued = new Set(ps.tags.map((t) => t.tag));
+    // Every purple stud actually present in a real save must be a known tag (no typos).
+    const inSave = [...save].filter((t) => t.startsWith("GameProgress.Definitions.PurpleStuds."));
+    expect(inSave.length).toBeGreaterThan(0);
+    for (const t of inSave) expect(catalogued.has(t), `save tag not catalogued: ${t}`).toBe(true);
+    expect(ps.stateValue).toBe("EPurpleStudGameProgressState::Collected");
   });
 
   it("catalogues every gameplay challenge in the maxed save (no stale manifest)", () => {
