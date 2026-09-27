@@ -93,7 +93,12 @@ const DLC_ABSENT_OK = new Set([
   "GameProgress.Definitions.Characters.Batman.DarkKnightsOfSteel",
 ]);
 
-describe.skipIf(!hasFx("slot0_thirdparty_100pct.sav"))("manifest vs 100% save", () => {
+describe("manifest vs 100% save", () => {
+  if (!hasFx("slot0_thirdparty_100pct.sav")) {
+    it.skip("skipped: test/fixtures/slot0_thirdparty_100pct.sav not present locally", () => {});
+    return;
+  }
+
   const save = new Set(
     readEnumArrayEntries(parse(decrypt(fx("slot0_thirdparty_100pct.sav"))).body).map((e) => e.tag),
   );
